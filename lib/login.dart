@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'sizeConfig.dart';
-
+import 'constant.dart';
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -11,7 +11,7 @@ class _LoginPageState extends State<LoginPage> {
   String phoneNumber;
   String password;
   var checkBoxValue = false;
-  final int colorNum = 600;
+
   final _loginformKey = GlobalKey<FormState>();
 
   @override

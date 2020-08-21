@@ -3,6 +3,7 @@ import 'sizeConfig.dart';
 import 'homeTab.dart';
 import 'orderTab.dart';
 import 'userTab.dart';
+import 'constant.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -10,12 +11,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int currentTab = 0;
-  int colorNum = 600;
   Widget currentScreen = HomeTab();
-  String home = '主页';
-  String order = '订单';
-  String user = '我的';
 
   @override
   Widget build(BuildContext context) {

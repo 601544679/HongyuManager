@@ -79,7 +79,6 @@ class _OrderWidgetState extends State<OrderWidget> {
                                 fontSize: SizeConfig.widthMultiplier * 4),
                           )),
                           Container(
-                            height: SizeConfig.heightMultiplier * 8,
                             child: Column(mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(

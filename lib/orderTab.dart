@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'sizeConfig.dart';
-import 'logisticsInformation.dart';
 import 'orderWidget.dart';
+import 'constant.dart';
 
 class OrderTab extends StatefulWidget {
   @override
@@ -9,23 +9,20 @@ class OrderTab extends StatefulWidget {
 }
 
 class _OrderTabState extends State<OrderTab> {
-  String order = '订单详情';
-  int colorNum = 600;
-  String value = '0';
   List<DropdownMenuItem> dropdownMenuItem = List();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(order),
+        title: Text(orderTabName),
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
       body: Column(
         children: [
           SizedBox(
-            height: SizeConfig.heightMultiplier ,
+            height: SizeConfig.heightMultiplier,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -33,7 +30,7 @@ class _OrderTabState extends State<OrderTab> {
               DropdownButtonHideUnderline(
                   child: DropdownButton(
                 style: TextStyle(fontSize: SizeConfig.heightMultiplier * 2),
-                value: value,
+                value: dropDownButtonValue,
                 items: [
                   DropdownMenuItem(
                     child: Text(
@@ -64,7 +61,7 @@ class _OrderTabState extends State<OrderTab> {
                 onChanged: (value) {
                   print(value);
                   setState(() {
-                    this.value = value;
+                    dropDownButtonValue = value;
                   });
                 },
                 icon: Icon(
@@ -77,24 +74,10 @@ class _OrderTabState extends State<OrderTab> {
           ),
           Expanded(
               child: ListView(
-            children: [OrderWidget(this.value)],
+            children: [OrderWidget(dropDownButtonValue)],
           ))
         ],
       ),
     );
-  }
-
-  String _string(String value) {
-    switch (value) {
-      case '0':
-        return '所有订单';
-        break;
-      case '1':
-        return '运输中';
-        break;
-      case '2':
-        return '已完成';
-        break;
-    }
   }
 }
