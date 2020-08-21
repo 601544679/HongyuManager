@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'sizeConfig.dart';
 import 'constant.dart';
+
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -24,16 +25,14 @@ class _LoginPageState extends State<LoginPage> {
             height: SizeConfig.heightMultiplier * 25,
             //color: Colors.red,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: SizeConfig.heightMultiplier * 15,
-                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
                       'images/hongyu.png',
-                      width: SizeConfig.widthMultiplier * 65,
+                      width: SizeConfig.widthMultiplier * 65,fit: BoxFit.cover,
                     )
                   ],
                 )
@@ -46,6 +45,7 @@ class _LoginPageState extends State<LoginPage> {
             height: SizeConfig.heightMultiplier * 30,
             //color: Colors.green,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Form(
                     autovalidate: true,
@@ -115,6 +115,7 @@ class _LoginPageState extends State<LoginPage> {
             height: SizeConfig.heightMultiplier * 20,
             //color: Colors.blue,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Row(
                   children: [
@@ -173,7 +174,10 @@ class _LoginPageState extends State<LoginPage> {
                         },
                         child: Text(
                           '登录',
-                          style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: SizeConfig.heightMultiplier*2.5),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: SizeConfig.heightMultiplier * 2.5),
                         ),
                         color: Colors.indigo[colorNum],
                         shape: RoundedRectangleBorder(
@@ -189,6 +193,7 @@ class _LoginPageState extends State<LoginPage> {
             height: SizeConfig.heightMultiplier * 25,
             //color: Colors.yellow,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Divider(
                   indent: SizeConfig.widthMultiplier * 15,
