@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Image.asset(
                       'images/hongyu.png',
-                      width: SizeConfig.widthMultiplier * 65,fit: BoxFit.cover,
+                      width: SizeConfig.widthMultiplier * 70,fit: BoxFit.cover,
                     )
                   ],
                 )
