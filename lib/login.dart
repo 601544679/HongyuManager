@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Image.asset(
                       'images/hongyu.png',
-                      width: SizeConfig.widthMultiplier * 60,
+                      width: SizeConfig.widthMultiplier * 65,
                     )
                   ],
                 )
@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: TextFormField(
                         // ignore: missing_return
                         validator: (value) {
-                          if (value.isEmpty) {
+                          if (value.trim().isEmpty) {
                             return '手机号不能为空';
                           }
                           if (isChinaPhoneLegal(value) == false) {
@@ -92,10 +92,10 @@ class _LoginPageState extends State<LoginPage> {
                             TextStyle(fontSize: SizeConfig.widthMultiplier * 5),
                         validator: (value) {
                           print('输出：${value}');
-                          if (value.isEmpty) {
+                          if (value.trim().isEmpty) {
                             return '密码不能为空';
                           }
-                          password = value;
+                          password = value.trim();
                           print('密码是：${password}');
                           return null;
                         },
@@ -164,13 +164,16 @@ class _LoginPageState extends State<LoginPage> {
                           right: SizeConfig.widthMultiplier * 15),
                       child: FlatButton(
                         onPressed: () {
-                          // todo 登录事件，跳转路由
+                          // todo 登录事件，跳转路由，
                           //print(_loginformKey.currentState.validate());
                           //如果选中记住密码,保存密码
+                          //销毁登录界面？
+                          // Navigator.pushAndRemoveUntil(context, newRoute, (route) => false)
+                          Navigator.pushNamed(context, "/homePage");
                         },
                         child: Text(
                           '登录',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: SizeConfig.heightMultiplier*2.5),
                         ),
                         color: Colors.indigo[colorNum],
                         shape: RoundedRectangleBorder(
