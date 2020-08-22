@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'sizeConfig.dart';
 import 'orderWidget.dart';
 import 'constant.dart';
+import 'getOrderData.dart';
 
 class OrderTab extends StatefulWidget {
   @override
@@ -73,8 +74,9 @@ class _OrderTabState extends State<OrderTab> {
             ],
           ),
           Expanded(
-              child: ListView(
-            children: [OrderWidget(dropDownButtonValue)],
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [getOrderData(dropDownButtonValue)],
           ))
         ],
       ),

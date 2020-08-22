@@ -11,12 +11,12 @@ List<logisticsInformation> ff() {
   information.add(new logisticsInformation(
       7581, '佛山', '铁岭', '天亮', '冰玑', '1000*1000冰玑石', '已完成', 2,1591315200000));
   information.add(new logisticsInformation(
-      6598, '西藏', '浙江', '明凯', '抛釉', '1000*1000抛釉砖', '已完成', 2,1594252800000));
+      3365, '西藏', '浙江', '明凯', '抛釉', '1000*1000抛釉砖', '已完成', 2,1594252800000));
   information.add(new logisticsInformation(
-      6598, '西安', '宁夏', '林司机', '现代', '1000*1000现代砖', '运输中', 1,1596240000000));
+      6875, '西安', '宁夏', '林司机', '现代', '1000*1000现代砖', '运输中', 1,1596240000000));
   information.add(new logisticsInformation(
-      6598, '雄安', '天津', '关羽', '磨砂', '200*200磨砂砖', '已完成', 2,1589760000000));
-  information.sort((a, b) => b.orderTime.compareTo(a.orderTime));
+      4444, '雄安', '天津', '关羽', '磨砂', '200*200磨砂砖', '已完成', 2,1589760000000));
+  //information.sort((a, b) => b.orderTime.compareTo(a.orderTime));
   return information;
 }
 
