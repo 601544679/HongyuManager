@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mydemo/logisticsInformation.dart';
-import 'package:mydemo/orderWidget.dart';
+import 'package:mydemo/OrderNetWorkWidget.dart';
 import 'constant.dart';
 import 'sizeConfig.dart';
 
@@ -24,9 +24,15 @@ class _getOrderDataState extends State<getOrderData> {
           } else {
             // 请求成功，显示数据
             return Expanded(
-                child: ListView(
-              children: [OrderWidget(widget.state)],
-            ));
+                //    child: ListView(
+                //  children: [
+                //    //使用本地数据生成的UI
+                //    //OrderWidget(widget.state),
+                //  ],
+                //)
+              //网络请求UI,传入数据
+              child: OrderNetWorkWidget(),
+                );
           }
         } else {
           // 请求未结束，显示loading
@@ -47,12 +53,12 @@ class _getOrderDataState extends State<getOrderData> {
           );
         }
       },
-      future: dd(),
+      future: _getData(),
     );
   }
 
-  //请求订单数据
-  Future dd() async {
+  //根据选择下拉菜单的值请求订单数据
+  Future _getData() async {
     return Future.delayed(Duration(seconds: 2), () => ff());
   }
 }

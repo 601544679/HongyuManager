@@ -1,22 +1,23 @@
 List<logisticsInformation> ff() {
   List<logisticsInformation> information = new List<logisticsInformation>();
   information.add(new logisticsInformation(
-      1255, '佛山', '北京', '张三', '三宝', '600*600吉祥三宝', '运输中', 1,1597104000000));
+      1255, '佛山', '北京', '张三', '三宝', '600*600吉祥三宝', '运输中', 1, 1597104000000));
   information.add(new logisticsInformation(
-      7555, '佛山', '广州', '天亮', '冰玑', '1200*1200大理石瓷砖', '运输中', 1,1596585600000));
+      7555, '佛山', '广州', '天亮', '冰玑', '1200*1200大理石瓷砖', '运输中', 1, 1596585600000));
   information.add(new logisticsInformation(
-      9527, '云浮', '海南', '张伟', '仿古', '800*800仿古砖', '运输中', 1,1596931200000));
+      9527, '云浮', '海南', '张伟', '仿古', '800*800仿古砖', '运输中', 1, 1596931200000));
   information.add(new logisticsInformation(
-      4589, '南京', '佛山', '李元浩', '玉瓷', '800*800玉瓷砖', '已完成', 2,1593648000000));
+      4589, '南京', '佛山', '李元浩', '玉瓷', '800*800玉瓷砖', '已完成', 2, 1593648000000));
   information.add(new logisticsInformation(
-      7581, '佛山', '铁岭', '天亮', '冰玑', '1000*1000冰玑石', '已完成', 2,1591315200000));
+      7581, '佛山', '铁岭', '天亮', '冰玑', '1000*1000冰玑石', '已完成', 2, 1591315200000));
   information.add(new logisticsInformation(
-      3365, '西藏', '浙江', '明凯', '抛釉', '1000*1000抛釉砖', '已完成', 2,1594252800000));
+      3365, '西藏', '浙江', '明凯', '抛釉', '1000*1000抛釉砖', '已完成', 2, 1594252800000));
   information.add(new logisticsInformation(
-      6875, '西安', '宁夏', '林司机', '现代', '1000*1000现代砖', '运输中', 1,1596240000000));
+      6875, '西安', '宁夏', '林司机', '现代', '1000*1000现代砖', '运输中', 1, 1596240000000));
   information.add(new logisticsInformation(
-      4444, '雄安', '天津', '关羽', '磨砂', '200*200磨砂砖', '已完成', 2,1589760000000));
-  //information.sort((a, b) => b.orderTime.compareTo(a.orderTime));
+      4444, '雄安', '天津', '关羽', '磨砂', '200*200磨砂砖', '已完成', 2, 1589760000000));
+  //时间排序
+  information.sort((a, b) => b.orderTime.compareTo(a.orderTime));
   return information;
 }
 
