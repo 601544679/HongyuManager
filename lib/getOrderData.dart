@@ -24,12 +24,6 @@ class _getOrderDataState extends State<getOrderData> {
           } else {
             // 请求成功，显示数据
             return Expanded(
-                //    child: ListView(
-                //  children: [
-                //    //使用本地数据生成的UI
-                //    //OrderWidget(widget.state),
-                //  ],
-                //)
               //网络请求UI,传入数据
               child: OrderNetWorkWidget(),
                 );
