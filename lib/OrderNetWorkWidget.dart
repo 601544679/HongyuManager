@@ -4,26 +4,19 @@ import 'package:mydemo/logisticsInformation.dart';
 import 'sizeConfig.dart';
 import 'package:date_format/date_format.dart';
 
-class OrderWidget extends StatefulWidget {
+//根据下拉菜单使用网络请求
+class OrderNetWorkWidget extends StatefulWidget {
   @override
-  _OrderWidgetState createState() => _OrderWidgetState();
-  String state;
-
-  OrderWidget(this.state);
+  _OrderNetWorkWidgetState createState() => _OrderNetWorkWidgetState();
+//构造方法传入请求成功后的数据
 }
 
-class _OrderWidgetState extends State<OrderWidget> {
-  List<Widget> widgetList = List();
-  Widget content;
-
+class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
   @override
   Widget build(BuildContext context) {
-    widgetList.clear();
-    for (var value in ff()) {
-      // ignore: unrelated_type_equality_checks
-      if (value.isFinish == int.parse(widget.state) ||
-          int.parse(widget.state) == 0) {
-        widgetList.add(Card(
+    return ListView.builder(
+      itemBuilder: (context, index) {
+        return Card(
           child: Padding(
             padding: EdgeInsets.only(
                 left: SizeConfig.widthMultiplier,
@@ -40,20 +33,20 @@ class _OrderWidgetState extends State<OrderWidget> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            '运输单号：${value.orderNumber}',
+                            '运输单号：${ff()[index].orderNumber}',
                             style: TextStyle(
                                 fontSize: SizeConfig.heightMultiplier * 2),
                           )
                         ],
                       ),
                       SizedBox(
-                        height: SizeConfig.heightMultiplier ,
+                        height: SizeConfig.heightMultiplier,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
-                            '${value.Departure}',
+                            '${ff()[index].Departure}',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: SizeConfig.heightMultiplier * 4),
@@ -64,7 +57,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                 fontSize: SizeConfig.heightMultiplier * 2),
                           ),
                           Text(
-                            '${value.destination}',
+                            '${ff()[index].destination}',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: SizeConfig.heightMultiplier * 4),
@@ -73,18 +66,21 @@ class _OrderWidgetState extends State<OrderWidget> {
                       ),
                       Row(
                         children: [
-                          Expanded(child: Text(
-                            '司机：${value.driverName}',textAlign: TextAlign.center,
+                          Expanded(
+                              child: Text(
+                            '司机：${ff()[index].driverName}',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: SizeConfig.widthMultiplier * 4),
                           )),
                           Container(
-                            child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  value.state,
+                                  ff()[index].state,
                                   style: TextStyle(
-                                      color: value.isFinish == 1
+                                      color: ff()[index].isFinish == 1
                                           ? Colors.red
                                           : Colors.green),
                                 ),
@@ -93,15 +89,17 @@ class _OrderWidgetState extends State<OrderWidget> {
                                   width: SizeConfig.widthMultiplier * 10,
                                   height: SizeConfig.heightMultiplier * 4,
                                   fit: BoxFit.cover,
-                                  color: value.isFinish == 1
+                                  color: ff()[index].isFinish == 1
                                       ? Colors.red
                                       : Colors.green,
                                 )
                               ],
                             ),
                           ),
-                          Expanded(child: Text(
-                            '项目：${value.projectName}',textAlign: TextAlign.center,
+                          Expanded(
+                              child: Text(
+                            '项目：${ff()[index].projectName}',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: SizeConfig.widthMultiplier * 4),
                           )),
@@ -109,7 +107,11 @@ class _OrderWidgetState extends State<OrderWidget> {
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        children: [Text('送货单信息',style: TextStyle(fontSize: SizeConfig.widthMultiplier*4))],
+                        children: [
+                          Text('送货单信息',
+                              style: TextStyle(
+                                  fontSize: SizeConfig.widthMultiplier * 4))
+                        ],
                       ),
                       SizedBox(
                         height: SizeConfig.widthMultiplier,
@@ -117,15 +119,19 @@ class _OrderWidgetState extends State<OrderWidget> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(value.message,style: TextStyle(fontSize: SizeConfig.heightMultiplier*2)),
+                          Text(ff()[index].message,
+                              style: TextStyle(
+                                  fontSize: SizeConfig.heightMultiplier * 2)),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            date(value.orderTime),
-                            style: TextStyle(color: Colors.red,fontSize: SizeConfig.heightMultiplier*2),
+                            date(ff()[index].orderTime),
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontSize: SizeConfig.heightMultiplier * 2),
                           ),
                         ],
                       )
@@ -135,11 +141,10 @@ class _OrderWidgetState extends State<OrderWidget> {
               ],
             ),
           ),
-        ));
-      }
-    }
-    content = Column(children: widgetList);
-    return content;
+        );
+      },
+      itemCount: ff().length,
+    );
   }
 
   //日期转换
