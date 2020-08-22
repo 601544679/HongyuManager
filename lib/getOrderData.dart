@@ -18,33 +18,44 @@ class _getOrderDataState extends State<getOrderData> {
     return FutureBuilder(
       // ignore: missing_return
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            return Text("Error: ${snapshot.error}");
-          } else {
-            // 请求成功，显示数据
-            return Expanded(
-              //网络请求UI,传入数据
-              child: OrderNetWorkWidget(),
-                );
-          }
-        } else {
-          // 请求未结束，显示loading
-          return Column(
-            children: [
-              SizedBox(
-                height: SizeConfig.heightMultiplier,
-              ),
-              CircularProgressIndicator(
-                valueColor:
-                    AlwaysStoppedAnimation<Color>(Colors.indigo[colorNum]),
-              ),
-              SizedBox(
-                height: SizeConfig.heightMultiplier,
-              ),
-              Text('正在加载...')
-            ],
-          );
+        switch (snapshot.connectionState) {
+          case ConnectionState.done:
+            print('done');
+            if (snapshot.hasError) {
+              return Text("Error: ${snapshot.error}");
+            } else if (snapshot.hasData) {
+              print('hasData');
+              // 请求成功，显示数据
+              return Expanded(
+                //网络请求UI,传入数据
+                child: OrderNetWorkWidget(),
+              );
+            }
+            break;
+          case ConnectionState.none:
+            print('none');
+            break;
+          case ConnectionState.waiting:
+            print('waiting');
+            return Column(
+              children: [
+                SizedBox(
+                  height: SizeConfig.heightMultiplier,
+                ),
+                CircularProgressIndicator(
+                  valueColor:
+                      AlwaysStoppedAnimation<Color>(Colors.indigo[colorNum]),
+                ),
+                SizedBox(
+                  height: SizeConfig.heightMultiplier,
+                ),
+                Text('正在加载...')
+              ],
+            );
+            break;
+          case ConnectionState.active:
+            print('active');
+            break;
         }
       },
       future: _getData(),
