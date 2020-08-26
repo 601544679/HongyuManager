@@ -1,22 +1,31 @@
 import 'package:flutter/material.dart';
 import 'sizeConfig.dart';
 import 'constant.dart';
+import 'userclass.dart';
+import 'server.dart';
 
 class LoginPage extends StatefulWidget {
+  final User user;
+
+  const LoginPage({Key key, this.user}) : super(key: key);
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool isRememberPassword = false;
-  String phoneNumber;
-  String password;
-  var checkBoxValue = false;
-
+  bool checkBoxValue = true;
+  final server = Server();
+  TextEditingController _passwordControl = new TextEditingController();
   final _loginformKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    User _user = widget.user ?? null;
+    if (_user?.password != null && _user?.password != "") {
+      checkBoxValue = true;
+      _passwordControl.text = _user.password;
+    }
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Column(
@@ -32,7 +41,8 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Image.asset(
                       'images/hongyu.png',
-                      width: SizeConfig.widthMultiplier * 70,fit: BoxFit.cover,
+                      width: SizeConfig.widthMultiplier * 70,
+                      fit: BoxFit.cover,
                     )
                   ],
                 )
@@ -40,7 +50,6 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           Container(
-            key: _loginformKey,
             //只能存在一个key
             height: SizeConfig.heightMultiplier * 30,
             //color: Colors.green,
@@ -48,64 +57,61 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Form(
-                    autovalidate: true,
+                    key: _loginformKey,
                     child: Padding(
                       padding: EdgeInsets.only(
                           left: SizeConfig.widthMultiplier * 15,
                           right: SizeConfig.widthMultiplier * 15),
-                      child: TextFormField(
-                        // ignore: missing_return
-                        validator: (value) {
-                          if (value.trim().isEmpty) {
-                            return '手机号不能为空';
-                          }
-                          if (isChinaPhoneLegal(value) == false) {
-                            //print('手机号码格式错误');
-                            return '手机号码格式错误';
-                          }
-                          return null;
-                        },
-                        style:
-                            TextStyle(fontSize: SizeConfig.widthMultiplier * 5),
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                            hintText: '输入手机号码',
-                            icon: Icon(
-                              Icons.phone_android,
-                              size: SizeConfig.heightMultiplier * 4,
-                            ),
-                            labelText: '输入手机号码'),
-                      ),
-                    )),
-                Form(
-                    autovalidate: true,
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          left: SizeConfig.widthMultiplier * 15,
-                          right: SizeConfig.widthMultiplier * 15),
-                      child: TextFormField(
-                        /*initialValue:
-                            _getUser(savePas) == null ? "" : _getUser(savePas),*/
-                        obscureText: false,
-                        // ignore: missing_return
-                        style:
-                            TextStyle(fontSize: SizeConfig.widthMultiplier * 5),
-                        validator: (value) {
-                          print('输出：${value}');
-                          if (value.trim().isEmpty) {
-                            return '密码不能为空';
-                          }
-                          password = value.trim();
-                          print('密码是：${password}');
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                            hintText: '输入密码',
-                            icon: Icon(
-                              Icons.lock,
-                              size: SizeConfig.heightMultiplier * 4,
-                            ),
-                            labelText: '输入密码'),
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            initialValue: _user.phoneNumber,
+                            validator: (value) {
+                              if (value.trim().isEmpty) {
+                                return '手机号不能为空';
+                              }
+                              if (isChinaPhoneLegal(value) == false) {
+                                //print('手机号码格式错误');
+                                return '手机号码格式错误';
+                              }
+                              return null;
+                            },
+                            //保存输入手机到 userclass
+                            onSaved: (input) => _user.phoneNumber = input,
+                            style: TextStyle(
+                                fontSize: SizeConfig.widthMultiplier * 5),
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                hintText: '输入手机号码',
+                                icon: Icon(
+                                  Icons.phone_android,
+                                  size: SizeConfig.heightMultiplier * 4,
+                                ),
+                                labelText: '输入手机号码'),
+                          ),
+                          TextFormField(
+                            controller: _passwordControl,
+                            obscureText: true,
+                            // ignore: missing_return
+                            style: TextStyle(
+                                fontSize: SizeConfig.widthMultiplier * 5),
+                            validator: (input) {
+                              //print('输出：${input}');
+                              if (input.trim().isEmpty) {
+                                return '密码不能为空';
+                              }
+                              return null;
+                            },
+                            onSaved: (input) => _user.password = input,
+                            decoration: InputDecoration(
+                                hintText: '输入密码',
+                                icon: Icon(
+                                  Icons.lock,
+                                  size: SizeConfig.heightMultiplier * 4,
+                                ),
+                                labelText: '输入密码'),
+                          )
+                        ],
                       ),
                     )),
               ],
@@ -164,13 +170,26 @@ class _LoginPageState extends State<LoginPage> {
                           left: SizeConfig.widthMultiplier * 15,
                           right: SizeConfig.widthMultiplier * 15),
                       child: FlatButton(
-                        onPressed: () {
+                        onPressed: () async {
                           // todo 登录事件，跳转路由，
-                          //print(_loginformKey.currentState.validate());
-                          //如果选中记住密码,保存密码
-                          //销毁登录界面？
                           // Navigator.pushAndRemoveUntil(context, newRoute, (route) => false)
-                          Navigator.pushNamed(context, "/homePage");
+                          if (_loginformKey.currentState.validate()) {
+                            _loginformKey.currentState.save();
+                            //"13802621111", "123456"
+                            var response = await server.mobilePhoneLogin(
+                                _user.phoneNumber, _user.password);
+                            if (response != null) {
+                              _user.sessionToken = response['sessionToken'];
+                              _user.idNumber = response['identityNo'];
+                              _user.name = response['username'];
+                              _user.company = response['company'];
+                              _user.phoneNumber = response['mobilePhoneNumber'];
+                              _user.isSave = checkBoxValue;
+                              _user.saveUser(_user);
+                              print(response);
+                              Navigator.pushNamed(context, "/homePage");
+                            }
+                          }
                         },
                         child: Text(
                           '登录',

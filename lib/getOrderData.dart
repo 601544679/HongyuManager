@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mydemo/logisticsInformation.dart';
 import 'package:mydemo/OrderNetWorkWidget.dart';
 import 'constant.dart';
 import 'sizeConfig.dart';
+import 'userclass.dart';
+import 'server.dart';
 
 class getOrderData extends StatefulWidget {
   @override
@@ -13,6 +14,16 @@ class getOrderData extends StatefulWidget {
 }
 
 class _getOrderDataState extends State<getOrderData> {
+  DateTime historydate;
+  var waybills;
+  var waybillRecord;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -27,8 +38,10 @@ class _getOrderDataState extends State<getOrderData> {
               print('hasData');
               // 请求成功，显示数据
               return Expanded(
-                //网络请求UI,传入数据
-                child: OrderNetWorkWidget(),
+                //网络请求数据,传入UI
+                child: OrderNetWorkWidget(
+                  waybill: waybills,
+                ),
               );
             }
             break;
@@ -58,12 +71,27 @@ class _getOrderDataState extends State<getOrderData> {
             break;
         }
       },
-      future: _getData(),
+      future: _getData(widget.state),
     );
   }
 
   //根据选择下拉菜单的值请求订单数据
-  Future _getData() async {
-    return Future.delayed(Duration(seconds: 2), () => ff());
+  Future _getData(String state) async {
+    switch (widget.state) {
+      case '0':
+        //state=0获取所有订单
+        waybillRecord = await Server().getAllWaybill();
+        break;
+      case '1':
+        //state=1获取运输中订单
+        waybillRecord = await Server().getWaybillTransport();
+        break;
+      case '2':
+        //state=2获取已完成订单
+        waybillRecord = await Server().getWaybillHistory();
+        break;
+    }
+    waybills = waybillRecord['result'];
+    return 1;
   }
 }
