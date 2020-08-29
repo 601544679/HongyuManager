@@ -1,12 +1,13 @@
 import 'mainPage.dart';
 import 'mapPage.dart';
-import 'finishPage.dart';
+import 'releaseOrder.dart';
 final int colorNum = 600;
 final String home = '主页';
 final String order = '订单';
 final String user = '我的';
 final routes = {
   "/homePage": (context) => Home(),
+  "/releaseOrder": (context) => ReleaseOrder(),
 };
 int currentTab = 0;
 String dropDownButtonValue = '0';

@@ -9,7 +9,7 @@ import 'sizeConfig.dart';
 import 'constant.dart';
 import 'userclass.dart';
 import 'server.dart';
-
+import 'constant.dart';
 class MapPage extends StatefulWidget {
   @override
   _MapPageState createState() => _MapPageState();
@@ -24,8 +24,9 @@ class _MapPageState extends State<MapPage> {
     _loadWaybill() async {
       print('_loadWaybill');
       Waybill waybillT = await Waybill().getWaybill();
-      var a = await Server().getWaybill(widget.orderNumber);
+      var a = await Server().getWaybillAdmin('GCZC00017222');
       print('waybillT: ${waybillT}');
+      print('订单信息: ${a}');
       return (waybillT);
     }
 
@@ -74,12 +75,12 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    this.checkPersmission();
+    //this.checkPersmission();
   }
 
   var latLng;
   AmapController _controller;
-
+  Marker _markerSelect;
   AMapLocation _location;
   num lastLongitude = 0.0;
   num lastLatitude = 0.0;
@@ -97,7 +98,7 @@ class _MapScreenState extends State<MapScreen> {
     PermissionStatus permission = await PermissionHandler()
         .checkPermissionStatus(PermissionGroup.location);
     if (permission == PermissionStatus.granted) {
-      _getLocation();
+     // _getLocation();
     } else {
       bool isOpened = await PermissionHandler().openAppSettings(); //打开应用设置
     }
@@ -111,7 +112,7 @@ class _MapScreenState extends State<MapScreen> {
     super.dispose();
   }
 
-  _getLocation() async {
+  /*_getLocation() async {
     //启动一下
     await AMapLocationClient.startup(new AMapLocationOption(
         desiredAccuracy: CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
@@ -176,7 +177,7 @@ class _MapScreenState extends State<MapScreen> {
 
     AMapLocationClient.startLocation();
     //print(result.longitude);
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -198,15 +199,16 @@ class _MapScreenState extends State<MapScreen> {
                   showScaleControl: true,
                   zoomLevel: 15,
                   maskDelay: Duration(milliseconds: 500),
+                  centerCoordinate: LatLng(25.03509484, 110.13402564),
                   markers: [
                     MarkerOption(
                         latLng: LatLng(
-                            widget.waybill?.destinationLat ?? 24.toDouble(),
-                            widget.waybill?.destinationLon ?? 34.toDouble()),
+                          //widget.waybill.destinationLat.toDouble(), widget.waybill.destinationLon.toDouble()
+                            23.03509484, 113.13402564),
                         title: 'test',
                         widget: Container(
-                          height: 30,
-                          width: 60,
+                          height: SizeConfig.heightMultiplier*4.5,
+                          width: SizeConfig.widthMultiplier*15,
                           child: Material(
                             borderRadius: BorderRadius.circular(30),
                             shadowColor: Colors.transparent,
@@ -224,7 +226,31 @@ class _MapScreenState extends State<MapScreen> {
                               ),
                             ),
                           ),
-                        ))
+                        )),
+                    MarkerOption(
+                        latLng: LatLng(25.03509484, 110.13402564),
+                        title: 'test1',
+                        widget: Container(
+                          height: SizeConfig.heightMultiplier*4.5,
+                          width: SizeConfig.widthMultiplier*15,
+                          child: Material(
+                            borderRadius: BorderRadius.circular(30),
+                            shadowColor: Colors.transparent,
+                            color: Colors.indigo[colorNum],
+                            elevation: 7.0,
+                            child: InkWell(
+                              child: Center(
+                                child: Text(
+                                  '当前位置',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Montserrat'),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )),
                   ],
                   onMapCreated: (controller) async {
                     await controller?.showMyLocation(MyLocationOption(

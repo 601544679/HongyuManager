@@ -153,16 +153,13 @@ class Server {
 
   //todo
   //根据订单号查询订单信息
-  getWaybill(String waybillid) async {
+  getWaybillAdmin(String waybillid) async {
     var responseBody;
-    /*responseBody =
-        _post('/1.1/functions/findWayBill/', {'waybillid': waybillid});
-    print('getWaybill Server:${responseBody}');*/
+    responseBody =
+        _post('/1.1/functions/getWaybillAdmin/', {'waybillid': waybillid});
+    print('getWaybill Server:${responseBody}');
     return {
-      'ID': '送货单号 ',
-      'address': '送货地址',
-      'receiver': '收货人',
-      'receiverPhone': '收货人手机号码'
+      responseBody
     };
   }
 
@@ -222,10 +219,20 @@ class Server {
     };
   }
 
-//todo 获取完成订单的三张图片
+//todo 获取完成订单的三张图片 改为获取订单的所有信息
   getFinishImage(String orderNumber) async {
     var responseBody;
-    return {'imageUrl': 'https://'};
+    return [
+      {
+        'imageUrl': {'http://one', 'http://two', 'http://three'}
+      },
+      {
+        'allMessage': {'订单的所有信息'}
+      },
+      {
+        '订单的所有字段名': {'订单号', '销售单号', '项目名称...'}
+      }
+    ];
   }
 
   posUpdate(String waybillid, double lat, lon, String positionname) {

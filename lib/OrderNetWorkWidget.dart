@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mydemo/mapPage.dart';
@@ -40,7 +42,9 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
             print(index);
             //根据运输状态进行跳转
             //widget.waybill[index]['state']
-            var state = '运输中';
+            var a = Random().nextInt(2);
+            print('a值$a');
+            var state = a == 0 ? '运输中' : '已完成';
             switch (state) {
               case '运输中':
                 Navigator.push(context,

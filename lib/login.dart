@@ -14,13 +14,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool checkBoxValue = true;
+  bool checkBoxValue = false;
   final server = Server();
   TextEditingController _passwordControl = new TextEditingController();
   final _loginformKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+
     User _user = widget.user ?? null;
     if (_user?.password != null && _user?.password != "") {
       checkBoxValue = true;
@@ -34,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
             height: SizeConfig.heightMultiplier * 25,
             //color: Colors.red,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -51,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           Container(
             //只能存在一个key
-            height: SizeConfig.heightMultiplier * 30,
+            height: SizeConfig.heightMultiplier * 35,
             //color: Colors.green,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -133,13 +134,23 @@ class _LoginPageState extends State<LoginPage> {
                         activeColor: Colors.indigo[colorNum],
                         onChanged: (value) {
                           setState(() {
+                            print(value);
                             checkBoxValue = value;
                           });
                         }),
-                    Text(
-                      '记住密码',
-                      style:
-                          TextStyle(fontSize: SizeConfig.heightMultiplier * 2),
+                    InkWell(
+                      child: Text(
+                        '记住密码',
+                        style: TextStyle(
+                            fontSize: SizeConfig.heightMultiplier * 2),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          print('bool$checkBoxValue');
+                          checkBoxValue = !checkBoxValue;
+                          print('!bool$checkBoxValue');
+                        });
+                      },
                     ),
                     SizedBox(
                       width: SizeConfig.widthMultiplier * 23,
@@ -209,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           Container(
-            height: SizeConfig.heightMultiplier * 25,
+            height: SizeConfig.heightMultiplier * 20,
             //color: Colors.yellow,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
