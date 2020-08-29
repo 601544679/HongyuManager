@@ -26,6 +26,8 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
   int count = User().numHistoryOrders();
   var waybills;
   var waybillCount;
+  var fontSize = SizeConfig.heightMultiplier * 2;
+  var sizedBoxHeight = SizeConfig.heightMultiplier;
 
   @override
   void initState() {
@@ -72,36 +74,44 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(
-                              //'运输单号：${widget.waybill[index]['ID']}',
-                              '运输单号：25225',
-                              style: TextStyle(
-                                  fontSize: SizeConfig.heightMultiplier * 2),
+                            textStyle('运输单号：', fontSize),
+                            Expanded(
+                              child: textStyle('25225', fontSize),
                             )
                           ],
                         ),
+                        SizedBox(height: sizedBoxHeight),
                         SizedBox(
-                          height: SizeConfig.heightMultiplier,
+                          height: SizeConfig.widthMultiplier,
                         ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            textStyle('项目名称：', fontSize),
+                            Expanded(
+                                child: textStyle('云南昆明保利山水云亭二期项目1标', fontSize))
+                          ],
+                        ),
+                        SizedBox(height: sizedBoxHeight),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            textStyle('施工单位：', fontSize),
+                            Expanded(
+                                child: textStyle('广州市东滕装饰工程有限公司(一标)', fontSize))
+                          ],
+                        ),
+                        SizedBox(height: sizedBoxHeight),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text(
-                              //'${widget.waybill[index]['startLocationName']}',
-                              '佛山',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: SizeConfig.heightMultiplier * 4),
-                            ),
+                            textStyle('佛山', fontSize * 2,
+                                fontWeight: FontWeight.bold),
                             Container(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    //widget.waybill[index].state,
-                                    '运输中',
-                                    style: TextStyle(color: Colors.red),
-                                  ),
+                                  textStyle('运输中', fontSize, color: Colors.red),
                                   Image.asset(
                                     'images/arrow.png',
                                     width: SizeConfig.widthMultiplier * 10,
@@ -112,21 +122,17 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                                 ],
                               ),
                             ),
-                            Text(
-                              //'${widget.waybill[index]['destinationName'] ?? '北京'}',
-                              '北京',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: SizeConfig.heightMultiplier * 4),
-                            ),
+                            textStyle('北京', fontSize * 2,
+                                fontWeight: FontWeight.bold),
                           ],
                         ),
+                        SizedBox(height: sizedBoxHeight),
                         Row(
                           children: [
                             Expanded(
                                 child: Text(
                               // '司机：${widget.waybill[index]['driverName'] ?? '张伟'}',
-                              '司机：张伟 ',
+                              '司机：张伟',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: SizeConfig.widthMultiplier * 4),
@@ -140,59 +146,37 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                             )),
                           ],
                         ),
-                        SizedBox(
-                          height: SizeConfig.widthMultiplier,
-                        ),
+                        SizedBox(height: sizedBoxHeight),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(
-                              '项目名称: 碧桂园',
-                              style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: SizeConfig.heightMultiplier * 2),
+                            textStyle('货品：', fontSize),
+                            Expanded(
+                              child: textStyle('800*800抛釉', fontSize),
                             ),
                           ],
                         ),
+                        SizedBox(height: sizedBoxHeight),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(
-                              '施工单位: 珠海华润',
-                              style: TextStyle(
-                                  fontSize: SizeConfig.heightMultiplier * 2),
+                            textStyle('发货日期：', fontSize),
+                            Expanded(
+                              child: textStyle(
+                                  '${date(1597120000000)}', fontSize,
+                                  color: Colors.red),
                             ),
                           ],
                         ),
+                        SizedBox(height: sizedBoxHeight),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(
-                                //widget.waybill[index]['message'] ?? '800*800',
-                                '货品：800*800抛釉',
-                                style: TextStyle(
-                                    fontSize: SizeConfig.heightMultiplier * 2)),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              '发货日期: ${date(1597120000000)}',
-                              style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: SizeConfig.heightMultiplier * 2),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              '预计到达: ${date(1597350000000)}',
-                              style: TextStyle(
-                                  color: Colors.green,
-                                  fontSize: SizeConfig.heightMultiplier * 2),
+                            textStyle('到货日期：', fontSize),
+                            Expanded(
+                              child: textStyle(
+                                  '${date(1597350000000)}', fontSize,
+                                  color: Colors.green),
                             ),
                           ],
                         ),
@@ -217,5 +201,16 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
     a.day;
     return (formatDate(
         DateTime(a.year, a.month, a.day), [yyyy, '年', mm, '月', dd, '日']));
+  }
+
+  Text textStyle(String data, double size,
+      {FontWeight fontWeight, Color color}) {
+    return Text(
+      data,
+      style: TextStyle(
+          fontSize: size,
+          fontWeight: fontWeight ?? FontWeight.normal,
+          color: color ?? Colors.black),
+    );
   }
 }

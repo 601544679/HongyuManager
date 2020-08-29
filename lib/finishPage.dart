@@ -135,12 +135,13 @@ class _ImageBuilderState extends State<ImageBuilder> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            textNameStyle(list[index]),
+                            textStyle(list[index], fontSize),
                           ],
                         ),
                         Container(
                             width: containerWidth,
-                            child: textDetailStyle(dd[index])),
+                            child: textStyle(dd[index], fontSize1,
+                                fontWeight: FontWeight.bold)),
                         SizedBox(
                           height: SizeConfig.heightMultiplier,
                         ),
@@ -152,68 +153,62 @@ class _ImageBuilderState extends State<ImageBuilder> {
                 Divider(color: Colors.grey),
                 Container(
                     child: ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          //color: Colors.red,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                s[index],
-                                style: TextStyle(
-                                    fontSize: SizeConfig.heightMultiplier * 3),
-                              ),
-                              SizedBox(
-                                height: SizeConfig.heightMultiplier,
-                              ),
-                              InkWell(
-                                child: AspectRatio(
-                                  aspectRatio: 16 / 10,
-                                  child: Image.network(
-                                    image[index],
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                onTap: () {
-                                  Fluttertoast.showToast(
-                                      msg: '$index',
-                                      toastLength: Toast.LENGTH_SHORT);
-                                  showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (context) {
-                                        return dialogImageBuilder(image, index);
-                                      });
-                                },
-                              ),
-                              SizedBox(
-                                height: SizeConfig.heightMultiplier,
-                              )
-                            ],
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      //color: Colors.red,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            s[index],
+                            style: TextStyle(
+                                fontSize: SizeConfig.heightMultiplier * 3),
                           ),
-                        );
-                      },
-                      itemCount: image.length,
-                    ))
+                          SizedBox(
+                            height: SizeConfig.heightMultiplier,
+                          ),
+                          InkWell(
+                            child: AspectRatio(
+                              aspectRatio: 16 / 10,
+                              child: Image.network(
+                                image[index],
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            onTap: () {
+                              Fluttertoast.showToast(
+                                  msg: '$index',
+                                  toastLength: Toast.LENGTH_SHORT);
+                              showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (context) {
+                                    return dialogImageBuilder(image, index);
+                                  });
+                            },
+                          ),
+                          SizedBox(
+                            height: SizeConfig.heightMultiplier,
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                  itemCount: image.length,
+                ))
               ],
             ),
           )),
     );
   }
 
-  Text textNameStyle(String data) {
+  Text textStyle(String data, double fontSize, {FontWeight fontWeight}) {
     return Text(
       '$data',
-      style: TextStyle(fontSize: fontSize),
-    );
-  }
-
-  Text textDetailStyle(String data) {
-    return Text(
-      '$data',
-      style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize1),
+      style: TextStyle(
+          fontWeight: fontWeight ?? FontWeight.normal, fontSize: fontSize),
     );
   }
 }

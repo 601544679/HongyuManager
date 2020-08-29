@@ -157,10 +157,15 @@ class Server {
     var responseBody;
     responseBody =
         _post('/1.1/functions/getWaybillAdmin/', {'waybillid': waybillid});
-    print('getWaybill Server:${responseBody}');
-    return {
-      responseBody
-    };
+    print('getWaybillAdmin:${responseBody}');
+    return
+      /*'ID': '送货单号',
+      'address': '送货地址',
+      'receiver': '收货人',
+      'recevierPhone': '收货人手机号码',
+      'latitude': {'司机当前纬度', '司机当前纬度1', '司机当前纬度2'},
+      'longitude': {'司机当前经度', '司机当前经度1', '司机当前经度2'},*/
+      responseBody;
   }
 
 //todo 返回运输中订单
@@ -224,14 +229,8 @@ class Server {
     var responseBody;
     return [
       {
-        'imageUrl': {'http://one', 'http://two', 'http://three'}
-      },
-      {
         'allMessage': {'订单的所有信息'}
       },
-      {
-        '订单的所有字段名': {'订单号', '销售单号', '项目名称...'}
-      }
     ];
   }
 

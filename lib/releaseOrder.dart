@@ -32,52 +32,56 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
     '装车备注',
     '明细备注'
   ];
+
   //
   List<TextEditingController> textEditingController = List();
+  final _releaseFormKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('发布订单'),
-        ),
-        body: Padding(
-          padding: EdgeInsets.fromLTRB(
-              SizeConfig.widthMultiplier * 2,
-              SizeConfig.heightMultiplier,
-              SizeConfig.widthMultiplier * 2,
-              SizeConfig.heightMultiplier),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text('订单内容',
-                        style: TextStyle(
-                            fontSize: SizeConfig.heightMultiplier * 2,
-                            fontWeight: FontWeight.bold))
-                  ],
-                ),
-                SizedBox(
-                  height: SizeConfig.heightMultiplier,
-                ),
-                TextField(
-                  maxLines: null,
-                  onChanged: (value) {
-                    //todo 粘贴订单内容后，开始自动识别，智能填充
-                  },
-                  decoration: InputDecoration(
-                      hintText: '请粘贴复制的订单内容',
-                      border: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(width: SizeConfig.widthMultiplier),
-                          borderRadius: BorderRadius.circular(15))),
-                ),
-                SizedBox(
-                  height: SizeConfig.widthMultiplier,
-                ),
-                ListView.builder(
+      appBar: AppBar(
+        title: Text('发布订单'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.fromLTRB(
+            SizeConfig.widthMultiplier * 2,
+            SizeConfig.heightMultiplier,
+            SizeConfig.widthMultiplier * 2,
+            SizeConfig.heightMultiplier),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text('订单内容',
+                      style: TextStyle(
+                          fontSize: SizeConfig.heightMultiplier * 2,
+                          fontWeight: FontWeight.bold))
+                ],
+              ),
+              SizedBox(
+                height: SizeConfig.heightMultiplier,
+              ),
+              TextField(
+                maxLines: null,
+                onChanged: (value) {
+                  //todo 粘贴订单内容后，开始自动识别，智能填充
+                },
+                decoration: InputDecoration(
+                    hintText: '请粘贴复制的订单内容',
+                    border: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(width: SizeConfig.widthMultiplier),
+                        borderRadius: BorderRadius.circular(15))),
+              ),
+              SizedBox(
+                height: SizeConfig.widthMultiplier,
+              ),
+              Form(
+                key: _releaseFormKey,
+                child: ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
@@ -97,8 +101,15 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
                         SizedBox(
                           height: SizeConfig.widthMultiplier,
                         ),
-                        Form(
-                            child: TextFormField(
+                        TextFormField(
+                          // ignore: missing_return
+                          validator: (value) {
+                            print('value${value}');
+                            if (value.isEmpty) {
+                              return '请输入${list[index]}';
+                            }
+                            return null;
+                          },
                           decoration: InputDecoration(
                               hintText: '请输入${list[index]}',
                               border: OutlineInputBorder(
@@ -109,7 +120,7 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
                               hintStyle: TextStyle(
                                   fontSize: SizeConfig.heightMultiplier * 1.5)),
                           maxLines: null,
-                        )),
+                        ),
                         SizedBox(
                           height: SizeConfig.heightMultiplier,
                         )
@@ -118,22 +129,27 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
                   },
                   itemCount: list.length,
                 ),
-                FlatButton(
-                  color: Colors.indigo[colorNum],
-                  textColor: Colors.white,
-                  onPressed: () {
-                    //发布订单
-                  },
-                  child: Text(
-                    '发布订单',
-                    style: TextStyle(
-                        fontSize: SizeConfig.heightMultiplier * 2,
-                        fontWeight: FontWeight.bold),
-                  ),
-                )
-              ],
-            ),
+              ),
+              FlatButton(
+                color: Colors.indigo[colorNum],
+                textColor: Colors.white,
+                onPressed: () {
+                  //todo 发布订单
+                  if (_releaseFormKey.currentState.validate()) {
+                    _releaseFormKey.currentState.save();
+                  }
+                },
+                child: Text(
+                  '发布订单',
+                  style: TextStyle(
+                      fontSize: SizeConfig.heightMultiplier * 2,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
