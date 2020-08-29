@@ -37,6 +37,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
 
   @override
   Widget build(BuildContext context) {
+    //print('订单也：${widget.waybill[0]['state']}');
     return ListView.builder(
       itemBuilder: (context, index) {
         return InkWell(
@@ -44,15 +45,12 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
             print(index);
             //根据运输状态进行跳转
             //widget.waybill[index]['state']
-            var a = Random().nextInt(2);
-            print('a值$a');
-            var state = a == 0 ? '运输中' : '已完成';
-            switch (state) {
-              case '运输中':
+            switch (widget.waybill[index]['state']) {
+              case 'inProgress':
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MapPage()));
+                    MaterialPageRoute(builder: (context) => MapPage(orderNumber: widget.waybill[index]['ID'],)));
                 break;
-              case '已完成':
+              case 'Finished':
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => FinishPage()));
                 break;
@@ -76,7 +74,8 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                           children: [
                             textStyle('运输单号：', fontSize),
                             Expanded(
-                              child: textStyle('25225', fontSize),
+                              child: textStyle(
+                                  '${widget.waybill[index]['ID']}', fontSize),
                             )
                           ],
                         ),
@@ -105,25 +104,42 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            textStyle('佛山', fontSize * 2,
-                                fontWeight: FontWeight.bold),
-                            Container(
+                            Expanded(
+                              child: textStyle(
+                                  '${widget.waybill[index]['startLocationName']}',
+                                  fontSize * 2,
+                                  fontWeight: FontWeight.bold,textAlign: TextAlign.center),
+                              flex: 2,
+                            ),
+                            Expanded(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  textStyle('运输中', fontSize, color: Colors.red),
-                                  Image.asset(
-                                    'images/arrow.png',
-                                    width: SizeConfig.widthMultiplier * 10,
-                                    height: SizeConfig.heightMultiplier * 4,
-                                    fit: BoxFit.cover,
-                                    color: Colors.red,
-                                  )
+                                  textStyle(
+                                      '${widget.waybill[index]['state'] == 'Finished' ? '已完成' : '运输中'}',
+                                      fontSize,
+                                      color: widget.waybill[index]['state'] ==
+                                              'Finished'
+                                          ? Colors.green
+                                          : Colors.red),
+                                  Image.asset('images/arrow.png',
+                                      width: SizeConfig.widthMultiplier * 10,
+                                      height: SizeConfig.heightMultiplier * 4,
+                                      fit: BoxFit.cover,
+                                      color: widget.waybill[index]['state'] ==
+                                              'Finished'
+                                          ? Colors.green
+                                          : Colors.red),
                                 ],
-                              ),
+                              ),flex: 1,
                             ),
-                            textStyle('北京', fontSize * 2,
-                                fontWeight: FontWeight.bold),
+                            Expanded(
+                              child: textStyle(
+                                  '${widget.waybill[index]['destinationName']}',
+                                  fontSize * 2,
+                                  fontWeight: FontWeight.bold,textAlign: TextAlign.center),
+                              flex: 2,
+                            ),
                           ],
                         ),
                         SizedBox(height: sizedBoxHeight),
@@ -131,8 +147,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                           children: [
                             Expanded(
                                 child: Text(
-                              // '司机：${widget.waybill[index]['driverName'] ?? '张伟'}',
-                              '司机：张伟',
+                              '${widget.waybill[index]['driverName']}',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: SizeConfig.widthMultiplier * 4),
@@ -189,7 +204,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
           ),
         );
       },
-      itemCount: 2,
+      itemCount: widget.waybill.length,
     );
   }
 
@@ -204,13 +219,15 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
   }
 
   Text textStyle(String data, double size,
-      {FontWeight fontWeight, Color color}) {
+      {FontWeight fontWeight, Color color, TextAlign textAlign}) {
     return Text(
       data,
       style: TextStyle(
-          fontSize: size,
-          fontWeight: fontWeight ?? FontWeight.normal,
-          color: color ?? Colors.black),
+        fontSize: size,
+        fontWeight: fontWeight ?? FontWeight.normal,
+        color: color ?? Colors.black,
+      ),
+      textAlign: textAlign ?? TextAlign.start,
     );
   }
 }

@@ -17,9 +17,10 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
+    //print('传入的订单号${widget.orderNumber}');
     _loadWaybill() async {
       print('_loadWaybill');
-      var a = await Server().getWaybillAdmin('GCZC00017227');
+      var a = await Server().getWaybillAdmin(widget.orderNumber);
       //print('订单信息: ${a['result']}');
       //print('ID:${a['result']['ID']}');
       return (a['result']);
@@ -122,8 +123,8 @@ class _MapScreenState extends State<MapScreen> {
                   showScaleControl: true,
                   zoomLevel: 15,
                   maskDelay: Duration(milliseconds: 500),
-                  centerCoordinate: LatLng(widget.waybill['latitude'][1],
-                      widget.waybill['longitude'][1]),
+                  centerCoordinate: LatLng(widget.waybill['latitude'][0],
+                      widget.waybill['longitude'][0]),
                   markers: makeOptions(),
                   onMapCreated: (controller) async {
                     await controller?.showMyLocation(MyLocationOption(

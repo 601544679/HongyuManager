@@ -67,6 +67,7 @@ class Server {
     request.headers.set('X-LC-Id', _appID);
     request.headers.set('X-LC-Key', _appKey);
     if (user != null) {
+      //通过sessionToken进行权限验证
       request.headers.set("X-LC-Session", user.sessionToken);
     }
     request.headers.set('Content-Type', 'application/json');
@@ -159,20 +160,21 @@ class Server {
         _post('/1.1/functions/getWaybillAdmin/', {'waybillid': waybillid});
     print('getWaybillAdmin:${responseBody}');
     return
-      /*'ID': '送货单号',
+        /*'ID': '送货单号',
       'address': '送货地址',
       'receiver': '收货人',
       'recevierPhone': '收货人手机号码',
       'latitude': {'司机当前纬度', '司机当前纬度1', '司机当前纬度2'},
       'longitude': {'司机当前经度', '司机当前经度1', '司机当前经度2'},*/
-      responseBody;
+        responseBody;
   }
 
 //todo 返回运输中订单
   getWaybillTransport() {
     var responseBody;
-
-    return {
+    responseBody = _post('/1.1/functions/getWaybillTransport/', {});
+    return responseBody
+      /*{
       'ID': '运输单号',
       'startLocationName': '出发地',
       'destinationName': '目的地',
@@ -184,14 +186,16 @@ class Server {
       'message': '送货单信息',
       'supplier': '业务员姓名',
       'date': '发货日期'
-    };
+    }*/;
   }
 
 //todo 返回已完成订单
-  getWaybillHistory() async {
+  getWaybillHistoryAdmin() async {
     var responseBody;
+    responseBody = _post('/1.1/functions/getWaybillHistoryAdmin/', {});
+    return responseBody;
 
-    return {
+    /* {
       'ID': '运输单号',
       'startLocationName': '出发地',
       'destinationName': '目的地',
@@ -203,7 +207,7 @@ class Server {
       'message': '送货单信息',
       'supplier': '业务员姓名',
       'date': '发货日期'
-    };
+    }*/
   }
 
 //todo 返回所有订单

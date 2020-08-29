@@ -88,10 +88,11 @@ class _getOrderDataState extends State<getOrderData> {
         break;
       case '2':
         //state=2获取已完成订单
-        waybillRecord = await Server().getWaybillHistory();
+        waybillRecord = await Server().getWaybillHistoryAdmin();
         break;
     }
     waybills = waybillRecord['result'];
-    return 1;
+    print('返回的结果${waybills}');
+    return waybills;
   }
 }
