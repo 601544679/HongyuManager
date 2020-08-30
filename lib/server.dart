@@ -213,7 +213,8 @@ class Server {
 //todo 返回所有订单
   getAllWaybill() async {
     var responseBody;
-    return {
+    responseBody = _post('/1.1/functions/getAllWaybill/', {});
+    return/* {
       'ID': '运输单号',
       'startLocationName': '出发地',
       'destinationName': '目的地',
@@ -225,7 +226,7 @@ class Server {
       'message': '送货单信息',
       'supplier': '业务员姓名',
       'date': '发货日期'
-    };
+    }*/ responseBody;
   }
 
 //todo 获取完成订单的三张图片 改为获取订单的所有信息
