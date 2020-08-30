@@ -174,7 +174,7 @@ class Server {
     var responseBody;
     responseBody = _post('/1.1/functions/getWaybillTransport/', {});
     return responseBody
-      /*{
+        /*{
       'ID': '运输单号',
       'startLocationName': '出发地',
       'destinationName': '目的地',
@@ -186,7 +186,8 @@ class Server {
       'message': '送货单信息',
       'supplier': '业务员姓名',
       'date': '发货日期'
-    }*/;
+    }*/
+        ;
   }
 
 //todo 返回已完成订单
@@ -214,7 +215,7 @@ class Server {
   getAllWaybill() async {
     var responseBody;
     responseBody = _post('/1.1/functions/getAllWaybill/', {});
-    return/* {
+    return /* {
       'ID': '运输单号',
       'startLocationName': '出发地',
       'destinationName': '目的地',
@@ -226,17 +227,21 @@ class Server {
       'message': '送货单信息',
       'supplier': '业务员姓名',
       'date': '发货日期'
-    }*/ responseBody;
+    }*/
+        responseBody;
   }
 
 //todo 获取完成订单的三张图片 改为获取订单的所有信息
   getFinishImage(String orderNumber) async {
     var responseBody;
-    return [
+    responseBody =
+        _post('/1.1/functions/getFinishImage/', {'waybillid': orderNumber});
+    return /*[
       {
         'allMessage': {'订单的所有信息'}
       },
-    ];
+    ]*/
+        responseBody;
   }
 
   posUpdate(String waybillid, double lat, lon, String positionname) {

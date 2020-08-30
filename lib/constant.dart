@@ -10,7 +10,7 @@ final routes = {
   "/releaseOrder": (context) => ReleaseOrder(),
 };
 int currentTab = 0;
-String dropDownButtonValue = '1';
+String dropDownButtonValue = '0';
 final String orderTabName = '订单详情';
 final String userTabName = '个人信息';
 final String homeTabName = '主页';

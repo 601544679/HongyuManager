@@ -37,20 +37,33 @@ class _FinishPageState extends State<FinishPage> {
             break;
           case ConnectionState.waiting:
             print('waiting');
-            return Column(
-              children: [
-                SizedBox(
-                  height: SizeConfig.heightMultiplier,
+            return Scaffold(
+              appBar: AppBar(
+                title: InkWell(
+                  child: Icon(Icons.arrow_back),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                 ),
-                CircularProgressIndicator(
-                  valueColor:
-                      AlwaysStoppedAnimation<Color>(Colors.indigo[colorNum]),
+              ),
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: SizeConfig.heightMultiplier,
+                    ),
+                    CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          Colors.indigo[colorNum]),
+                    ),
+                    SizedBox(
+                      height: SizeConfig.heightMultiplier,
+                    ),
+                    Text('正在加载...')
+                  ],
                 ),
-                SizedBox(
-                  height: SizeConfig.heightMultiplier,
-                ),
-                Text('正在加载...')
-              ],
+              ),
             );
             break;
           case ConnectionState.active:
@@ -64,6 +77,7 @@ class _FinishPageState extends State<FinishPage> {
 
   imageFuture() async {
     var a = await Server().getFinishImage(widget.number);
+    print('aaa:${a['result']}');
     return 1;
   }
 }

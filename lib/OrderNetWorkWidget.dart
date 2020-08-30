@@ -52,7 +52,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                 break;
               case 'Finished':
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => FinishPage()));
+                    MaterialPageRoute(builder: (context) => FinishPage(number: widget.waybill[index]['ID'])));
                 break;
             }
           },
