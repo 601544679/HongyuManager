@@ -29,7 +29,7 @@ class _FinishPageState extends State<FinishPage> {
             } else if (snapshot.hasData) {
               print('hasData');
               // 请求成功，显示数据
-              return ImageBuilder();
+              return ImageBuilder(snapshot.data);
             }
             break;
           case ConnectionState.none:
@@ -38,14 +38,7 @@ class _FinishPageState extends State<FinishPage> {
           case ConnectionState.waiting:
             print('waiting');
             return Scaffold(
-              appBar: AppBar(
-                title: InkWell(
-                  child: Icon(Icons.arrow_back),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
+              appBar: AppBar(),
               body: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -78,11 +71,15 @@ class _FinishPageState extends State<FinishPage> {
   imageFuture() async {
     var a = await Server().getFinishImage(widget.number);
     print('aaa:${a['result']}');
-    return 1;
+    return a['result'];
   }
 }
 
 class ImageBuilder extends StatefulWidget {
+  final data;
+
+  ImageBuilder(this.data);
+
   @override
   _ImageBuilderState createState() => _ImageBuilderState();
 }
@@ -103,6 +100,7 @@ class _ImageBuilderState extends State<ImageBuilder> {
 
   @override
   Widget build(BuildContext context) {
+    print('data是: ${widget.data}');
     List list = [
       '送货单编号：',
       '车牌号码：',
@@ -116,16 +114,16 @@ class _ImageBuilderState extends State<ImageBuilder> {
       '供应商联系方式：'
     ];
     List dd = [
-      'GCZC00017227',
+      widget.data['allMessage']['waybill_ID'],
       '粤ABF949',
       '云南昆明保利山水云亭二期项目1标',
       '云南保晟房地产开发有限公司',
       '广州市东滕装饰工程有限公司(一标)',
-      '祝杨林',
-      '18307391395',
+      widget.data['allMessage']['constructionSiteContactPerson'],
+      widget.data['allMessage']['constructionSiteContactPhone'],
       '昆明市呈贡区黄陂土片区保利山水云亭',
-      '曾永裕',
-      '13922777784'
+      widget.data['allMessage']['supplierContactPerson'],
+      widget.data['allMessage']['supplierContactPhone']
     ];
     return Scaffold(
       appBar: AppBar(
@@ -187,7 +185,7 @@ class _ImageBuilderState extends State<ImageBuilder> {
                             child: AspectRatio(
                               aspectRatio: 16 / 10,
                               child: Image.network(
-                                image[index],
+                                widget.data['imageUrl'][index],
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -199,7 +197,8 @@ class _ImageBuilderState extends State<ImageBuilder> {
                                   context: context,
                                   barrierDismissible: false,
                                   builder: (context) {
-                                    return dialogImageBuilder(image, index);
+                                    return dialogImageBuilder(
+                                        widget.data['imageUrl'], index);
                                   });
                             },
                           ),

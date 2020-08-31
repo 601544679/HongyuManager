@@ -147,7 +147,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                           children: [
                             Expanded(
                                 child: Text(
-                              '${widget.waybill[index]['driverName']}',
+                              '司机：${widget.waybill[index]['driverName']}',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: SizeConfig.widthMultiplier * 4),
@@ -187,7 +187,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            textStyle('到货日期：', fontSize),
+                            textStyle('预计到达：', fontSize),
                             Expanded(
                               child: textStyle(
                                   '${date(1597350000000)}', fontSize,

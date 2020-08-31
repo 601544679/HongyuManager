@@ -234,10 +234,10 @@ class _MapScreenState extends State<MapScreen> {
           widget: Container(
             height: i == 0
                 ? SizeConfig.heightMultiplier * 4.5
-                : SizeConfig.widthMultiplier * 5,
+                : SizeConfig.widthMultiplier * 2,
             width: i == 0
                 ? SizeConfig.widthMultiplier * 15
-                : SizeConfig.widthMultiplier * 5,
+                : SizeConfig.widthMultiplier * 2,
             child: Material(
               borderRadius: BorderRadius.circular(30),
               shadowColor: Colors.transparent,
