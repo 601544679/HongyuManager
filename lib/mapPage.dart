@@ -231,8 +231,9 @@ class _MapScreenState extends State<MapScreen> {
     List<MarkerOption> marks = [];
     for (int i = 0; i < widget.waybill['latitude'].length; i++) {
       marks.add(MarkerOption(
-          latLng: LatLng(
-              widget.waybill['latitude'][i].toDouble(), widget.waybill['longitude'][i].toDouble()),
+          latLng: LatLng(widget.waybill['latitude'][i].toDouble(),
+              widget.waybill['longitude'][i].toDouble()),
+          title: i == 0 ? '司机在这里' : '',
           widget: Container(
             height: i == 0
                 ? SizeConfig.heightMultiplier * 4.5
@@ -245,15 +246,13 @@ class _MapScreenState extends State<MapScreen> {
               shadowColor: Colors.transparent,
               color: Colors.indigo[colorNum],
               elevation: 7.0,
-              child: InkWell(
-                child: Center(
-                  child: Text(
-                    i == 0 ? '当前位置' : '',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Montserrat'),
-                  ),
+              child: Center(
+                child: Text(
+                  i == 0 ? '当前位置' : '',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Montserrat'),
                 ),
               ),
             ),

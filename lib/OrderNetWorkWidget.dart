@@ -193,7 +193,8 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                             textStyle('发货日期：', fontSize),
                             Expanded(
                               child: textStyle(
-                                  '${date(1597120000000)}', fontSize,
+                                  '${date(widget.waybill[index]['departureDate'] ?? 1597120000000)}',
+                                  fontSize,
                                   color: Colors.red),
                             ),
                           ],
@@ -205,7 +206,8 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                             textStyle('预计到达：', fontSize),
                             Expanded(
                               child: textStyle(
-                                  '${date(1597350000000)}', fontSize,
+                                  '${date(widget.waybill[index]['arrivalTime'] ?? 1597350000000)}',
+                                  fontSize,
                                   color: Colors.green),
                             ),
                           ],
