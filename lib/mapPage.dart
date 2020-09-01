@@ -233,7 +233,7 @@ class _MapScreenState extends State<MapScreen> {
       marks.add(MarkerOption(
           latLng: LatLng(widget.waybill['latitude'][i].toDouble(),
               widget.waybill['longitude'][i].toDouble()),
-          title: i == 0 ? '司机在这里' : '',
+          title: i == 0 ? '司机在这里' : '途径点',
           widget: Container(
             height: i == 0
                 ? SizeConfig.heightMultiplier * 4.5
