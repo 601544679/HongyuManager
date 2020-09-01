@@ -15,7 +15,7 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
     '送货单编号', //waybill_ ID                                GCZC00014245
     '销售单号', //XK_ NO                                       XK0007467019
     '客户名称', //company_ ID                                  深圳碧胜发展有限公司
-    '项目部名称', //projectDepartmentName                      海南金海晟投资有限公司(二部三期)
+    '项目部名称', //projectName                                海南金海晟投资有限公司(二部三期)
     '施工单位', //constructionCompanyName                      辽宁德昌建设工程有限公司
     '项目地址', //projectAddress                               海口新埠岛滨海国际项目2101地块
     '业务员名称', //supplierContactPerson                      高展鹏

@@ -177,18 +177,34 @@ class _MapScreenState extends State<MapScreen> {
                           ),
                         ],
                       ),
+                      SizedBox(
+                        height: SizeConfig.heightMultiplier,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            '送货地址：${widget.waybill['address']}',
+                            '送货地址：',
                             style: TextStyle(
                                 fontSize: SizeConfig.heightMultiplier * 2.19,
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black),
                           ),
+                          Expanded(
+                            child: Text(
+                              '${widget.waybill['address']}',
+                              style: TextStyle(
+                                  fontSize: SizeConfig.heightMultiplier * 2.19,
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                            ),
+                          )
                         ],
+                      ),
+                      SizedBox(
+                        height: SizeConfig.heightMultiplier,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -202,6 +218,9 @@ class _MapScreenState extends State<MapScreen> {
                                 color: Colors.black),
                           ),
                         ],
+                      ),
+                      SizedBox(
+                        height: SizeConfig.heightMultiplier,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
