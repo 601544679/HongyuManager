@@ -98,7 +98,9 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('经纬度: ${widget.waybill['latitude'].length}');
+    //print('经纬度: ${widget.waybill['latitude'].length}');
+    print("目的地：${widget.waybill['destination']['latitude']}");
+    print("目的地：${widget.waybill['destination']['longitude']}");
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -230,7 +232,7 @@ class _MapScreenState extends State<MapScreen> {
     for (int i = 0; i < widget.waybill['latitude'].length; i++) {
       marks.add(MarkerOption(
           latLng: LatLng(
-              widget.waybill['latitude'][i], widget.waybill['longitude'][i]),
+              widget.waybill['latitude'][i].toDouble(), widget.waybill['longitude'][i].toDouble()),
           widget: Container(
             height: i == 0
                 ? SizeConfig.heightMultiplier * 4.5
@@ -259,9 +261,9 @@ class _MapScreenState extends State<MapScreen> {
     }
     marks.add(MarkerOption(
         latLng: LatLng(
-            //widget.waybill.destinationLat.toDouble(), widget.waybill.destinationLon.toDouble()
-            23.03509484,
-            113.13402564),
+            widget.waybill['destination']['latitude'].toDouble() ?? 23.03509484,
+            widget.waybill['destination']['longitude'].toDouble() ??
+                113.13402564),
         title: 'test',
         widget: Container(
           height: SizeConfig.heightMultiplier * 4.5,

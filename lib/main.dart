@@ -7,7 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mydemo/sizeConfig.dart';
 import 'login.dart';
 import 'constant.dart';
-import 'userclass.dart';
+import 'userClass.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

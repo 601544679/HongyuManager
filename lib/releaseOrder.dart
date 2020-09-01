@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mydemo/constant.dart';
 import 'sizeConfig.dart';
@@ -8,34 +10,33 @@ class ReleaseOrder extends StatefulWidget {
 }
 
 class _ReleaseOrderState extends State<ReleaseOrder> {
+  //发布订单没有车牌号码，司机接单后才添加车牌号码
   List list = [
-    '送货单编号',
-    '销售单号',
-    '客户名称',
-    '项目部名称',
-    '施工单位',
-    '项目地址',
-    '业务员名称',
-    '业务员电话',
-    '收货人姓名',
-    '收货人电话',
-    '运输方式',
-    '车牌号码',
-    '物料号',
-    '客户编码',
-    '开单|色号',
-    '规格',
-    '跟单通知发货|发货数量',
-    '跟单通知发货|开单单位',
-    '跟单通知发货|数量(块)',
-    '跟单通知发货|M2',
-    '装车备注',
-    '明细备注'
+    '送货单编号', //waybill_ ID                                GCZC00014245
+    '销售单号', //XK_ NO                                       XK0007467019
+    '客户名称', //company_ ID                                  深圳碧胜发展有限公司
+    '项目部名称', //projectDepartmentName                      海南金海晟投资有限公司(二部三期)
+    '施工单位', //constructionCompanyName                      辽宁德昌建设工程有限公司
+    '项目地址', //projectAddress                               海口新埠岛滨海国际项目2101地块
+    '业务员名称', //supplierContactPerson                      高展鹏
+    '业务员电话', //supplierContactPhone                       13590665414
+    '收货人姓名', //constructionSiteContactPerson              黄海德
+    '收货人电话', //constructionSiteContactPhone               15595652151
+    '运输方式', //ModeOfTransport                              汽运
+    '物料号', //materialsNumber                                MG150-600-0
+    '客户编码', //client_ID                                    HMG60913M
+    '开单|色号', //billingColor                                GB015V
+    '规格', // size                                            150* 600
+    '跟单通知发货|发货数量', //amount                           800
+    '跟单通知发货|开单单位', //BillingUnit                      块
+    '跟单通知发货|数量(块)', //subtotal                         800
+    '跟单通知发货|M2', //M2
+    '装车备注', //loadingRemarks
+    '明细备注' //detailedRemarks
   ];
-
-  //
-  List<TextEditingController> textEditingController = List();
+  Map<String, dynamic> map = {};
   final _releaseFormKey = GlobalKey<FormState>();
+  List valueList = List();
 
   @override
   Widget build(BuildContext context) {
@@ -110,6 +111,12 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
                             }
                             return null;
                           },
+                          onSaved: (value) {
+                            valueList.add(value);
+                            Map<String, dynamic> map1 = {};
+                            map1 = {list[index]: value};
+                            map.addAll(map1);
+                          },
                           decoration: InputDecoration(
                               hintText: '请输入${list[index]}',
                               border: OutlineInputBorder(
@@ -137,6 +144,9 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
                   //todo 发布订单
                   if (_releaseFormKey.currentState.validate()) {
                     _releaseFormKey.currentState.save();
+                    print('TextFiled信息: ${valueList}');
+                    print('map信息: ${map}');
+                    print('map信息: ${jsonEncode(map)}');
                   }
                 },
                 child: Text(

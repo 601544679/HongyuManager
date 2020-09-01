@@ -85,11 +85,6 @@ class ImageBuilder extends StatefulWidget {
 }
 
 class _ImageBuilderState extends State<ImageBuilder> {
-  List image = [
-    'https://i0.hdslb.com/bfs/archive/8960f855cdc2c0576d89626f2da080e2f2cf876b.jpg',
-    'https://i0.hdslb.com/bfs/archive/563c74bf0dec75460eeffdda71fc3791913fcc5e.png@320w_184h_1c_100q.png',
-    'https://i0.hdslb.com/bfs/live/69b3af257667506850bdc44621b176dd1055598d.jpg@320w_330h_1c_100q.webp'
-  ];
   List s = ['工地现场图', '运货单号', '顺丰单号'];
   var fontSize = SizeConfig.heightMultiplier * 2;
   var fontSize1 = SizeConfig.heightMultiplier * 2.5;
@@ -115,15 +110,17 @@ class _ImageBuilderState extends State<ImageBuilder> {
     ];
     List dd = [
       widget.data['allMessage']['waybill_ID'],
-      '粤ABF949',
-      '云南昆明保利山水云亭二期项目1标',
-      '云南保晟房地产开发有限公司',
-      '广州市东滕装饰工程有限公司(一标)',
-      widget.data['allMessage']['constructionSiteContactPerson'],
-      widget.data['allMessage']['constructionSiteContactPhone'],
-      '昆明市呈贡区黄陂土片区保利山水云亭',
-      widget.data['allMessage']['supplierContactPerson'],
-      widget.data['allMessage']['supplierContactPhone']
+      widget.data['allMessage']['carNo'] ?? '粤ABF949',
+      widget.data['allMessage']['projectName'] ?? '云南昆明保利山水云亭二期项目1标',
+      widget.data['allMessage']['company_ID'] ?? '云南保晟房地产开发有限公司',
+      widget.data['allMessage']['constructionCompanyName'] ??
+          '广州市东滕装饰工程有限公司(一标)',
+      widget.data['allMessage']['constructionSiteContactPerson'] ?? '高德伟',
+      widget.data['allMessage']['constructionSiteContactPhone'] ??
+          '13952654785',
+      widget.data['allMessage']['projectAddress'] ?? '昆明市呈贡区黄陂土片区保利山水云亭',
+      widget.data['allMessage']['supplierContactPerson'] ?? '金凯鹏',
+      widget.data['allMessage']['supplierContactPhone'] ?? '18654723369'
     ];
     return Scaffold(
       appBar: AppBar(
@@ -191,7 +188,7 @@ class _ImageBuilderState extends State<ImageBuilder> {
                             ),
                             onTap: () {
                               Fluttertoast.showToast(
-                                  msg: '$index',
+                                  msg: '${s[index]}',
                                   toastLength: Toast.LENGTH_SHORT);
                               showDialog(
                                   context: context,
@@ -209,7 +206,7 @@ class _ImageBuilderState extends State<ImageBuilder> {
                       ),
                     );
                   },
-                  itemCount: image.length,
+                  itemCount: widget.data['imageUrl'].length,
                 ))
               ],
             ),

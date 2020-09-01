@@ -47,12 +47,19 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
             //widget.waybill[index]['state']
             switch (widget.waybill[index]['state']) {
               case 'inProgress':
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MapPage(orderNumber: widget.waybill[index]['ID'],)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MapPage(
+                              orderNumber: widget.waybill[index]['ID'],
+                            )));
                 break;
               case 'Finished':
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => FinishPage(number: widget.waybill[index]['ID'])));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            FinishPage(number: widget.waybill[index]['ID'])));
                 break;
             }
           },
@@ -75,7 +82,8 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                             textStyle('运输单号：', fontSize),
                             Expanded(
                               child: textStyle(
-                                  '${widget.waybill[index]['ID']}', fontSize),
+                                  '${widget.waybill[index]['ID'] ?? 'GCZC00025478'}',
+                                  fontSize),
                             )
                           ],
                         ),
@@ -88,7 +96,9 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                           children: [
                             textStyle('项目名称：', fontSize),
                             Expanded(
-                                child: textStyle('云南昆明保利山水云亭二期项目1标', fontSize))
+                                child: textStyle(
+                                    '${widget.waybill[index]['projectName'] ?? '云南昆明保利山水云亭二期项目1标'}',
+                                    fontSize))
                           ],
                         ),
                         SizedBox(height: sizedBoxHeight),
@@ -97,18 +107,21 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                           children: [
                             textStyle('施工单位：', fontSize),
                             Expanded(
-                                child: textStyle('广州市东滕装饰工程有限公司(一标)', fontSize))
+                                child: textStyle(
+                                    '${widget.waybill[index]['ConstructionUnit'] ?? '广州市东滕装饰工程有限公司(一标)'}',
+                                    fontSize))
                           ],
                         ),
                         SizedBox(height: sizedBoxHeight),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Expanded(
                               child: textStyle(
-                                  '${widget.waybill[index]['startLocationName']}',
+                                  '${widget.waybill[index]['startLocationName'] ?? '佛山'}',
                                   fontSize * 2,
-                                  fontWeight: FontWeight.bold,textAlign: TextAlign.center),
+                                  fontWeight: FontWeight.bold,
+                                  textAlign: TextAlign.center),
                               flex: 2,
                             ),
                             Expanded(
@@ -131,13 +144,15 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                                           ? Colors.green
                                           : Colors.red),
                                 ],
-                              ),flex: 1,
+                              ),
+                              flex: 1,
                             ),
                             Expanded(
                               child: textStyle(
-                                  '${widget.waybill[index]['destinationName']}',
+                                  '${widget.waybill[index]['destinationName'] ?? '海口'}',
                                   fontSize * 2,
-                                  fontWeight: FontWeight.bold,textAlign: TextAlign.center),
+                                  fontWeight: FontWeight.bold,
+                                  textAlign: TextAlign.center),
                               flex: 2,
                             ),
                           ],
@@ -147,14 +162,14 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                           children: [
                             Expanded(
                                 child: Text(
-                              '司机：${widget.waybill[index]['driverName']}',
+                              '司机：${widget.waybill[index]['driverName'] ?? '李玉红'}',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: SizeConfig.widthMultiplier * 4),
                             )),
                             Expanded(
                                 child: Text(
-                              '业务员：陈关西',
+                              '业务员：${widget.waybill[index]['supplierContactPerson'] ?? '李玉'}',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: SizeConfig.widthMultiplier * 4),

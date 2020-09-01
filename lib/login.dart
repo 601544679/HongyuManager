@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'sizeConfig.dart';
 import 'constant.dart';
-import 'userclass.dart';
+import 'userClass.dart';
 import 'server.dart';
 
 class LoginPage extends StatefulWidget {
@@ -21,7 +21,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-
     User _user = widget.user ?? null;
     if (_user?.password != null && _user?.password != "") {
       checkBoxValue = true;

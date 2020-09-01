@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
-import 'userclass.dart';
+import 'userClass.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'login.dart';
@@ -229,6 +229,13 @@ class Server {
       'date': '发货日期'
     }*/
         responseBody;
+  }
+
+  //todo 发布订单
+  releaseWaybill(Map map) {
+    var responseBody;
+    //_post(url, map);
+    return responseBody;
   }
 
 //todo 获取完成订单的三张图片 改为获取订单的所有信息
