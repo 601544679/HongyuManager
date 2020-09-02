@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mydemo/constant.dart';
 import 'sizeConfig.dart';
 
+//发布订单
 class ReleaseOrder extends StatefulWidget {
   @override
   _ReleaseOrderState createState() => _ReleaseOrderState();
@@ -24,14 +25,14 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
     '收货人电话', //constructionSiteContactPhone               15595652151
     '运输方式', //ModeOfTransport                              汽运
     '物料号', //materialsNumber                                MG150-600-0
-    '客户编码', //client_ID                                    HMG60913M
-    '开单|色号', //billingColor                                GB015V
+    '客户编码', //client_ID
+    '开单|色号', //billingColor                                HMG60906M HC002CCV(工程部碧桂园项目备货)
     '规格', // size                                            150* 600
     '跟单通知发货|发货数量', //amount                           800
     '跟单通知发货|开单单位', //BillingUnit                      块
     '跟单通知发货|数量(块)', //subtotal                         800
-    '跟单通知发货|M2', //M2
-    '装车备注', //loadingRemarks
+    '跟单通知发货|M2', //M2                                     72
+    '装车备注', //loadingRemarks                                HC002CCV
     '明细备注' //detailedRemarks
   ];
   Map<String, dynamic> map = {};

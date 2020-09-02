@@ -85,7 +85,7 @@ class _HomeState extends State<Home> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.person,
+                    Icon(Icons.directions_car,
                         size: SizeConfig.heightMultiplier * 3,
                         color: currentTab == 2
                             ? Colors.indigo[colorNum]

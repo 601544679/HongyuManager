@@ -210,7 +210,7 @@ class _MapScreenState extends State<MapScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            '收货人：${widget.waybill['receiver']}',
+                            '收货人：    ${widget.waybill['receiver']}',
                             style: TextStyle(
                                 fontSize: SizeConfig.heightMultiplier * 2.19,
                                 fontFamily: 'Montserrat',
@@ -252,14 +252,14 @@ class _MapScreenState extends State<MapScreen> {
       marks.add(MarkerOption(
           latLng: LatLng(widget.waybill['latitude'][i].toDouble(),
               widget.waybill['longitude'][i].toDouble()),
-          title: i == 0 ? '司机在这里' : '途径点',
+          title: widget.waybill['positionName'][i],
           widget: Container(
             height: i == 0
                 ? SizeConfig.heightMultiplier * 4.5
-                : SizeConfig.widthMultiplier * 2,
+                : SizeConfig.widthMultiplier * 3,
             width: i == 0
                 ? SizeConfig.widthMultiplier * 15
-                : SizeConfig.widthMultiplier * 2,
+                : SizeConfig.widthMultiplier * 3,
             child: Material(
               borderRadius: BorderRadius.circular(30),
               shadowColor: Colors.transparent,

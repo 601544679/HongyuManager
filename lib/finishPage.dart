@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_drag_scale/flutter_drag_scale.dart';
 import 'package:flutter/services.dart';
 
+//查看已完成订单的详细信息
 class FinishPage extends StatefulWidget {
   @override
   _FinishPageState createState() => _FinishPageState();

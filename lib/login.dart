@@ -3,6 +3,8 @@ import 'sizeConfig.dart';
 import 'constant.dart';
 import 'userClass.dart';
 import 'server.dart';
+import 'mainPage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginPage extends StatefulWidget {
   final User user;
@@ -19,9 +21,33 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _passwordControl = new TextEditingController();
   final _loginformKey = GlobalKey<FormState>();
 
+  autoLogin(context) async {
+    if (checkBoxValue &&
+        widget.user?.phoneNumber != null &&
+        widget.user?.password != null) {
+      var response = await server.mobilePhoneLogin(
+          widget.user?.phoneNumber ?? null,
+          widget.user?.password ?? null,
+          false);
+      if (response != null) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Home(), fullscreenDialog: true));
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => autoLogin(context));
+  }
+
   @override
   Widget build(BuildContext context) {
-    User _user = widget.user ?? null;
+    User _user = widget.user ?? User();
     if (_user?.password != null && _user?.password != "") {
       checkBoxValue = true;
       _passwordControl.text = _user.password;
@@ -198,6 +224,9 @@ class _LoginPageState extends State<LoginPage> {
                               _user.saveUser(_user);
                               print(response);
                               Navigator.pushNamed(context, "/homePage");
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: '登录失败', toastLength: Toast.LENGTH_SHORT);
                             }
                           }
                         },

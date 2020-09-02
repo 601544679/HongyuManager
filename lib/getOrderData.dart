@@ -5,6 +5,7 @@ import 'sizeConfig.dart';
 import 'userclass.dart';
 import 'server.dart';
 
+//获取订单数据
 class getOrderData extends StatefulWidget {
   @override
   _getOrderDataState createState() => _getOrderDataState();
