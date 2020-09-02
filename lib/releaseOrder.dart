@@ -37,9 +37,15 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
   Map<String, dynamic> map = {};
   final _releaseFormKey = GlobalKey<FormState>();
   List valueList = List();
+  List splited = List();
 
   @override
   Widget build(BuildContext context) {
+    var _controllers = <TextEditingController>[];
+    for (var i = 0; i < 21; i++) {
+      var _controller = new TextEditingController();
+      _controllers.add(_controller);
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('发布订单'),
@@ -69,6 +75,11 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
                 maxLines: null,
                 onChanged: (value) {
                   //todo 粘贴订单内容后，开始自动识别，智能填充
+                  splited = value.split(" ");
+
+                  for (var i = 0; i < 21; i++) {
+                    _controllers[i].text = splited[i];
+                  }
                 },
                 decoration: InputDecoration(
                     hintText: '请粘贴复制的订单内容',
@@ -104,6 +115,7 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
                         ),
                         TextFormField(
                           // ignore: missing_return
+                          controller: _controllers[index],
                           validator: (value) {
                             print('value${value}');
                             if (value.isEmpty) {
