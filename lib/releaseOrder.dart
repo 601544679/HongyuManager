@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:mydemo/constant.dart';
@@ -74,10 +75,8 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
               TextField(
                 maxLines: null,
                 onChanged: (value) {
-                  //todo 粘贴订单内容后，开始自动识别，智能填充
                   splited = value.split(" ");
-
-                  for (var i = 0; i < 21; i++) {
+                  for (var i = 0; i < min(splited.length, 21); i++) {
                     _controllers[i].text = splited[i];
                   }
                 },
