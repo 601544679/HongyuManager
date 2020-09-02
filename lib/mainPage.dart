@@ -15,6 +15,8 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    print('currentTab: ${currentTab}');
+    currentTab = 0;
     return Scaffold(
       body: currentScreen,
       bottomNavigationBar: BottomAppBar(

@@ -30,10 +30,7 @@ class _LoginPageState extends State<LoginPage> {
           widget.user?.password ?? null,
           false);
       if (response != null) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => Home(), fullscreenDialog: true));
+        Navigator.pushNamedAndRemoveUntil(context, "/homePage", (route) => route == null);
       }
     }
   }
@@ -223,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
                               _user.isSave = checkBoxValue;
                               _user.saveUser(_user);
                               print(response);
-                              Navigator.pushNamed(context, "/homePage");
+                              Navigator.pushNamedAndRemoveUntil(context, "/homePage", (route) => route == null);
                             } else {
                               Fluttertoast.showToast(
                                   msg: '登录失败', toastLength: Toast.LENGTH_SHORT);

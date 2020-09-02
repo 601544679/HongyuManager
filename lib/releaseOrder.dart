@@ -14,27 +14,48 @@ class ReleaseOrder extends StatefulWidget {
 class _ReleaseOrderState extends State<ReleaseOrder> {
   //发布订单没有车牌号码，司机接单后才添加车牌号码
   List list = [
-    '送货单编号', //waybill_ ID                                GCZC00014245
-    '销售单号', //XK_ NO                                       XK0007467019
-    '客户名称', //company_ ID                                  深圳碧胜发展有限公司
-    '项目部名称', //projectName                                海南金海晟投资有限公司(二部三期)
-    '施工单位', //constructionCompanyName                      辽宁德昌建设工程有限公司
-    '项目地址', //projectAddress                               海口新埠岛滨海国际项目2101地块
-    '业务员名称', //supplierContactPerson                      高展鹏
-    '业务员电话', //supplierContactPhone                       13590665414
-    '收货人姓名', //constructionSiteContactPerson              黄海德
-    '收货人电话', //constructionSiteContactPhone               15595652151
-    '运输方式', //ModeOfTransport                              汽运
-    '物料号', //materialsNumber                                MG150-600-0
-    '客户编码', //client_ID
-    '开单|色号', //billingColor                                HMG60906M HC002CCV(工程部碧桂园项目备货)
-    '规格', // size                                            150* 600
-    '跟单通知发货|发货数量', //amount                           800
-    '跟单通知发货|开单单位', //BillingUnit                      块
-    '跟单通知发货|数量(块)', //subtotal                         800
-    '跟单通知发货|M2', //M2                                     72
-    '装车备注', //loadingRemarks                                HC002CCV
-    '明细备注' //detailedRemarks
+    '送货单编号',
+    //waybill_ ID                                GCZC00014245
+    '销售单号',
+    //XK_ NO                                       XK0007467019
+    '客户名称',
+    //company_ ID                                  深圳碧胜发展有限公司
+    '项目部名称',
+    //projectName                                海南金海晟投资有限公司(二部三期)
+    '施工单位',
+    //constructionCompanyName                      辽宁德昌建设工程有限公司
+    '项目地址',
+    //projectAddress                               海口新埠岛滨海国际项目2101地块
+    '业务员名称',
+    //supplierContactPerson                      高展鹏
+    '业务员电话',
+    //supplierContactPhone                       13590665414
+    '收货人姓名',
+    //constructionSiteContactPerson              黄海德
+    '收货人电话',
+    //constructionSiteContactPhone               15595652151
+    '运输方式',
+    //ModeOfTransport                              汽运
+    '物料号',
+    //materialsNumber                                MG150-600-0
+    '客户编码',
+    //client_ID
+    '开单|色号',
+    //billingColor                                HMG60906M HC002CCV(工程部碧桂园项目备货)
+    '规格',
+    // size                                            150* 600
+    '跟单通知发货|发货数量',
+    //amount                           800
+    '跟单通知发货|开单单位',
+    //BillingUnit                      块
+    '跟单通知发货|数量(块)',
+    //subtotal                         800
+    '跟单通知发货|M2',
+    //M2                                     72
+    '装车备注',
+    //loadingRemarks                                HC002CCV
+    '明细备注'
+    //detailedRemarks
   ];
   Map<String, dynamic> map = {};
   final _releaseFormKey = GlobalKey<FormState>();
@@ -77,8 +98,10 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
                 maxLines: null,
                 onChanged: (value) {
                   splited = value.split(" ");
-                  for (var i = 0; i < min(splited.length, 21); i++) {
-                    _controllers[i].text = splited[i];
+                  for (var i = 0; i < 21; i++) {
+                    for (var i = 0; i < min(splited.length, 21); i++) {
+                      _controllers[i].text = splited[i];
+                    }
                   }
                 },
                 decoration: InputDecoration(

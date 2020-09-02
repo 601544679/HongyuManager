@@ -52,7 +52,7 @@ class _UserTabState extends State<UserTab> {
     '桂A•95227',
     '疆A•5hh85',
   ];
-  int currentTab = 0;
+  int currentTab =0;
 
   @override
   Widget build(BuildContext context) {
@@ -73,13 +73,8 @@ class _UserTabState extends State<UserTab> {
                         prefs.clear();
                         final storage = new FlutterSecureStorage();
                         await storage.deleteAll();
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LoginPage(user: User()),
-                              fullscreenDialog: true),
-                          (Route<dynamic> route) => false,
-                        );
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, "/loginPage", (route) => route == null);
                       }))),
         ],
         title: Text(userTabName),
