@@ -15,7 +15,7 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
   //发布订单没有车牌号码，司机接单后才添加车牌号码
   List list = [
     '送货日期', //departureDate                                2020-09-02
-    '物流单号',//                                              GCWL00018834
+    '物流单号', //                                              GCWL00018834
     '送货单编号', //waybill_ ID                                GCZC00021371
     '销售单号', //XK_ NO                                       XK0007549849
     '名义客户', //company_ ID                                  佛山万科置业有限公司(佛山万科星都荟项目)
@@ -37,12 +37,12 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
     '跟单通知发货|发货数量', //amount                           28
     '跟单通知发货|数量(块)', //subtotal                         28
     '跟单通知发货|M2', //M2                                    7.56
-    '自定义打印|送货单价(块) ',//                               12.7683
-    '托板总数',//
-    '物流结算|发货重量（吨）',//                                 0.168
-    '明细备注' ,//detailedRemarks
+    '自定义打印|送货单价(块) ', //                               12.7683
+    '托板总数', //
+    '物流结算|发货重量（吨）', //                                 0.168
+    '明细备注', //detailedRemarks
     '装车备注', //loadingRemarks                               和坚487单,要求带搬运，穿着整齐，长裤，带安全帽，反光衣，
-                                                            // 不能抽烟，送货时间早上10点30以后，下午3点半之后！要求今天到货
+    // 不能抽烟，送货时间早上10点30以后，下午3点半之后！要求今天到货
   ];
   Map<String, dynamic> map = {};
   final _releaseFormKey = GlobalKey<FormState>();
@@ -52,7 +52,7 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
   @override
   Widget build(BuildContext context) {
     var _controllers = <TextEditingController>[];
-    for (var i = 0; i < 21; i++) {
+    for (var i = 0; i < 28; i++) {
       var _controller = new TextEditingController();
       _controllers.add(_controller);
     }
@@ -85,8 +85,8 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
                 maxLines: null,
                 onChanged: (value) {
                   splited = value.split(" ");
-                  for (var i = 0; i < 21; i++) {
-                    for (var i = 0; i < min(splited.length, 21); i++) {
+                  for (var i = 0; i < 28; i++) {
+                    for (var i = 0; i < min(splited.length, 28); i++) {
                       _controllers[i].text = splited[i];
                     }
                   }
@@ -125,7 +125,7 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
                         ),
                         TextFormField(
                           // ignore: missing_return
-                          //controller: _controllers[index],
+                          controller: _controllers[index],
                           validator: (value) {
                             print('value${value}');
                             if (value.isEmpty) {
