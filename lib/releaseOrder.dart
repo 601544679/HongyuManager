@@ -14,48 +14,35 @@ class ReleaseOrder extends StatefulWidget {
 class _ReleaseOrderState extends State<ReleaseOrder> {
   //发布订单没有车牌号码，司机接单后才添加车牌号码
   List list = [
-    '送货单编号',
-    //waybill_ ID                                GCZC00014245
-    '销售单号',
-    //XK_ NO                                       XK0007467019
-    '客户名称',
-    //company_ ID                                  深圳碧胜发展有限公司
-    '项目部名称',
-    //projectName                                海南金海晟投资有限公司(二部三期)
-    '施工单位',
-    //constructionCompanyName                      辽宁德昌建设工程有限公司
-    '项目地址',
-    //projectAddress                               海口新埠岛滨海国际项目2101地块
-    '业务员名称',
-    //supplierContactPerson                      高展鹏
-    '业务员电话',
-    //supplierContactPhone                       13590665414
-    '收货人姓名',
-    //constructionSiteContactPerson              黄海德
-    '收货人电话',
-    //constructionSiteContactPhone               15595652151
-    '运输方式',
-    //ModeOfTransport                              汽运
-    '物料号',
-    //materialsNumber                                MG150-600-0
-    '客户编码',
-    //client_ID
-    '开单|色号',
-    //billingColor                                HMG60906M HC002CCV(工程部碧桂园项目备货)
-    '规格',
-    // size                                            150* 600
-    '跟单通知发货|发货数量',
-    //amount                           800
-    '跟单通知发货|开单单位',
-    //BillingUnit                      块
-    '跟单通知发货|数量(块)',
-    //subtotal                         800
-    '跟单通知发货|M2',
-    //M2                                     72
-    '装车备注',
-    //loadingRemarks                                HC002CCV
-    '明细备注'
-    //detailedRemarks
+    '送货日期', //departureDate                                2020-09-02
+    '物流单号',//                                              GCWL00018834
+    '送货单编号', //waybill_ ID                                GCZC00021371
+    '销售单号', //XK_ NO                                       XK0007549849
+    '名义客户', //company_ ID                                  佛山万科置业有限公司(佛山万科星都荟项目)
+    '项目部名称', //projectName                                佛山万科置业有限公司
+    '施工单位', //constructionCompanyName                      广州市景晖园林景观工程有限公司
+    '项目地址', //projectAddress                               广东省佛山市顺德区龙洲路北（骏马修车厂附近）
+    '业务员名称', //supplierContactPerson                      李啟然
+    '业务员电话', //supplierContactPhone                       13827798161
+    '收货人姓名', //constructionSiteContactPerson              王永淦
+    '收货人电话', //constructionSiteContactPhone               13725285112
+    '运输方式', //ModeOfTransport                              汽运
+    '车牌号码', //carNo
+    '装车柜号',
+    '物料号', //materialsNumber                                FT200-318-0
+    '客户编码', //client_ID                                    HG60816
+    '规格', // size                                            450x600
+    '开单|色号', //billingColor                                YA0601(和坚487单-万科佛山星都荟园林景观工程)
+    '跟单通知发货|开单单位', //BillingUnit                      块
+    '跟单通知发货|发货数量', //amount                           28
+    '跟单通知发货|数量(块)', //subtotal                         28
+    '跟单通知发货|M2', //M2                                    7.56
+    '自定义打印|送货单价(块) ',//                               12.7683
+    '托板总数',//
+    '物流结算|发货重量（吨）',//                                 0.168
+    '明细备注' ,//detailedRemarks
+    '装车备注', //loadingRemarks                               和坚487单,要求带搬运，穿着整齐，长裤，带安全帽，反光衣，
+                                                            // 不能抽烟，送货时间早上10点30以后，下午3点半之后！要求今天到货
   ];
   Map<String, dynamic> map = {};
   final _releaseFormKey = GlobalKey<FormState>();
@@ -138,7 +125,7 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
                         ),
                         TextFormField(
                           // ignore: missing_return
-                          controller: _controllers[index],
+                          //controller: _controllers[index],
                           validator: (value) {
                             print('value${value}');
                             if (value.isEmpty) {

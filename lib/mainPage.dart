@@ -11,12 +11,21 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  Widget currentScreen = HomeTab();
+  Widget currentScreen = IndexedStack(
+    index: 0,
+    children: [HomeTab(), OrderTab(), UserTab()],
+  );
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    currentTab = 0;
+  }
 
   @override
   Widget build(BuildContext context) {
     print('currentTab: ${currentTab}');
-    currentTab = 0;
     return Scaffold(
       body: currentScreen,
       bottomNavigationBar: BottomAppBar(
@@ -29,7 +38,10 @@ class _HomeState extends State<Home> {
                 onPressed: () {
                   setState(() {
                     currentTab = 0;
-                    currentScreen = HomeTab();
+                    currentScreen = IndexedStack(
+                      index: 0,
+                      children: [HomeTab(), OrderTab(), UserTab()],
+                    );
                   });
                 },
                 child: Column(
@@ -56,7 +68,10 @@ class _HomeState extends State<Home> {
                 onPressed: () {
                   setState(() {
                     currentTab = 1;
-                    currentScreen = OrderTab();
+                    currentScreen = IndexedStack(
+                      index: 1,
+                      children: [HomeTab(), OrderTab(), UserTab()],
+                    );
                   });
                 },
                 child: Column(
@@ -81,7 +96,10 @@ class _HomeState extends State<Home> {
                 onPressed: () {
                   setState(() {
                     currentTab = 2;
-                    currentScreen = UserTab();
+                    currentScreen = IndexedStack(
+                      index: 2,
+                      children: [HomeTab(), OrderTab(), UserTab()],
+                    );
                   });
                 },
                 child: Column(

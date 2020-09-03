@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'login.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'main.dart';
 
 class Server {
   static GlobalKey<NavigatorState> navigatorState;
@@ -59,15 +60,15 @@ class Server {
     return data;
   }
 
-  _post(String url, Map data, [Map header, bool second = false]) async {
+  _post(String url, Map data, [Map header, bool second = true]) async {
+    //second 为出现invalid user时是否尝试自动登录
     User user = await User().getUser();
     var responseBody;
     var httpClient = new HttpClient();
     var request = await httpClient.postUrl(Uri.parse(_baseUrl + url));
     request.headers.set('X-LC-Id', _appID);
     request.headers.set('X-LC-Key', _appKey);
-    if (user != null) {
-      //通过sessionToken进行权限验证
+    if (user != null && _baseUrl != _signUpUrl) {
       request.headers.set("X-LC-Session", user.sessionToken);
     }
     request.headers.set('Content-Type', 'application/json');
@@ -78,7 +79,7 @@ class Server {
     }
     request.add(utf8.encode(json.encode(data)));
     HttpClientResponse response = await request.close();
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       responseBody = await response.transform(utf8.decoder).join();
       responseBody = json.decode(responseBody);
       return responseBody;
@@ -87,10 +88,10 @@ class Server {
       print(response.statusCode);
       print(json.encode(data));
     }
-    if (response.statusCode != 200) {
-      if (second == false) {
-        responseBody =
-            await this.mobilePhoneLogin(user.phoneNumber, user.password, true);
+    if (responseBody == 'Invalid User') {
+      if (second == true) {
+        responseBody = await this
+            .mobilePhoneLogin(user?.phoneNumber, user?.password, false);
         if (responseBody == null) {
           Fluttertoast.showToast(
             msg: "自动登录失败",
@@ -98,9 +99,9 @@ class Server {
             gravity: ToastGravity.BOTTOM,
             timeInSecForIos: 2,
           );
-          navigatorState.currentState.pushAndRemoveUntil(
+          MyApp.navigatorState.currentState.pushAndRemoveUntil(
               MaterialPageRoute(
-                  builder: (context) => LoginPage(user: user),
+                  builder: (context) => LoginPage(user: user ?? null),
                   fullscreenDialog: true),
               (Route<dynamic> route) => false);
         } else {
@@ -112,7 +113,7 @@ class Server {
           );
           user.sessionToken = responseBody['sessionToken'];
           user.saveUser(user);
-          responseBody = await _post(url, data, header, true);
+          responseBody = await _post(url, data, header, false);
           return (responseBody);
         }
       }

@@ -38,6 +38,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
   @override
   Widget build(BuildContext context) {
     //print('订单也：${widget.waybill[0]['state']}');
+    print('${widget.waybill[0]['arrivalTime'].runtimeType}');
     return ListView.builder(
       itemBuilder: (context, index) {
         return InkWell(
@@ -188,28 +189,35 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                         ),
                         SizedBox(height: sizedBoxHeight),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            textStyle('发货日期：', fontSize),
-                            Expanded(
-                              child: textStyle(
-                                  '${date(widget.waybill[index]['departureDate'] ?? 1597120000000)}',
-                                  fontSize,
-                                  color: Colors.red),
-                            ),
+                            textStyle('发货日期', fontSize),
+                            textStyle('预计到达', fontSize),
                           ],
                         ),
-                        SizedBox(height: sizedBoxHeight),
+                        Divider(
+                          height: SizeConfig.heightMultiplier,
+                          color: Colors.black,
+                        ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            textStyle('预计到达：', fontSize),
-                            Expanded(
-                              child: textStyle(
-                                  '${date(widget.waybill[index]['arrivalTime'] ?? 1597350000000)}',
-                                  fontSize,
-                                  color: Colors.green),
+                            textStyle(
+                              '${date(widget.waybill[index]['departureDate'] ?? 1597120000000)}',
+                              fontSize,
+                              color: Colors.red,
                             ),
+                            Container(
+                              color: Colors.grey,
+                              width: 1,
+                              height: SizeConfig.heightMultiplier *
+                              4,
+                            ),
+                            textStyle(
+                                '${date(widget.waybill[index]['arrivalTime'] ?? 1597920000000)}',
+                                fontSize,
+                                color: Colors.green,
+                                textAlign: TextAlign.center),
                           ],
                         ),
                       ],

@@ -52,7 +52,14 @@ class _UserTabState extends State<UserTab> {
     '桂A•95227',
     '疆A•5hh85',
   ];
-  int currentTab =0;
+  int currentTab = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    currentTab = s.length + 1;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,16 +105,18 @@ class _UserTabState extends State<UserTab> {
                     title: Text(
                       s[index],
                       style: TextStyle(
-                          color: currentTab == index
+                          color: showVisible(currentTab, index, visible)
                               ? Colors.indigo[colorNum]
                               : Colors.black,
-                          fontWeight: currentTab == index
+                          fontWeight: showVisible(currentTab, index, visible)
                               ? FontWeight.bold
                               : FontWeight.normal),
                     ),
                     trailing: Icon(
-                      Icons.arrow_drop_down,
-                      color: currentTab == index
+                      showVisible(currentTab, index, visible)
+                          ? Icons.arrow_drop_up
+                          : Icons.arrow_drop_down,
+                      color: showVisible(currentTab, index, visible)
                           ? Colors.indigo[colorNum]
                           : Colors.grey,
                     ),
@@ -123,7 +132,7 @@ class _UserTabState extends State<UserTab> {
                       },
                       itemCount: carNoList.length,
                     ),
-                    visible: currentTab == index ? true : false,
+                    visible: showVisible(currentTab, index, visible),
                   )
                 ],
               );
@@ -131,5 +140,13 @@ class _UserTabState extends State<UserTab> {
             itemCount: s.length),
       ),
     );
+  }
+
+  bool showVisible(int currentTab, int index, bool visible) {
+    if (currentTab == index && visible == true) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

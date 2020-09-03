@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           Container(
             height: SizeConfig.heightMultiplier * 25,
-            //color: Colors.red,
+            color: Colors.white,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
           Container(
             //只能存在一个key
             height: SizeConfig.heightMultiplier * 35,
-            //color: Colors.green,
+            color: Colors.white,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -142,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           Container(
             height: SizeConfig.heightMultiplier * 20,
-            //color: Colors.blue,
+            color: Colors.white,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -246,7 +246,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           Container(
             height: SizeConfig.heightMultiplier * 20,
-            //color: Colors.yellow,
+            color: Colors.white,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
