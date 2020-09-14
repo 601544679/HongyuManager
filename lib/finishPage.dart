@@ -97,11 +97,12 @@ class ImageBuilder extends StatefulWidget {
 class _ImageBuilderState extends State<ImageBuilder>
     with SingleTickerProviderStateMixin {
   List cutList = List();
+  List indexList = List();
 
   @override
   Widget build(BuildContext context) {
     var allData = FinishDataEntity().fromJson(widget.data);
-    print('data是: ${widget.data}');
+    //print('data是: ${widget.data}');
 
     List contentList = [
       date(allData.result.allMessage.departureDate) ?? '无日期',
@@ -121,6 +122,7 @@ class _ImageBuilderState extends State<ImageBuilder>
     ];
     for (int i = 0; i < allData.result.allMessage.xkNo.length; i++) {
       List detailList = List();
+      detailList.add(i + 1);
       detailList.add(allData.result.allMessage.xkNo[i]);
       detailList.add(allData.result.allMessage.materialsNumber[i]);
       detailList.add(allData.result.allMessage.clientId[i]);
@@ -138,27 +140,7 @@ class _ImageBuilderState extends State<ImageBuilder>
       cutList.add(detailList);
     }
     print('整理--${cutList}');
-   /* List arrayContentList = [
-      allData.result.allMessage.xkNo ?? "无销售单号",
-      allData.result.allMessage.materialsNumber ?? '无物料号',
-      allData.result.allMessage.clientId ?? '无客户编码',
-      allData.result.allMessage.size ?? '无规格',
-      allData.result.allMessage.billingColor ?? '无开单|色号',
-      allData.result.allMessage.billingUnit ?? '无开单单位',
-      allData.result.allMessage.sendQuantity,
-      allData.result.allMessage.quantity,
-      allData.result.allMessage.m2 ?? '无M2',
-      allData.result.allMessage.unitPrice,
-      allData.result.allMessage.palletsNumber ?? '无托板数',
-      allData.result.allMessage.shippingWeight,
-      allData.result.allMessage.detailedRemarks ?? '无明细备注',
-      allData.result.allMessage.loadingRemarks ?? '无装车备注',
-    ];*/
-    List indexList = List();
-    for (int i = 0; i < allData.result.allMessage.xkNo.length; i++) {
-      indexList.add(i);
-    }
-    cutList.insert(0, indexList);
+
     TabController controller = TabController(length: 3, vsync: this);
     return Scaffold(
       appBar: PreferredSize(
@@ -187,8 +169,7 @@ class _ImageBuilderState extends State<ImageBuilder>
           ),
           preferredSize: Size.fromHeight(SizeConfig.heightMultiplier * 11)),
       body: TabBarView(controller: controller, children: [
-        waybillDetailTab(
-            titleList, contentList, arrayTitleList, cutList),
+        waybillDetailTab(titleList, contentList, arrayTitleList, cutList),
         signForPicture(allData),
         finishMapPage(widget.number)
       ]),
@@ -261,71 +242,49 @@ class contentHorizontal extends StatefulWidget {
 
 List<DataColumn> dataColumn(List contentList) {
   List<DataColumn> columnList = List();
+  print('标题长度---${contentList.length}');
   for (int i = 0; i < contentList.length; i++) {
-    columnList.add(DataColumn(label: Text(contentList[i])));
+    columnList.add(DataColumn(
+        label: Text(
+      contentList[i],
+      style: TextStyle(
+          fontSize: SizeConfig.heightMultiplier * 2, color: Colors.black),
+      textAlign: TextAlign.center,
+    )));
   }
+  print('标题${columnList.length}');
+  print(columnList);
   return columnList;
 }
 
 List<DataRow> dataRow(List arrayContentList) {
   List<DataRow> rowList = List();
-  for (int i = 0; i < arrayContentList[0].length; i++) {
-    rowList.add(DataRow(cells: dataCell(arrayContentList)));
+  for (var value in arrayContentList) {
+    List<DataCell> cellList = List();
+    for (int i = 0; i < value.length; i++) {
+      cellList.add(DataCell(Text(
+        value[i].toString(),
+        style: TextStyle(color: Colors.black),
+      )));
+    }
+    rowList.add(DataRow(cells: cellList));
+    print('内容长度${cellList.length}');
+    print(cellList);
   }
+
   return rowList;
 }
-
-List<DataCell> dataCell(List arrayContentList) {
-  List<DataCell> cellList = List();
-  for (var value in arrayContentList) {
-    for (int i = 0; i < value.length; i++) {
-      cellList.add(DataCell(Text(value[i].toString())));
-    }
-  }
-  return cellList;
-}
-/*List<Widget> contentWidget(List contentList) {
-  List<Widget> widget = List();
-  for (int i = 0; i < contentList.length; i++) {
-    widget.add(Container(
-      height: SizeConfig.heightMultiplier * 2.5,
-      child: Baseline(
-        baseline: 15,
-        baselineType: TextBaseline.alphabetic,
-        child: Text('${contentList[i]}'),
-      ),
-    ));
-  }
-  return widget;
-}*/
 
 class _contentHorizontalState extends State<contentHorizontal> {
   @override
   Widget build(BuildContext context) {
-    return /*ListView.separated(
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (context, index) {
-        return Column(
-          children: [
-            Text(widget.arrayTitleList[index]),
-            Expanded(
-                child: Column(
-              children: contentWidget(widget.arrayContentList[index]),
-            ))
-          ],
-        );
-      },
-      itemCount: widget.arrayTitleList.length,
-      separatorBuilder: (context, index) {
-        return VerticalDivider(
-          color: Colors.black,
-        );
-      },
-    )*/
-        SingleChildScrollView(
-            child: DataTable(
-                columns: dataColumn(widget.arrayTitleList),
-                rows: [DataRow(cells: dataCell(widget.cutList))]));
+    //print('标题长度--${widget.arrayTitleList.length}');
+    //print('内容长度--${widget.cutList.length}');
+    return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: DataTable(
+            columns: dataColumn(widget.arrayTitleList),
+            rows: dataRow(widget.cutList)));
   }
 }
 
@@ -395,16 +354,7 @@ class _waybillDetailTabState extends State<waybillDetailTab>
                 color: Colors.black,
                 height: SizeConfig.heightMultiplier,
               ),
-              Container(
-                /* height: SizeConfig.heightMultiplier > 7
-                    ? SizeConfig.heightMultiplier *
-                        widget.arrayContentList[0].length *
-                        3
-                    : SizeConfig.heightMultiplier *
-                        widget.arrayContentList[0].length *
-                        3.3,*/
-                child: contentHorizontal(widget.arrayTitleList, widget.cutList),
-              ),
+              contentHorizontal(widget.arrayTitleList, widget.cutList),
               Divider(color: Colors.black),
             ],
           ),

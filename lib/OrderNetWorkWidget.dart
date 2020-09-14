@@ -51,10 +51,10 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
 
   @override
   Widget build(BuildContext context) {
-    //print('类型：${widget.waybill.runtimeType}');
     var wbill = WaybillEntity().fromJson(widget.waybill);
     return ListView.builder(
       itemBuilder: (context, index) {
+        //print('类型：${wbill.result[index].runtimeType}');
         return InkWell(
           onTap: () {
             print(index);
@@ -71,8 +71,8 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            FinishPage(orderNumber: wbill.result[index].waybillId)));
+                        builder: (context) => FinishPage(
+                            orderNumber: wbill.result[index].waybillId)));
                 break;
             }
           },
@@ -166,7 +166,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                     children: [
                       Expanded(
                           child: Text(
-                        '司机：${wbill.result[index].driver==null ? '无司机':wbill.result[index].driver.username}',
+                        '司机：${wbill.result[index].driver == null ? '无司机' : wbill.result[index].driver.username}',
                         textAlign: TextAlign.center,
                         style:
                             TextStyle(fontSize: SizeConfig.widthMultiplier * 4),
@@ -196,7 +196,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                     child: GoodsDetail(
                       index: index,
                       titleList: titleList,
-                      totalList: wbill,
+                      totalList: wbill.result[index],
                     ),
                   ),
                   SizedBox(height: sizedBoxHeight),
@@ -268,7 +268,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
 //todo 写控件传值
 class GoodsDetail extends StatefulWidget {
   int index;
-  WaybillEntity totalList;
+  WaybillResult totalList;
   List titleList;
 
   GoodsDetail({this.index, this.totalList, this.titleList});
@@ -277,90 +277,53 @@ class GoodsDetail extends StatefulWidget {
   _GoodsDetailState createState() => _GoodsDetailState();
 }
 
-List<Widget> detailWidget(List totalList) {
-  List<Widget> list = List();
-  for (int i = 0; i < totalList.length; i++) {
-    list.add(Container(
-        height: SizeConfig.heightMultiplier * 2.5,
-        //baseline：baseline数值，必须要有，从顶部算。
-        //
-        // baselineType：bseline类型，也是必须要有的，目前有两种类型：
-        //
-        // alphabetic：对齐字符底部的水平线；
-        // ideographic：对齐表意字符的水平线。
-        child: Baseline(
-          baseline: 12,
-          baselineType: TextBaseline.alphabetic,
-          child: Text(totalList[i].toString()),
-        )));
+List<DataColumn> dataColumn(List titleList) {
+  List<DataColumn> columnList = List();
+  print('标题长度---${titleList.length}');
+  for (int i = 0; i < titleList.length; i++) {
+    columnList.add(DataColumn(label: Text(titleList[i])));
   }
-  return list;
+}
+
+List<DataRow> dataRow(List contentList) {
+  List<DataRow> rowList = List();
+  for (var value in contentList) {
+    List<DataCell> cellList = List();
+    for (int i = 0; i < value.length; i++) {
+      print('遍历----${value[i]}---${333}');
+      cellList.add(DataCell(Text(contentList[i].toString())));
+    }
+    rowList.add(DataRow(cells: cellList));
+  }
+
+  return rowList;
 }
 
 class _GoodsDetailState extends State<GoodsDetail> {
-  List allList = List();
-  List indexList = List();
-
   @override
   Widget build(BuildContext context) {
-    //RLogger.instance.d(widget.totalList.toString());
-    allList.add(widget.totalList.result[widget.index].billingColor);
-    allList.add(widget.totalList.result[widget.index].size);
-    allList.add(widget.totalList.result[widget.index].quantity);
-    allList.add(widget.totalList.result[widget.index].sendQuantity);
-    allList.add(widget.totalList.result[widget.index].billingUnit);
-    allList.add(widget.totalList.result[widget.index].unitPrice);
-    allList.add(widget.totalList.result[widget.index].detailedRemarks);
-    for (int i = 0;
-        i < widget.totalList.result[widget.index].xkNo.length;
-        i++) {
-      indexList.add(i + 1);
+    List allList = List();
+    //RLogger.instance.d('传入的数据${widget.totalList}');
+    print('几条记录${widget.totalList.xkNo.length}---index---${widget.index + 1}');
+    for (int i = 0; i < widget.totalList.xkNo.length; i++) {
+      List cutList = List();
+      cutList.add(i + 1);
+      cutList.add(widget.totalList.billingColor[i]);
+      cutList.add(widget.totalList.size[i]);
+      cutList.add(widget.totalList.quantity[i]);
+      cutList.add(widget.totalList.sendQuantity[i]);
+      cutList.add(widget.totalList.billingUnit[i]);
+      cutList.add(widget.totalList.unitPrice[i]);
+      cutList.add(widget.totalList.detailedRemarks[i]);
+      allList.add(cutList);
     }
-    allList.insert(0, indexList);
-    return ListView.separated(
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              child: Text(widget.titleList[index]),
-            ),
-            SizedBox(
-              height: SizeConfig.heightMultiplier,
-            )
-            /* Divider(color: Colors.green),
-            */
-            /* Container(
-              height: 200,
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return Text(allList[index]);
-                },
-                itemCount: allList[index].length,
-              ),
-            )*/
-            ,
-            Expanded(
-              child: Column(
-                children: detailWidget(
-                  allList[index],
-                ),
-              ),
-            )
-          ],
-        );
-      },
-      itemCount: widget.titleList.length,
+    print('裁剪--${allList}');
+
+    //RLogger.instance.d(widget.totalList.toString());
+    return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      separatorBuilder: (context, index) {
-        return VerticalDivider(
-          width: SizeConfig.widthMultiplier,
-          color: Colors.black,
-        );
-      },
+      child: DataTable(
+          columns: dataColumn(widget.titleList), rows: dataRow(allList)),
     );
   }
 }
