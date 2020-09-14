@@ -245,11 +245,18 @@ List<DataColumn> dataColumn(List contentList) {
   print('标题长度---${contentList.length}');
   for (int i = 0; i < contentList.length; i++) {
     columnList.add(DataColumn(
-        label: Text(
-      contentList[i],
-      style: TextStyle(
-          fontSize: SizeConfig.heightMultiplier * 2, color: Colors.black),
-      textAlign: TextAlign.center,
+        label: Row(
+      children: [
+        Text(
+          contentList[i],
+          style: TextStyle(
+              fontSize: SizeConfig.heightMultiplier * 2,
+              color: Colors.black,
+              fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        )
+      ],
+      mainAxisAlignment: MainAxisAlignment.center,
     )));
   }
   print('标题${columnList.length}');

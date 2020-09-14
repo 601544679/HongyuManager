@@ -27,21 +27,6 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
   var fontSize = SizeConfig.heightMultiplier * 2;
   var sizedBoxHeight = SizeConfig.heightMultiplier;
   List titleList = ['序号', '色号', '规格', '数量', '发货数量', '开单单位', '送货单价', '明细备注'];
-  List titleList1 = [
-    'index',
-    'billingColor',
-    'size',
-    'quantity',
-    'sendQuantity',
-    'billingUnit',
-    'unitPrice',
-    'detailedRemarks'
-  ];
-  List detailList = List();
-  int currentIndex;
-  List smallList = List();
-  List indexList = List();
-  List list = List();
 
   @override
   void initState() {
@@ -188,11 +173,6 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                     ],
                   ),
                   Container(
-                    height: wbill.result[index].xkNo.length > 1
-                        ? SizeConfig.heightMultiplier *
-                            wbill.result[index].xkNo.length *
-                            3.3
-                        : SizeConfig.heightMultiplier * 8,
                     child: GoodsDetail(
                       index: index,
                       titleList: titleList,
@@ -281,8 +261,19 @@ List<DataColumn> dataColumn(List titleList) {
   List<DataColumn> columnList = List();
   print('标题长度---${titleList.length}');
   for (int i = 0; i < titleList.length; i++) {
-    columnList.add(DataColumn(label: Text(titleList[i])));
+    print('标题--${titleList[i]}');
+    columnList.add(DataColumn(
+        label: Row(
+      children: [
+        Text(
+          titleList[i],
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        )
+      ],
+      mainAxisAlignment: MainAxisAlignment.center,
+    )));
   }
+  return columnList;
 }
 
 List<DataRow> dataRow(List contentList) {
@@ -290,8 +281,7 @@ List<DataRow> dataRow(List contentList) {
   for (var value in contentList) {
     List<DataCell> cellList = List();
     for (int i = 0; i < value.length; i++) {
-      print('遍历----${value[i]}---${333}');
-      cellList.add(DataCell(Text(contentList[i].toString())));
+      cellList.add(DataCell(Text(value[i].toString())));
     }
     rowList.add(DataRow(cells: cellList));
   }
