@@ -160,18 +160,11 @@ class Server {
     responseBody =
         _post('/1.1/functions/getWaybillAdmin/', {'waybillid': waybillid});
     print('getWaybillAdmin:${responseBody}');
-    return
-        /*'ID': '送货单号',
-      'address': '送货地址',
-      'receiver': '收货人',
-      'recevierPhone': '收货人手机号码',
-      'latitude': {'司机当前纬度', '司机当前纬度1', '司机当前纬度2'},
-      'longitude': {'司机当前经度', '司机当前经度1', '司机当前经度2'},*/
-        responseBody;
+    return responseBody;
   }
 
 //todo 返回运输中订单
-  getWaybillTransport() {
+  getWaybillTransport() async {
     var responseBody;
     responseBody = _post('/1.1/functions/getWaybillTransport/', {});
     return responseBody
@@ -212,7 +205,17 @@ class Server {
     }*/
   }
 
-//todo 返回所有订单
+  // todo 根据value返回订单
+  //value=0 返回所有订单
+  //value=1 返回运输中订单
+  //value=2 返回已完成订单
+  getWaybillByValue(String value) {
+    var responseBody;
+    responseBody = _post('/1.1/functions/getWaybillByValue/', {'value': value});
+    return responseBody;
+  }
+
+  //todo 返回所有订单
   getAllWaybill() async {
     var responseBody;
     responseBody = _post('/1.1/functions/getAllWaybill/', {});
@@ -227,26 +230,54 @@ class Server {
       'arrivalTime': '计划到达时间',
       'message': '送货单信息',
       'supplier': '业务员姓名',
-      'date': '发货日期'
+      'departureDate': '发货日期',
     }*/
         responseBody;
   }
 
   //todo 发布订单
-  releaseWaybill(Map map) {
+  releaseWaybill(Map map) async {
     var responseBody;
-    //_post(url, map);
+    responseBody = _post('/1.1/functions/releaseWaybill/', map);
     return responseBody;
   }
 
-//todo 获取完成订单的三张图片 改为获取订单的所有信息
+//todo 根据Excel发布订单
+  releaseByExcel(Map map) {
+    var responseBody;
+    for (int i = 0; i < map.length; i++) {
+      responseBody = _post('/1.1/functions/releaseByExcel/', map);
+    }
+
+    return responseBody;
+  }
+
+//todo 获取订单的所有信息
   getFinishImage(String orderNumber) async {
     var responseBody;
     responseBody =
         _post('/1.1/functions/getFinishImage/', {'waybillid': orderNumber});
     return /*[
       {
-        'allMessage': {'订单的所有信息'}
+        'allMessage':
+         {
+        '订单的所有信息'
+        ...
+      'XK_NO':[销售单号,销售单号1,销售单号2],
+      'materialsNumber':[物料号,物料号1,物料号2],
+      'client_ID':[客户编码,客户编码1,客户编码2]
+      'size':[规格,规格1,规格2]
+      'billingColor':[色号,色号1,色号2]，
+      'BillingUnit':[单位,单位1,单位2],
+      'sendQuantity':[发货数量,发货数量1,发货数量2]
+      'quantity':[数量,数量1,数量2]
+      'M2':[M2,M2(1),M2(2)]
+      'unitPrice':[单价,单价1,单价2]
+      'palletsNumber':[托板数,托板数1,托板数2]
+      'ShippingWeight':[发货重量,发货重量1,发货重量2]
+      'detailedRemark':[明细备注,明细备注1,明细备注2]
+      'loadingRemarks':[装车备注,装车备注,装车备注]
+        }
       },
     ]*/
         responseBody;

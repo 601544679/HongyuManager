@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'sizeConfig.dart';
 import 'constant.dart';
 import 'userClass.dart';
@@ -101,9 +102,10 @@ class _LoginPageState extends State<LoginPage> {
                             },
                             //保存输入手机到 userclass
                             onSaved: (input) => _user.phoneNumber = input,
+                            inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9]"))],
                             style: TextStyle(
                                 fontSize: SizeConfig.widthMultiplier * 5),
-                            keyboardType: TextInputType.number,
+                            keyboardType: TextInputType.phone,
                             decoration: InputDecoration(
                                 hintText: '输入手机号码',
                                 icon: Icon(

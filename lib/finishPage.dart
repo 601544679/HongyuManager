@@ -1,5 +1,8 @@
+import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:mydemo/finish_data_entity.dart';
 import 'sizeConfig.dart';
 import 'server.dart';
 import 'constant.dart';
@@ -7,14 +10,16 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_drag_scale/flutter_drag_scale.dart';
 import 'package:flutter/services.dart';
 import 'package:date_format/date_format.dart';
+import 'package:r_logger/r_logger.dart';
+import 'constant.dart';
 
 //查看已完成订单的详细信息
 class FinishPage extends StatefulWidget {
   @override
   _FinishPageState createState() => _FinishPageState();
-  String number;
+  String orderNumber;
 
-  FinishPage({this.number});
+  FinishPage({this.orderNumber});
 }
 
 class _FinishPageState extends State<FinishPage> {
@@ -31,7 +36,10 @@ class _FinishPageState extends State<FinishPage> {
             } else if (snapshot.hasData) {
               print('hasData');
               // 请求成功，显示数据
-              return ImageBuilder(snapshot.data);
+              return ImageBuilder(
+                snapshot.data,
+                number: widget.orderNumber,
+              );
             }
             break;
           case ConnectionState.none:
@@ -71,286 +79,143 @@ class _FinishPageState extends State<FinishPage> {
   }
 
   imageFuture() async {
-    var a = await Server().getFinishImage(widget.number);
-    print('aaa:${a['result']}');
-    return a['result'];
+    var finishData = await Server().getFinishImage(widget.orderNumber);
+    return finishData;
   }
 }
 
 class ImageBuilder extends StatefulWidget {
   final data;
+  final number;
 
-  ImageBuilder(this.data);
+  ImageBuilder(this.data, {this.number});
 
   @override
   _ImageBuilderState createState() => _ImageBuilderState();
 }
 
-class _ImageBuilderState extends State<ImageBuilder> {
-  List s = ['工地现场图', '运货单号', '顺丰单号'];
-  var fontSize = SizeConfig.heightMultiplier * 2;
-  var fontSize1 = SizeConfig.heightMultiplier * 2.5;
-  var flex1 = 1;
-  var flex2 = 2;
-  var textAlign = TextAlign.right;
-  var containerWidth = SizeConfig.widthMultiplier * 94;
+class _ImageBuilderState extends State<ImageBuilder>
+    with SingleTickerProviderStateMixin {
+  List cutList = List();
 
   @override
   Widget build(BuildContext context) {
+    var allData = FinishDataEntity().fromJson(widget.data);
     print('data是: ${widget.data}');
-    List list = [
-      '送货日期',
-      //departureDate                                2020-09-02
-      '物流单号',
-      //logisticsOrderNo                              GCWL00018834
-      '送货单编号',
-      //waybill_ID                                 GCZC00021371
-      '销售单号',
-      //XK_NO                                        XK0007549849
-      '名义客户',
-      //company_ID                                   佛山万科置业有限公司(佛山万科星都荟项目)
-      '项目部名称',
-      //projectName                                佛山万科置业有限公司
-      '施工单位',
-      //constructionCompanyName                      广州市景晖园林景观工程有限公司
-      '项目地址',
-      //projectAddress                               广东省佛山市顺德区龙洲路北（骏马修车厂附近）
-      '业务员名称',
-      //supplierContactPerson                      李啟然
-      '业务员电话',
-      //supplierContactPhone                       13827798161
-      '收货人姓名',
-      //constructionSiteContactPerson              王永淦
-      '收货人电话',
-      //constructionSiteContactPhone               13725285112
-      '运输方式',
-      //ModeOfTransport                              汽运
-      '车牌号码',
-      //carNo
-      '装车柜号',
-      //containerNo
-      '物料号',
-      //materialsNumber                                FT200-318-0
-      '客户编码',
-      //client_ID                                    HG60816
-      '规格',
-      // size                                            450x600
-      '开单|色号',
-      //billingColor                                YA0601(和坚487单-万科佛山星都荟园林景观工程)
-      '跟单通知发货|开单单位',
-      //BillingUnit                      块
-      '跟单通知发货|发货数量',
-      //sendQuantity                     28
-      '跟单通知发货|数量(块)',
-      //quantity                         28
-      '跟单通知发货|M2',
-      //M2                                    7.56
-      '自定义打印|送货单价(块) ',
-      //unitPrice                      12.7683
-      '托板总数',
-      //palletsNumber
-      '物流结算|发货重量（吨）',
-      //ShippingWeight                  0.168
-      '明细备注',
-      //detailedRemarks
-      '装车备注',
-      //loadingRemarks                               和坚487单,要求带搬运，穿着整齐，长裤，带安全帽，反光衣，
-      // 不能抽烟，送货时间早上10点30以后，下午3点半之后！要求今天到货
-    ];
-    List dd = [
-      date(widget.data['allMessage']['departureDate']) ?? date(1597120000000),
-      widget.data['allMessage']['logisticsOrderNo'] ?? 'SDFE123658',
-      widget.data['allMessage']['waybill_ID'],
-      widget.data['allMessage']['XK_NO']??"XK48948948",
-      widget.data['allMessage']['company_ID'] ?? '云南保晟房地产开发有限公司',
-      widget.data['allMessage']['projectName'] ?? '云南昆明保利山水云亭二期项目1标',
-      widget.data['allMessage']['constructionCompanyName'] ??
-          '广州市东滕装饰工程有限公司(一标)',
-      widget.data['allMessage']['projectAddress'] ?? '昆明市呈贡区黄陂土片区保利山水云亭',
-      widget.data['allMessage']['supplierContactPerson'] ?? '金凯鹏',
-      widget.data['allMessage']['supplierContactPhone'] ?? '18654723369',
-      widget.data['allMessage']['constructionSiteContactPerson'] ?? '高德伟',
-      widget.data['allMessage']['constructionSiteContactPhone'] ??
-          '13952654785',
-      widget.data['allMessage']['ModeOfTransport'] ?? '汽运',
-      widget.data['allMessage']['carNo'] ?? '粤ABF949',
-      widget.data['allMessage']['containerNo'] ?? 'containerNo',
-      widget.data['allMessage']['materialsNumber'] ?? 'FT200-318-0',
-      widget.data['allMessage']['client_ID'] ?? 'HG60816',
-      widget.data['allMessage']['size'] ?? '450x600',
-      widget.data['allMessage']['billingColor'] ??
-          'YA0601(和坚487单-万科佛山星都荟园林景观工程)',
-      widget.data['allMessage']['BillingUnit'] ?? '块',
-      widget.data['allMessage']['sendQuantity'] == null
-          ? '28'
-          : widget.data['allMessage']['sendQuantity'].toString(), //int
-      widget.data['allMessage']['quantity'] == null
-          ? '28'
-          : widget.data['allMessage']['quantity'].toString(), //int
-      widget.data['allMessage']['M2'] ?? '7.56', //string
-      widget.data['allMessage']['unitPrice'] == null
-          ? '12.7683'
-          : widget.data['allMessage']['unitPrice'].toString(), //double
-      widget.data['allMessage']['palletsNumber'] ?? '10',
-      widget.data['allMessage']['ShippingWeight'] == null
-          ? '0.168'
-          : widget.data['allMessage']['ShippingWeight'].toString(), //double
-      widget.data['allMessage']['detailedRemarks'] ?? '',
-      widget.data['allMessage']['loadingRemarks'] ??
-          '和坚487单,要求带搬运，穿着整齐，长裤，带安全帽，反光衣，不能抽烟，送货时间早上10点30以后，下午3点半之后！要求今天到货',
-    ];
-    print(
-        'logisticsOrderNo: ${widget.data['allMessage']['logisticsOrderNo'].runtimeType}');
-    print('waybill_ID: ${widget.data['allMessage']['waybill_ID'].runtimeType}');
-    print('company_ID: ${widget.data['allMessage']['company_ID'].runtimeType}');
-    print(
-        'projectName: ${widget.data['allMessage']['projectName'].runtimeType}');
-    print(
-        'constructionCompany: ${widget.data['allMessage']['constructionCompany'].runtimeType}');
-    print(
-        'projectAddress: ${widget.data['allMessage']['projectAddress'].runtimeType}');
-    print(
-        'supplierContactPerson: ${widget.data['allMessage']['supplierContactPerson'].runtimeType}');
-    print(
-        'supplierContactPhone: ${widget.data['allMessage']['supplierContactPhone'].runtimeType}');
-    print(
-        'ModeOfTransport: ${widget.data['allMessage']['ModeOfTransport'].runtimeType}');
-    print('carNo: ${widget.data['allMessage']['carNo'].runtimeType}');
-    print(
-        'containerNo: ${widget.data['allMessage']['containerNo'].runtimeType}');
-    print(
-        'materialsNumber: ${widget.data['allMessage']['materialsNumber'].runtimeType}');
-    print('client_ID: ${widget.data['allMessage']['client_ID'].runtimeType}');
-    print('size: ${widget.data['allMessage']['size'].runtimeType}');
-    print(
-        'billingColor: ${widget.data['allMessage']['billingColor'].runtimeType}');
-    print(
-        'BillingUnit: ${widget.data['allMessage']['BillingUnit'].runtimeType}');
-    print(
-        'sendQuantity: ${widget.data['allMessage']['sendQuantity'].runtimeType}');
-    print('quantity: ${widget.data['allMessage']['quantity'].runtimeType}');
-    print('M2: ${widget.data['allMessage']['M2'].runtimeType}');
-    print('unitPrice: ${widget.data['allMessage']['unitPrice'].runtimeType}');
-    print(
-        'palletsNumber: ${widget.data['allMessage']['palletsNumber'].runtimeType}');
-    print(
-        'ShippingWeight: ${widget.data['allMessage']['ShippingWeight'].runtimeType}');
-    print(
-        'detailedRemarks: ${widget.data['allMessage']['detailedRemarks'].runtimeType}');
-    print(
-        'loadingRemarks: ${widget.data['allMessage']['loadingRemarks'].runtimeType}');
 
+    List contentList = [
+      date(allData.result.allMessage.departureDate) ?? '无日期',
+      allData.result.allMessage.logisticsOrderNo ?? '无物流单号',
+      allData.result.allMessage.waybillId,
+      allData.result.allMessage.companyId ?? '无命一客户',
+      allData.result.allMessage.projectName ?? '无项目部名称',
+      allData.result.allMessage.constructionCompanyName ?? '无施工单位',
+      allData.result.allMessage.projectAddress ?? '无项目地址',
+      allData.result.allMessage.supplierContactPerson ?? '无业务员',
+      allData.result.allMessage.supplierContactPhone ?? '无业务员电话',
+      allData.result.allMessage.constructionSiteContactPerson ?? '无收货人',
+      allData.result.allMessage.constructionSiteContactPhone ?? '无收货人电话',
+      allData.result.allMessage.modeOfTransport ?? '无运输方式',
+      allData.result.allMessage.carNo ?? '无车牌号码',
+      allData.result.allMessage.containerNo ?? '无装车柜号',
+    ];
+    for (int i = 0; i < allData.result.allMessage.xkNo.length; i++) {
+      List detailList = List();
+      detailList.add(allData.result.allMessage.xkNo[i]);
+      detailList.add(allData.result.allMessage.materialsNumber[i]);
+      detailList.add(allData.result.allMessage.clientId[i]);
+      detailList.add(allData.result.allMessage.size[i]);
+      detailList.add(allData.result.allMessage.billingColor[i]);
+      detailList.add(allData.result.allMessage.billingUnit[i]);
+      detailList.add(allData.result.allMessage.sendQuantity[i]);
+      detailList.add(allData.result.allMessage.quantity[i]);
+      detailList.add(allData.result.allMessage.m2[i]);
+      detailList.add(allData.result.allMessage.unitPrice[i]);
+      detailList.add(allData.result.allMessage.palletsNumber[i]);
+      detailList.add(allData.result.allMessage.shippingWeight[i]);
+      detailList.add(allData.result.allMessage.detailedRemarks[i]);
+      detailList.add(allData.result.allMessage.loadingRemarks[i]);
+      cutList.add(detailList);
+    }
+    print('整理--${cutList}');
+   /* List arrayContentList = [
+      allData.result.allMessage.xkNo ?? "无销售单号",
+      allData.result.allMessage.materialsNumber ?? '无物料号',
+      allData.result.allMessage.clientId ?? '无客户编码',
+      allData.result.allMessage.size ?? '无规格',
+      allData.result.allMessage.billingColor ?? '无开单|色号',
+      allData.result.allMessage.billingUnit ?? '无开单单位',
+      allData.result.allMessage.sendQuantity,
+      allData.result.allMessage.quantity,
+      allData.result.allMessage.m2 ?? '无M2',
+      allData.result.allMessage.unitPrice,
+      allData.result.allMessage.palletsNumber ?? '无托板数',
+      allData.result.allMessage.shippingWeight,
+      allData.result.allMessage.detailedRemarks ?? '无明细备注',
+      allData.result.allMessage.loadingRemarks ?? '无装车备注',
+    ];*/
+    List indexList = List();
+    for (int i = 0; i < allData.result.allMessage.xkNo.length; i++) {
+      indexList.add(i);
+    }
+    cutList.insert(0, indexList);
+    TabController controller = TabController(length: 3, vsync: this);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('订单完成情况'),
-      ),
-      body: Padding(
-          padding: EdgeInsets.only(
-              left: SizeConfig.widthMultiplier * 3,
-              top: SizeConfig.heightMultiplier,
-              right: SizeConfig.widthMultiplier * 3,
-              bottom: SizeConfig.heightMultiplier),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            textStyle(list[index], fontSize),
-                          ],
-                        ),
-                        Container(
-                            width: containerWidth,
-                            child: textStyle(dd[index], fontSize1,
-                                fontWeight: FontWeight.bold)),
-                        SizedBox(
-                          height: SizeConfig.heightMultiplier,
-                        ),
-                      ],
-                    );
-                  },
-                  itemCount: list.length,
-                ),
-                Divider(color: Colors.grey),
-                Container(
-                    child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      //color: Colors.red,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            s[index],
-                            style: TextStyle(
-                                fontSize: SizeConfig.heightMultiplier * 3),
-                          ),
-                          SizedBox(
-                            height: SizeConfig.heightMultiplier,
-                          ),
-                          InkWell(
-                            child: AspectRatio(
-                              aspectRatio: 16 / 10,
-                              child: Image.network(
-                                widget.data['imageUrl'][index],
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            onTap: () {
-                              Fluttertoast.showToast(
-                                  msg: '${s[index]}',
-                                  toastLength: Toast.LENGTH_SHORT);
-                              showDialog(
-                                  context: context,
-                                  barrierDismissible: false,
-                                  builder: (context) {
-                                    return dialogImageBuilder(
-                                        widget.data['imageUrl'], index);
-                                  });
-                            },
-                          ),
-                          SizedBox(
-                            height: SizeConfig.heightMultiplier,
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                  itemCount: widget.data['imageUrl'].length,
-                ))
-              ],
-            ),
-          )),
-    );
-  }
-
-//日期转换
-  String date(int millTime) {
-    DateTime a = DateTime.fromMillisecondsSinceEpoch(millTime);
-    a.year;
-    a.month;
-    a.day;
-    return (formatDate(
-        DateTime(a.year, a.month, a.day), [yyyy, '年', mm, '月', dd, '日']));
-  }
-
-  Text textStyle(String data, double fontSize, {FontWeight fontWeight}) {
-    return Text(
-      '$data',
-      style: TextStyle(
-          fontWeight: fontWeight ?? FontWeight.normal, fontSize: fontSize),
+      appBar: PreferredSize(
+          child: AppBar(
+            title: Text('订单完成情况'),
+            bottom: TabBar(
+                indicatorWeight: 4.0,
+                labelPadding:
+                    EdgeInsets.only(bottom: SizeConfig.heightMultiplier),
+                indicatorColor: Colors.white,
+                controller: controller,
+                tabs: [
+                  Text(
+                    '送货单信息',
+                    style: TextStyle(fontSize: SizeConfig.heightMultiplier * 2),
+                  ),
+                  Text(
+                    '签收照片',
+                    style: TextStyle(fontSize: SizeConfig.heightMultiplier * 2),
+                  ),
+                  Text(
+                    '途径点',
+                    style: TextStyle(fontSize: SizeConfig.heightMultiplier * 2),
+                  ),
+                ]),
+          ),
+          preferredSize: Size.fromHeight(SizeConfig.heightMultiplier * 11)),
+      body: TabBarView(controller: controller, children: [
+        waybillDetailTab(
+            titleList, contentList, arrayTitleList, cutList),
+        signForPicture(allData),
+        finishMapPage(widget.number)
+      ]),
     );
   }
 }
 
+//日期转换
+String date(int millTime) {
+  DateTime a = DateTime.fromMillisecondsSinceEpoch(millTime);
+  a.year;
+  a.month;
+  a.day;
+  return (formatDate(
+      DateTime(a.year, a.month, a.day), [yyyy, '年', mm, '月', dd, '日']));
+}
+
+//Text样式
+Text textStyle(String data, double fontSize, {FontWeight fontWeight}) {
+  return Text(
+    '$data',
+    style: TextStyle(
+        fontWeight: fontWeight ?? FontWeight.normal, fontSize: fontSize),
+  );
+}
+
+//点击查看大图
 class dialogImageBuilder extends StatefulWidget {
   List imageList = List();
   int index;
@@ -381,4 +246,471 @@ class _dialogImageBuilderState extends State<dialogImageBuilder> {
       },
     );
   }
+}
+
+//销售单水平展示
+class contentHorizontal extends StatefulWidget {
+  List arrayTitleList;
+  List cutList;
+
+  contentHorizontal(this.arrayTitleList, this.cutList);
+
+  @override
+  _contentHorizontalState createState() => _contentHorizontalState();
+}
+
+List<DataColumn> dataColumn(List contentList) {
+  List<DataColumn> columnList = List();
+  for (int i = 0; i < contentList.length; i++) {
+    columnList.add(DataColumn(label: Text(contentList[i])));
+  }
+  return columnList;
+}
+
+List<DataRow> dataRow(List arrayContentList) {
+  List<DataRow> rowList = List();
+  for (int i = 0; i < arrayContentList[0].length; i++) {
+    rowList.add(DataRow(cells: dataCell(arrayContentList)));
+  }
+  return rowList;
+}
+
+List<DataCell> dataCell(List arrayContentList) {
+  List<DataCell> cellList = List();
+  for (var value in arrayContentList) {
+    for (int i = 0; i < value.length; i++) {
+      cellList.add(DataCell(Text(value[i].toString())));
+    }
+  }
+  return cellList;
+}
+/*List<Widget> contentWidget(List contentList) {
+  List<Widget> widget = List();
+  for (int i = 0; i < contentList.length; i++) {
+    widget.add(Container(
+      height: SizeConfig.heightMultiplier * 2.5,
+      child: Baseline(
+        baseline: 15,
+        baselineType: TextBaseline.alphabetic,
+        child: Text('${contentList[i]}'),
+      ),
+    ));
+  }
+  return widget;
+}*/
+
+class _contentHorizontalState extends State<contentHorizontal> {
+  @override
+  Widget build(BuildContext context) {
+    return /*ListView.separated(
+      scrollDirection: Axis.horizontal,
+      itemBuilder: (context, index) {
+        return Column(
+          children: [
+            Text(widget.arrayTitleList[index]),
+            Expanded(
+                child: Column(
+              children: contentWidget(widget.arrayContentList[index]),
+            ))
+          ],
+        );
+      },
+      itemCount: widget.arrayTitleList.length,
+      separatorBuilder: (context, index) {
+        return VerticalDivider(
+          color: Colors.black,
+        );
+      },
+    )*/
+        SingleChildScrollView(
+            child: DataTable(
+                columns: dataColumn(widget.arrayTitleList),
+                rows: [DataRow(cells: dataCell(widget.cutList))]));
+  }
+}
+
+//送货单详细信息Tab
+class waybillDetailTab extends StatefulWidget {
+  final titleList;
+  final contentList;
+  final arrayTitleList;
+  final cutList;
+
+  waybillDetailTab(
+      this.titleList, this.contentList, this.arrayTitleList, this.cutList);
+
+  @override
+  _waybillDetailTabState createState() => _waybillDetailTabState();
+}
+
+class _waybillDetailTabState extends State<waybillDetailTab>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  var fontSize = SizeConfig.heightMultiplier * 2;
+  var fontSize1 = SizeConfig.heightMultiplier * 2.5;
+  var flex1 = 1;
+  var flex2 = 2;
+  var textAlign = TextAlign.right;
+  var containerWidth = SizeConfig.widthMultiplier * 94;
+
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.only(
+            left: SizeConfig.widthMultiplier * 3,
+            top: SizeConfig.heightMultiplier,
+            right: SizeConfig.widthMultiplier * 3,
+            bottom: SizeConfig.heightMultiplier),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          textStyle(widget.titleList[index], fontSize),
+                        ],
+                      ),
+                      Container(
+                          width: containerWidth,
+                          child: textStyle(widget.contentList[index], fontSize1,
+                              fontWeight: FontWeight.bold)),
+                      SizedBox(
+                        height: SizeConfig.heightMultiplier,
+                      ),
+                    ],
+                  );
+                },
+                itemCount: widget.titleList.length,
+              ),
+              SizedBox(
+                height: SizeConfig.heightMultiplier,
+              ),
+              textStyle('货物明细', fontSize),
+              Divider(
+                color: Colors.black,
+                height: SizeConfig.heightMultiplier,
+              ),
+              Container(
+                /* height: SizeConfig.heightMultiplier > 7
+                    ? SizeConfig.heightMultiplier *
+                        widget.arrayContentList[0].length *
+                        3
+                    : SizeConfig.heightMultiplier *
+                        widget.arrayContentList[0].length *
+                        3.3,*/
+                child: contentHorizontal(widget.arrayTitleList, widget.cutList),
+              ),
+              Divider(color: Colors.black),
+            ],
+          ),
+        ));
+  }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+}
+
+//签收图Tab
+class signForPicture extends StatefulWidget {
+  final allData;
+
+  signForPicture(this.allData);
+
+  @override
+  _signForPictureState createState() => _signForPictureState();
+}
+
+class _signForPictureState extends State<signForPicture>
+    with AutomaticKeepAliveClientMixin {
+  List s = ['工地现场图', '运货单号', '顺丰单号'];
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: ListView.builder(
+      itemBuilder: (context, index) {
+        return Container(
+          //color: Colors.red,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                s[index],
+                style: TextStyle(fontSize: SizeConfig.heightMultiplier * 3),
+              ),
+              SizedBox(
+                height: SizeConfig.heightMultiplier,
+              ),
+              InkWell(
+                child: AspectRatio(
+                  aspectRatio: 16 / 10,
+                  child: Image.network(
+                    widget.allData.result.imageUrl[index],
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                onTap: () {
+                  Fluttertoast.showToast(
+                      msg: '${s[index]}', toastLength: Toast.LENGTH_SHORT);
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) {
+                        return dialogImageBuilder(
+                            widget.allData.result.imageUrl, index);
+                      });
+                },
+              ),
+              SizedBox(
+                height: SizeConfig.heightMultiplier,
+              )
+            ],
+          ),
+        );
+      },
+      itemCount: widget.allData.result.imageUrl.length,
+    ));
+  }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+}
+
+//地图Tab
+class finishMapPage extends StatefulWidget {
+  final orderNumber;
+
+  finishMapPage(this.orderNumber);
+
+  @override
+  _finishMapPageState createState() => _finishMapPageState();
+}
+
+class _finishMapPageState extends State<finishMapPage>
+    with AutomaticKeepAliveClientMixin {
+  _loadWaybill() async {
+    var result = await Server().getWaybillAdmin(widget.orderNumber);
+    return (result['result']);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget _buildFuture(BuildContext context, AsyncSnapshot snapshot) {
+      switch (snapshot.connectionState) {
+        case ConnectionState.none:
+          print('还没有开始网络请求');
+          return Text('还没有开始网络请求');
+        case ConnectionState.active:
+          print('active');
+          return Text('ConnectionState.active');
+        case ConnectionState.waiting:
+          print('waiting');
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(
+                  valueColor: new AlwaysStoppedAnimation<Color>(
+                      Colors.indigo[colorNum]),
+                ),
+                SizedBox(
+                  height: SizeConfig.heightMultiplier * 2,
+                ),
+                Text(
+                  '正在加载中...',
+                  style: TextStyle(color: Colors.indigo[colorNum]),
+                )
+              ],
+            ),
+          );
+        case ConnectionState.done:
+          print('done');
+          if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+          print('snapshot.data: ${snapshot.data}');
+          return MapScreen(waybill: snapshot.data);
+        default:
+          return null;
+      }
+    }
+
+    return Scaffold(
+      body: FutureBuilder(
+        builder: _buildFuture,
+        future: _loadWaybill(),
+      ),
+    );
+  }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+}
+
+class MapScreen extends StatefulWidget {
+  @override
+  _MapScreenState createState() => _MapScreenState();
+  final waybill;
+
+  MapScreen({Key key, this.waybill}) : super(key: key);
+}
+
+class _MapScreenState extends State<MapScreen>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    //print('经纬度: ${widget.waybill['latitude'].length}');
+    print("目的地：${widget.waybill['destination']['latitude']}");
+    print("目的地：${widget.waybill['destination']['longitude']}");
+    return Scaffold(
+      body: Column(
+        children: [
+          SizedBox(
+            height: SizeConfig.heightMultiplier * 50,
+            child: AmapView(
+              mapType: MapType.Standard,
+              showScaleControl: true,
+              zoomLevel: 15,
+              maskDelay: Duration(milliseconds: 500),
+              centerCoordinate: LatLng(widget.waybill['latitude'][0],
+                  widget.waybill['longitude'][0]),
+              markers: makeOptions(),
+              onMapCreated: (controller) async {
+                await controller?.showMyLocation(MyLocationOption(
+                    myLocationType: MyLocationType.Follow,
+                    interval: Duration(seconds: 10)));
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<MarkerOption> makeOptions() {
+    List<MarkerOption> marks = [];
+    for (int i = 0; i < widget.waybill['latitude'].length; i++) {
+      //print('获取:${widget.waybill['latitude'][i].toDouble()}');
+      marks.add(MarkerOption(
+          latLng: LatLng(widget.waybill['latitude'][i].toDouble(),
+              widget.waybill['longitude'][i].toDouble()),
+          title: widget.waybill['positionName'][i],
+          widget: showOptions(i)));
+    }
+    marks.add(MarkerOption(
+        latLng: LatLng(
+            widget.waybill['destination']['latitude'].toDouble() ?? 23.03509484,
+            widget.waybill['destination']['longitude'].toDouble() ??
+                113.13402564),
+        title: 'test',
+        widget: Container(
+          height: SizeConfig.heightMultiplier * 4.5,
+          width: SizeConfig.widthMultiplier * 15,
+          child: Material(
+            borderRadius: BorderRadius.circular(30),
+            shadowColor: Colors.transparent,
+            color: Colors.amber,
+            elevation: 7.0,
+            child: InkWell(
+              child: Center(
+                child: Text(
+                  '目的地',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Montserrat'),
+                ),
+              ),
+            ),
+          ),
+        )));
+    return marks;
+  }
+
+  Container showOptions(int i) {
+    if (i == 0) {
+      return Container(
+        height: SizeConfig.widthMultiplier * 6,
+        width: SizeConfig.widthMultiplier * 18,
+        child: Material(
+          borderRadius: BorderRadius.circular(30),
+          shadowColor: Colors.transparent,
+          color: Colors.indigo[colorNum],
+          elevation: 7.0,
+          child: Center(
+            child: lastOptions(i),
+          ),
+        ),
+      );
+    } else if (i == widget.waybill['latitude'].length - 1) {
+      return Container(
+        height: SizeConfig.widthMultiplier * 10,
+        width: SizeConfig.widthMultiplier * 40,
+        child: Material(
+          borderRadius: BorderRadius.circular(30),
+          shadowColor: Colors.transparent,
+          color: Colors.indigo[colorNum],
+          elevation: 7.0,
+          child: Center(
+            child: lastOptions(i),
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        height: SizeConfig.widthMultiplier * 3,
+        width: SizeConfig.widthMultiplier * 3,
+        child: Material(
+          borderRadius: BorderRadius.circular(30),
+          shadowColor: Colors.transparent,
+          color: Colors.indigo[colorNum],
+          elevation: 7.0,
+          child: Center(
+            child: lastOptions(i),
+          ),
+        ),
+      );
+    }
+  }
+
+  Text lastOptions(int i) {
+    if (i == 0) {
+      return Text('当前位置',
+          style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Montserrat'));
+    } else if (i == widget.waybill['latitude'].length - 1) {
+      String startTime = widget.waybill['createdAt'][i];
+      return Text('开始运输${startTime.substring(0, 10)}',
+          style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Montserrat'));
+    } else {
+      return Text(
+        '',
+        style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Montserrat'),
+      );
+    }
+  }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

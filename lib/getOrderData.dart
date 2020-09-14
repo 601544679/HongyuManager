@@ -4,6 +4,7 @@ import 'constant.dart';
 import 'sizeConfig.dart';
 import 'userclass.dart';
 import 'server.dart';
+import 'package:r_logger/r_logger.dart';
 
 //获取订单数据
 class getOrderData extends StatefulWidget {
@@ -41,7 +42,7 @@ class _getOrderDataState extends State<getOrderData> {
               return Expanded(
                 //todo 网络请求数据,传入UI
                 child: OrderNetWorkWidget(
-                  waybill: waybills,
+                  waybill: waybillRecord,
                 ),
               );
             }
@@ -78,22 +79,10 @@ class _getOrderDataState extends State<getOrderData> {
 
   //todo 根据选择下拉菜单的值请求订单数据
   Future _getData(String state) async {
-    switch (widget.state) {
-      case '0':
-        //state=0获取所有订单
-        waybillRecord = await Server().getAllWaybill();
-        break;
-      case '1':
-        //state=1获取运输中订单
-        waybillRecord = await Server().getWaybillTransport();
-        break;
-      case '2':
-        //state=2获取已完成订单
-        waybillRecord = await Server().getWaybillHistoryAdmin();
-        break;
-    }
-    waybills = waybillRecord['result'];
-    print('返回的结果${waybills}');
-    return waybills;
+    waybillRecord = await Server().getWaybillByValue(state);
+    //waybills = waybillRecord['result'];
+    //print('返回的类型${waybillRecord.runtimeType}');
+    //RLogger.instance.d(waybills.toString());
+    return waybillRecord;
   }
 }

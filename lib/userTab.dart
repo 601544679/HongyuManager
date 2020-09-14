@@ -4,8 +4,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'constant.dart';
 import 'sizeConfig.dart';
-import 'login.dart';
-import 'userClass.dart';
 
 class UserTab extends StatefulWidget {
   @override
@@ -99,7 +97,9 @@ class _UserTabState extends State<UserTab> {
                     onTap: () {
                       setState(() {
                         currentTab = index;
-                        visible = !visible;
+                        if (currentTab == index) {
+                          visible = !visible;
+                        }
                       });
                     },
                     title: Text(

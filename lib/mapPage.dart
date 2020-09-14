@@ -3,7 +3,7 @@ import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:flutter/material.dart';
 import 'sizeConfig.dart';
 import 'constant.dart';
-
+import 'package:amap_core_fluttify/amap_core_fluttify.dart';
 import 'server.dart';
 
 class MapPage extends StatefulWidget {
@@ -16,15 +16,22 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  _loadWaybill() async {
+    print('_loadWaybill');
+    var result = await Server().getWaybillAdmin(widget.orderNumber);
+    //print('订单信息: ${result['result']}');
+    //print('ID:${result['result']['ID']}');
+    return (result['result']);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    //print('传入的订单号${widget.orderNumber}');
-    _loadWaybill() async {
-      print('_loadWaybill');
-      var a = await Server().getWaybillAdmin(widget.orderNumber);
-      //print('订单信息: ${a['result']}');
-      //print('ID:${a['result']['ID']}');
-      return (a['result']);
-    }
+    print('传入的订单号${widget.orderNumber}');
 
     Widget _buildFuture(BuildContext context, AsyncSnapshot snapshot) {
       switch (snapshot.connectionState) {
@@ -118,22 +125,19 @@ class _MapScreenState extends State<MapScreen> {
           children: [
             SizedBox(
               height: SizeConfig.heightMultiplier * 50,
-              child: Flexible(
-                flex: 1,
-                child: AmapView(
-                  mapType: MapType.Standard,
-                  showScaleControl: true,
-                  zoomLevel: 15,
-                  maskDelay: Duration(milliseconds: 500),
-                  centerCoordinate: LatLng(widget.waybill['latitude'][0],
-                      widget.waybill['longitude'][0]),
-                  markers: makeOptions(),
-                  onMapCreated: (controller) async {
-                    await controller?.showMyLocation(MyLocationOption(
-                        myLocationType: MyLocationType.Follow,
-                        interval: Duration(seconds: 10)));
-                  },
-                ),
+              child: AmapView(
+                mapType: MapType.Standard,
+                showScaleControl: true,
+                zoomLevel: 15,
+                maskDelay: Duration(milliseconds: 500),
+                centerCoordinate: LatLng(widget.waybill['latitude'][0],
+                    widget.waybill['longitude'][0]),
+                markers: makeOptions(),
+                onMapCreated: (controller) async {
+                  await controller?.showMyLocation(MyLocationOption(
+                      myLocationType: MyLocationType.Follow,
+                      interval: Duration(seconds: 10)));
+                },
               ),
             ),
             Container(
@@ -249,33 +253,12 @@ class _MapScreenState extends State<MapScreen> {
   List<MarkerOption> makeOptions() {
     List<MarkerOption> marks = [];
     for (int i = 0; i < widget.waybill['latitude'].length; i++) {
+      //print('获取:${widget.waybill['latitude'][i].toDouble()}');
       marks.add(MarkerOption(
           latLng: LatLng(widget.waybill['latitude'][i].toDouble(),
               widget.waybill['longitude'][i].toDouble()),
           title: widget.waybill['positionName'][i],
-          widget: Container(
-            height: i == 0
-                ? SizeConfig.heightMultiplier * 4.5
-                : SizeConfig.widthMultiplier * 3,
-            width: i == 0
-                ? SizeConfig.widthMultiplier * 15
-                : SizeConfig.widthMultiplier * 3,
-            child: Material(
-              borderRadius: BorderRadius.circular(30),
-              shadowColor: Colors.transparent,
-              color: Colors.indigo[colorNum],
-              elevation: 7.0,
-              child: Center(
-                child: Text(
-                  i == 0 ? '当前位置' : '',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Montserrat'),
-                ),
-              ),
-            ),
-          )));
+          widget: showOptions(i)));
     }
     marks.add(MarkerOption(
         latLng: LatLng(
@@ -305,5 +288,76 @@ class _MapScreenState extends State<MapScreen> {
           ),
         )));
     return marks;
+  }
+
+  Container showOptions(int i) {
+    if (i == 0) {
+      return Container(
+        height: SizeConfig.widthMultiplier * 6,
+        width: SizeConfig.widthMultiplier * 18,
+        child: Material(
+          borderRadius: BorderRadius.circular(30),
+          shadowColor: Colors.transparent,
+          color: Colors.indigo[colorNum],
+          elevation: 7.0,
+          child: Center(
+            child: lastOptions(i),
+          ),
+        ),
+      );
+    } else if (i == widget.waybill['latitude'].length - 1) {
+      return Container(
+        height: SizeConfig.widthMultiplier * 10,
+        width: SizeConfig.widthMultiplier * 40,
+        child: Material(
+          borderRadius: BorderRadius.circular(30),
+          shadowColor: Colors.transparent,
+          color: Colors.indigo[colorNum],
+          elevation: 7.0,
+          child: Center(
+            child: lastOptions(i),
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        height: SizeConfig.widthMultiplier * 3,
+        width: SizeConfig.widthMultiplier * 3,
+        child: Material(
+          borderRadius: BorderRadius.circular(30),
+          shadowColor: Colors.transparent,
+          color: Colors.indigo[colorNum],
+          elevation: 7.0,
+          child: Center(
+            child: lastOptions(i),
+          ),
+        ),
+      );
+    }
+  }
+
+  Text lastOptions(int i) {
+    if (i == 0) {
+      return Text('当前位置',
+          style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Montserrat'));
+    } else if (i == widget.waybill['latitude'].length - 1) {
+      String startTime = widget.waybill['createdAt'][i];
+      return Text('开始运输${startTime.substring(0, 10)}',
+          style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Montserrat'));
+    } else {
+      return Text(
+        '',
+        style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Montserrat'),
+      );
+    }
   }
 }

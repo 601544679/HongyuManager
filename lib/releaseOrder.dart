@@ -1,10 +1,19 @@
 import 'dart:convert';
-import 'dart:math';
-
+import 'dart:io';
+import 'package:amap_map_fluttify/amap_map_fluttify.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mydemo/constant.dart';
 import 'sizeConfig.dart';
+import 'package:r_logger/r_logger.dart';
+import 'server.dart';
+import 'package:amap_search_fluttify/amap_search_fluttify.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:excel/excel.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'constant.dart';
 
 //发布订单
 class ReleaseOrder extends StatefulWidget {
@@ -12,71 +21,25 @@ class ReleaseOrder extends StatefulWidget {
   _ReleaseOrderState createState() => _ReleaseOrderState();
 }
 
-class _ReleaseOrderState extends State<ReleaseOrder> {
-  //发布订单没有车牌号码，司机接单后才添加车牌号码
-  List list = [
-    '送货日期',
-    //departureDate           number                2020-09-02
-    '物流单号',
-    //logisticsOrderNo                              GCWL00018834
-    '送货单编号',
-    //waybill_ID                                 GCZC00021371
-    '销售单号',
-    //XK_NO                                        XK0007549849
-    '名义客户',
-    //company_ID                                   佛山万科置业有限公司(佛山万科星都荟项目)
-    '项目部名称',
-    //projectName                                佛山万科置业有限公司
-    '施工单位',
-    //constructionCompanyName                      广州市景晖园林景观工程有限公司
-    '项目地址',
-    //projectAddress                               广东省佛山市顺德区龙洲路北（骏马修车厂附近）
-    '业务员名称',
-    //supplierContactPerson                      李啟然
-    '业务员电话',
-    //supplierContactPhone                       13827798161
-    '收货人姓名',
-    //constructionSiteContactPerson              王永淦
-    '收货人电话',
-    //constructionSiteContactPhone               13725285112
-    '运输方式',
-    //ModeOfTransport                              汽运
-    '车牌号码',
-    //carNo
-    '装车柜号',
-    //containerNo
-    '物料号',
-    //materialsNumber                                FT200-318-0
-    '客户编码',
-    //client_ID                                    HG60816
-    '规格',
-    // size                                            450x600
-    '开单|色号',
-    //billingColor                                YA0601(和坚487单-万科佛山星都荟园林景观工程)
-    '跟单通知发货|开单单位',
-    //BillingUnit                      块
-    '跟单通知发货|发货数量',
-    //sendQuantity        number       28
-    '跟单通知发货|数量(块)',
-    //quantity            number       28
-    '跟单通知发货|M2',
-    //M2                                    7.56
-    '自定义打印|送货单价(块) ',
-    //unitPrice          number        12.7683
-    '托板总数',
-    //palletsNumber       number
-    '物流结算|发货重量（吨）',
-    //ShippingWeight      number            0.168
-    '明细备注',
-    //detailedRemarks
-    '装车备注',
-    //loadingRemarks                               和坚487单,要求带搬运，穿着整齐，长裤，带安全帽，反光衣，
-    // 不能抽烟，送货时间早上10点30以后，下午3点半之后！要求今天到货
-  ];
+class _ReleaseOrderState extends State<ReleaseOrder>
+    with AmapSearchDisposeMixin {
+
   Map<String, dynamic> map = {};
   final _releaseFormKey = GlobalKey<FormState>();
   List valueList = List();
   List splited = List();
+  List splited1 = List();
+  List allSplited = List();
+  List rowToList = List();
+  List cutList = List();
+  List mapList = List();
+  Map<String, dynamic> rowMap = Map();
+  Map<String, dynamic> allMap = Map();
+  bool visible = false;
+  double latitude = 0;
+  double longitude = 0;
+
+  List valueToMap = List();
 
   TextInputType _textInputType(int index) {
     switch (index) {
@@ -95,7 +58,7 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
 
   List<TextInputFormatter> textInputFormatter(int index) {
     List<TextInputFormatter> tt = [
-      WhitelistingTextInputFormatter(RegExp("[0-9.]"))
+      FilteringTextInputFormatter.allow(RegExp("[0-9.\n]"))
     ];
     List<TextInputFormatter> tt1 = [];
     switch (index) {
@@ -112,6 +75,86 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
     }
   }
 
+  checkPermission() async {
+    bool status = await Permission.storage.isGranted;
+    if (status) {
+      FilePickerResult result = await FilePicker.platform.pickFiles();
+      if (result != null) {
+        readExcel(result.files.single.path);
+      }
+    } else {
+      Permission.storage.request();
+    }
+  }
+
+  readExcel(String filePath) async {
+    var file = filePath;
+    var bytes = File(file).readAsBytesSync();
+    var excel = Excel.decodeBytes(bytes);
+    cutList.clear();
+    rowToList.clear();
+    mapList.clear();
+    allMap.clear();
+    rowMap.clear();
+    //遍历Excel
+    for (var table in excel.tables.keys) {
+      print('table：${table}');
+      print('maxCols：${excel.tables[table].maxCols}');
+      print('maxRows：${excel.tables[table].maxRows}');
+      for (var row in excel.tables[table].rows) {
+        for (int i = 0; i < row.length; i++) {
+          if (row[i] == null) {
+            row[i] = '';
+          }
+          //print('${i}---${row[i]}');
+        }
+        rowToList.add(row);
+      }
+      //裁剪去掉标题
+      cutList = rowToList.sublist(1, 20);
+
+      valueToMap.clear();
+      //格式处理
+      for (var value in cutList) {
+        List allList = List();
+        for (int i = 0; i < value.length; i++) {
+          List valueToList = List();
+          if (i == 0) {
+            value[i] = DateTime.parse(value[i]).millisecondsSinceEpoch;
+            allList.add(value[i]);
+          } else if (i == 3 || i > 14) {
+            valueToList = [value[i]];
+            allList.add(valueToList);
+          } else {
+            allList.add(value[i]);
+          }
+        }
+        valueToMap.add(allList);
+      }
+      //转化为map
+      List aa = List();
+      aa.clear();
+      for (var value in valueToMap) {
+        Map<String, dynamic> map = {};
+        map = Map.fromIterables(jsonTitle, value);
+        print('map----${map}');
+        aa.add(map);
+        allMap.addAll({'release': aa});
+      }
+      print('长度---${allMap['release'].length}');
+      /*for (int i = 0; i < 4; i++) {
+        var a = await Server().releaseByExcel(allMap['release'][i]);
+        if (a['result'] == 'success') {
+          print('结果--${a}');
+        }
+      }*/
+    }
+    //map=Map.fromIterables(jsonTitle, allList);
+    //print(valueToMap);
+    //print('map ${jsonEncode(allMap)}');
+    //RLogger.instance.d('${jsonEncode(allMap['release'][0])}');
+  }
+
   @override
   Widget build(BuildContext context) {
     var _controllers = <TextEditingController>[];
@@ -119,9 +162,21 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
       var _controller = new TextEditingController();
       _controllers.add(_controller);
     }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('发布订单'),
+        actions: [
+          MaterialButton(
+            onPressed: () {
+              checkPermission();
+            },
+            child: Text(
+              '从Excel导入',
+              style: TextStyle(color: Colors.white),
+            ),
+          )
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(
@@ -146,12 +201,37 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
               ),
               TextField(
                 maxLines: null,
-                onChanged: (value) {
+                //智能识别，裁剪
+                onChanged: (value) async {
                   splited = value.split(" ");
-                  for (var i = 0; i < list.length; i++) {
-                    for (var i = 0; i < min(splited.length, list.length); i++) {
-                      _controllers[i].text = splited[i];
+                  splited1 = value.split('\n');
+                  for (int i = 0; i < splited1.length; i++) {
+                    splited = splited1[i].toString().split(" ");
+                    allSplited.add(splited);
+                  }
+                  //print('allSplited:${allSplited}');
+                  //print('splited1:${splited1}');
+                  //print('splited1:${splited1.length}');
+                  //print('识别：${splited}');
+                  //print('list长度${list.length}');
+                  for (var value in allSplited) {
+                    for (int i = 0; i < value.length; i++) {
+                      if (value[i] == '') {
+                        value[i] = ' ';
+                      }
+                      if (_controllers[i].text == "") {
+                        _controllers[i].text = value[i];
+                      } else if (_controllers[i].text != value[i] ||
+                          i == 3 ||
+                          i == 19 ||
+                          i == 24 ||
+                          i == 26 ||
+                          i == 27) {
+                        _controllers[i].text =
+                            _controllers[i].text + '\n' + value[i];
+                      }
                     }
+                    //print('value${value}');
                   }
                 },
                 decoration: InputDecoration(
@@ -188,40 +268,69 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
                         ),
                         TextFormField(
                           // ignore: missing_return
-                          keyboardType: _textInputType(index),
+                          //todo 指定输入类型有bug
+                          keyboardType: TextInputType.multiline,
                           inputFormatters: textInputFormatter(index),
                           controller: _controllers[index],
+                          textInputAction: TextInputAction.newline,
                           validator: (value) {
-                            print('value${value}');
+                            //print('value${value}');
                             if (value.isEmpty) {
                               return '请输入${list[index]}';
                             }
                             return null;
                           },
-                          onSaved: (value) {
-                            valueList.add(value);
+                          onSaved: (value) async {
+                            //valueList.add(value);
                             Map<String, dynamic> map1 = {};
                             switch (index) {
                               case 0:
                                 map1 = {
-                                  list[index]: DateTime.parse(value)
+                                  jsonTitle[index]: DateTime.parse(value)
                                       .millisecondsSinceEpoch
                                 };
                                 break;
+                              case 3:
+                              case 15:
+                              case 16:
+                              case 17:
+                              case 18:
+                              case 19:
                               case 20:
                               case 21:
-                              case 24:
-                                map1 = {list[index]: int.parse(value)};
-                                break;
+                              case 22:
                               case 23:
+                              case 24:
                               case 25:
-                                map1 = {list[index]: double.parse(value)};
+                              case 26:
+                              case 27:
+                                List ll = List();
+                                for (int i = 0;
+                                    i < value.split('\n').length;
+                                    i++) {
+                                  ll.add(value.split('\n')[i] == " "
+                                      ? ''
+                                      : value.split('\n')[i]);
+                                }
+                                map1 = {jsonTitle[index]: ll};
                                 break;
                               default:
-                                map1 = {list[index]: value};
+                                map1 = {
+                                  jsonTitle[index]: value == " " ? '' : value
+                                };
                                 break;
                             }
                             map.addAll(map1);
+                            // todo 缺发货地
+                            map.addAll({
+                              "destinationName": place(_controllers[7].text)
+                            });
+
+                            //RLogger.instance.d(jsonEncode(map), tag: 'wer');
+                            //print(place('香港特别行政区中西区薄扶林道'));
+                            //print(place('西藏自治区拉萨市'));
+                            //print(place('北京市东城区景山前街4号'));
+                            //print(place('广东省广州市天河区东站路1号'));
                           },
                           decoration: InputDecoration(
                               hintText: '请输入${list[index]}',
@@ -243,29 +352,79 @@ class _ReleaseOrderState extends State<ReleaseOrder> {
                   itemCount: list.length,
                 ),
               ),
-              FlatButton(
-                color: Colors.indigo[colorNum],
-                textColor: Colors.white,
-                onPressed: () {
-                  //todo 发布订单
-                  if (_releaseFormKey.currentState.validate()) {
-                    _releaseFormKey.currentState.save();
-                    print('TextFiled信息: ${valueList}');
-                    print('map信息: ${map}');
-                    print('map信息: ${jsonEncode(map)}');
-                  }
-                },
-                child: Text(
-                  '发布订单',
-                  style: TextStyle(
-                      fontSize: SizeConfig.heightMultiplier * 2,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
             ],
           ),
         ),
       ),
+      floatingActionButton: FlatButton(
+        color: Colors.indigo[colorNum],
+        textColor: Colors.white,
+        onPressed: () async {
+          //todo 发布订单
+          print("7777${_controllers[7].text}");
+          final geocodeList = await AmapSearch.instance.searchGeocode(
+              _controllers[7].text,
+              city: place(_controllers[7].text));
+          var lat = await geocodeList[0].latLng.then((value) {
+            return value.latitude;
+          });
+          var lon = await geocodeList[0].latLng.then((value) {
+            return value.longitude;
+          });
+          print('值1 ${lat},${lon}');
+          Map<String, dynamic> map2 = {};
+          map2 = {"__type": "GeoPoint"};
+          map2.addAll({'latitude': lat});
+          map2.addAll({'longitude': lon});
+          map.addAll({'destination': map2});
+          if (_releaseFormKey.currentState.validate()) {
+            _releaseFormKey.currentState.save();
+            //print('TextFiled信息: ${valueList}');
+            //print('map信息: ${map}');
+            //print('map信息: ${jsonEncode(map)}');
+
+            var a = await Server().releaseWaybill(map);
+            print('结果${a}');
+            switch (a['result']) {
+              case '订单已存在':
+                Fluttertoast.showToast(
+                    msg: a['result'], toastLength: Toast.LENGTH_SHORT);
+                break;
+              case 'success':
+                Fluttertoast.showToast(
+                    msg: '订单发布成功', toastLength: Toast.LENGTH_SHORT);
+                break;
+              default:
+                Fluttertoast.showToast(
+                    msg: a['result'], toastLength: Toast.LENGTH_SHORT);
+                break;
+            }
+
+            RLogger.instance.d(jsonEncode(map), tag: 'ff');
+          }
+        },
+        child: Text(
+          '发布订单',
+          style: TextStyle(
+              fontSize: SizeConfig.heightMultiplier * 2,
+              fontWeight: FontWeight.bold),
+        ),
+      ),
     );
+  }
+
+  //返回目的地发货地
+  String place(String location) {
+    if (location.contains('省')) {
+      return location.substring(
+          location.indexOf('省') + 1, location.indexOf('市'));
+    } else if (location.contains('自治')) {
+      return location.substring(
+          location.indexOf('区') + 1, location.indexOf('市'));
+    } else if (location.contains('特别')) {
+      return location.substring(0, 2);
+    } else {
+      return location.substring(0, location.indexOf('市'));
+    }
   }
 }
