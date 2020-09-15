@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:amap_map_fluttify/amap_map_fluttify.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -9,11 +8,11 @@ import 'package:mydemo/constant.dart';
 import 'sizeConfig.dart';
 import 'package:r_logger/r_logger.dart';
 import 'server.dart';
-import 'package:amap_search_fluttify/amap_search_fluttify.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:excel/excel.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'constant.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 //发布订单
 class ReleaseOrder extends StatefulWidget {
@@ -23,7 +22,6 @@ class ReleaseOrder extends StatefulWidget {
 
 class _ReleaseOrderState extends State<ReleaseOrder>
     with AmapSearchDisposeMixin {
-
   Map<String, dynamic> map = {};
   final _releaseFormKey = GlobalKey<FormState>();
   List valueList = List();
@@ -110,49 +108,67 @@ class _ReleaseOrderState extends State<ReleaseOrder>
         }
         rowToList.add(row);
       }
-      //裁剪去掉标题
-      cutList = rowToList.sublist(1, 20);
-
-      valueToMap.clear();
-      //格式处理
-      for (var value in cutList) {
-        List allList = List();
-        for (int i = 0; i < value.length; i++) {
-          List valueToList = List();
-          if (i == 0) {
-            value[i] = DateTime.parse(value[i]).millisecondsSinceEpoch;
-            allList.add(value[i]);
-          } else if (i == 3 || i > 14) {
-            valueToList = [value[i]];
-            allList.add(valueToList);
+    }
+    //裁剪去掉标题
+    //cutList = rowToList.sublist(1, rowToList.length-1);
+    cutList = rowToList.sublist(1, 5);
+    valueToMap.clear();
+    //格式处理
+    for (var value in cutList) {
+      List allList = List();
+      for (int i = 0; i < value.length; i++) {
+        List valueToList = List();
+        if (i == 0) {
+          value[i] = DateTime.parse(value[i]).millisecondsSinceEpoch;
+          allList.add(value[i]);
+        } else if (i == 3 || i > 14) {
+          valueToList = [value[i]];
+          allList.add(valueToList);
+        } else {
+          allList.add(value[i]);
+        }
+      }
+      valueToMap.add(allList);
+    }
+    //转化为map
+    List aa = List();
+    aa.clear();
+    int success = 0;
+    int failed = 0;
+    for (var value in valueToMap) {
+      Fluttertoast.showToast(msg: '开始上传', toastLength: Toast.LENGTH_SHORT);
+      Map<String, dynamic> map = {};
+      map = Map.fromIterables(jsonTitle, value);
+      //print('map----${map}');
+      print('地址 ${map['projectAddress']}');
+      var lating = await changeLat(map['projectAddress']);
+      print('值1 ${lating.latitude},${lating.longitude}');
+      Map<String, dynamic> map2 = {};
+      map2 = {"__type": "GeoPoint"};
+      map2.addAll({'latitude': lating.latitude});
+      map2.addAll({'longitude': lating.longitude});
+      map.addAll({'destination': map2});
+      map.addAll({"destinationName": place(map['projectAddress'])});
+      bool result = true;
+      var a;
+      print('当前请求$map');
+      if (result) {
+        a = await Server().releaseByExcel(map);
+        print('结果--${a}');
+        if (a != null) {
+          setState(() {
+            result = true;
+          });
+          if (a['result'] == 'success') {
+            success++;
           } else {
-            allList.add(value[i]);
+            failed++;
           }
         }
-        valueToMap.add(allList);
       }
-      //转化为map
-      List aa = List();
-      aa.clear();
-      for (var value in valueToMap) {
-        Map<String, dynamic> map = {};
-        map = Map.fromIterables(jsonTitle, value);
-        print('map----${map}');
-        aa.add(map);
-        allMap.addAll({'release': aa});
-      }
-      print('长度---${allMap['release'].length}');
-      /*for (int i = 0; i < 4; i++) {
-        var a = await Server().releaseByExcel(allMap['release'][i]);
-        if (a['result'] == 'success') {
-          print('结果--${a}');
-        }
-      }*/
     }
-    //map=Map.fromIterables(jsonTitle, allList);
-    //print(valueToMap);
-    //print('map ${jsonEncode(allMap)}');
-    //RLogger.instance.d('${jsonEncode(allMap['release'][0])}');
+    Fluttertoast.showToast(
+        msg: '成功上传$success条数据,失败$failed条', toastLength: Toast.LENGTH_SHORT);
   }
 
   @override
@@ -361,34 +377,25 @@ class _ReleaseOrderState extends State<ReleaseOrder>
         textColor: Colors.white,
         onPressed: () async {
           //todo 发布订单
-          print("7777${_controllers[7].text}");
-          final geocodeList = await AmapSearch.instance.searchGeocode(
-              _controllers[7].text,
-              city: place(_controllers[7].text));
-          var lat = await geocodeList[0].latLng.then((value) {
-            return value.latitude;
-          });
-          var lon = await geocodeList[0].latLng.then((value) {
-            return value.longitude;
-          });
-          print('值1 ${lat},${lon}');
-          Map<String, dynamic> map2 = {};
-          map2 = {"__type": "GeoPoint"};
-          map2.addAll({'latitude': lat});
-          map2.addAll({'longitude': lon});
-          map.addAll({'destination': map2});
+          //print("7777${_controllers[7].text}");
           if (_releaseFormKey.currentState.validate()) {
             _releaseFormKey.currentState.save();
             //print('TextFiled信息: ${valueList}');
             //print('map信息: ${map}');
             //print('map信息: ${jsonEncode(map)}');
-
-            var a = await Server().releaseWaybill(map);
-            print('结果${a}');
-            switch (a['result']) {
+            var lating = await changeLat(_controllers[7].text);
+            print('值1 ${lating.latitude},${lating.longitude}');
+            Map<String, dynamic> map2 = {};
+            map2 = {"__type": "GeoPoint"};
+            map2.addAll({'latitude': lating.latitude});
+            map2.addAll({'longitude': lating.longitude});
+            map.addAll({'destination': map2});
+            var result = await Server().releaseWaybill(map);
+            print('结果$result');
+            switch (result['result']) {
               case '订单已存在':
                 Fluttertoast.showToast(
-                    msg: a['result'], toastLength: Toast.LENGTH_SHORT);
+                    msg: result['result'], toastLength: Toast.LENGTH_SHORT);
                 break;
               case 'success':
                 Fluttertoast.showToast(
@@ -396,11 +403,11 @@ class _ReleaseOrderState extends State<ReleaseOrder>
                 break;
               default:
                 Fluttertoast.showToast(
-                    msg: a['result'], toastLength: Toast.LENGTH_SHORT);
+                    msg: result['result'], toastLength: Toast.LENGTH_SHORT);
                 break;
             }
 
-            RLogger.instance.d(jsonEncode(map), tag: 'ff');
+            //RLogger.instance.d(jsonEncode(map), tag: 'ff');
           }
         },
         child: Text(
@@ -411,6 +418,13 @@ class _ReleaseOrderState extends State<ReleaseOrder>
         ),
       ),
     );
+  }
+
+  //地址转经纬度
+  changeLat(String address) async {
+    final geocodeList =
+        await AmapSearch.instance.searchGeocode(address, city: place(address));
+    return geocodeList[0].latLng;
   }
 
   //返回目的地发货地

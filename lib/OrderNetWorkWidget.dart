@@ -116,24 +116,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                         flex: 2,
                       ),
                       Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            textStyle(
-                                '${wbill.result[index].status == 'Finished' ? '已完成' : '运输中'}',
-                                fontSize,
-                                color: wbill.result[index].status == 'Finished'
-                                    ? Colors.green
-                                    : Colors.red),
-                            Image.asset('images/arrow.png',
-                                width: SizeConfig.widthMultiplier * 10,
-                                height: SizeConfig.heightMultiplier * 4,
-                                fit: BoxFit.cover,
-                                color: wbill.result[index].status == 'Finished'
-                                    ? Colors.green
-                                    : Colors.red),
-                          ],
-                        ),
+                        child: goodStatus(wbill.result[index].status),
                         flex: 1,
                       ),
                       Expanded(
@@ -172,12 +155,10 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                       textStyle('货物明细：', fontSize),
                     ],
                   ),
-                  Container(
-                    child: GoodsDetail(
-                      index: index,
-                      titleList: titleList,
-                      totalList: wbill.result[index],
-                    ),
+                  GoodsDetail(
+                    index: index,
+                    titleList: titleList,
+                    totalList: wbill.result[index],
                   ),
                   SizedBox(height: sizedBoxHeight),
                   Row(
@@ -221,6 +202,51 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
     );
   }
 
+  //判断运输状态
+  Widget goodStatus(String status) {
+    switch (status) {
+      case 'inProgress':
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            textStyle('运输中', fontSize, color: Colors.red),
+            Image.asset('images/arrow.png',
+                width: SizeConfig.widthMultiplier * 10,
+                height: SizeConfig.heightMultiplier * 4,
+                fit: BoxFit.cover,
+                color: Colors.red),
+          ],
+        );
+        break;
+      case 'Finished':
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            textStyle('已完成', fontSize, color: Colors.green),
+            Image.asset('images/arrow.png',
+                width: SizeConfig.widthMultiplier * 10,
+                height: SizeConfig.heightMultiplier * 4,
+                fit: BoxFit.cover,
+                color: Colors.green),
+          ],
+        );
+        break;
+      default:
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            textStyle('待分配', fontSize, color: Colors.lime),
+            Image.asset('images/arrow.png',
+                width: SizeConfig.widthMultiplier * 10,
+                height: SizeConfig.heightMultiplier * 4,
+                fit: BoxFit.cover,
+                color: Colors.lime),
+          ],
+        );
+        break;
+    }
+  }
+
   //日期转换
   String date(int millTime) {
     DateTime a = DateTime.fromMillisecondsSinceEpoch(millTime);
@@ -259,9 +285,9 @@ class GoodsDetail extends StatefulWidget {
 
 List<DataColumn> dataColumn(List titleList) {
   List<DataColumn> columnList = List();
-  print('标题长度---${titleList.length}');
+  //print('标题长度---${titleList.length}');
   for (int i = 0; i < titleList.length; i++) {
-    print('标题--${titleList[i]}');
+    //print('标题--${titleList[i]}');
     columnList.add(DataColumn(
         label: Row(
       children: [
@@ -294,7 +320,7 @@ class _GoodsDetailState extends State<GoodsDetail> {
   Widget build(BuildContext context) {
     List allList = List();
     //RLogger.instance.d('传入的数据${widget.totalList}');
-    print('几条记录${widget.totalList.xkNo.length}---index---${widget.index + 1}');
+    //print('几条记录${widget.totalList.xkNo.length}---index---${widget.index + 1}');
     for (int i = 0; i < widget.totalList.xkNo.length; i++) {
       List cutList = List();
       cutList.add(i + 1);
@@ -307,13 +333,16 @@ class _GoodsDetailState extends State<GoodsDetail> {
       cutList.add(widget.totalList.detailedRemarks[i]);
       allList.add(cutList);
     }
-    print('裁剪--${allList}');
+    //print('裁剪--${allList}');
 
     //RLogger.instance.d(widget.totalList.toString());
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
-          columns: dataColumn(widget.titleList), rows: dataRow(allList)),
+          dataRowHeight: SizeConfig.heightMultiplier * 3,
+          headingRowHeight: SizeConfig.heightMultiplier * 4,
+          columns: dataColumn(widget.titleList),
+          rows: dataRow(allList)),
     );
   }
 }

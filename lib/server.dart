@@ -209,7 +209,7 @@ class Server {
   //value=0 返回所有订单
   //value=1 返回运输中订单
   //value=2 返回已完成订单
-  getWaybillByValue(String value) {
+  getWaybillByValue(String value) async {
     var responseBody;
     responseBody = _post('/1.1/functions/getWaybillByValue/', {'value': value});
     return responseBody;
@@ -243,12 +243,9 @@ class Server {
   }
 
 //todo 根据Excel发布订单
-  releaseByExcel(Map map) {
+  releaseByExcel(Map map) async {
     var responseBody;
-    for (int i = 0; i < map.length; i++) {
-      responseBody = _post('/1.1/functions/releaseByExcel/', map);
-    }
-
+    responseBody = _post('/1.1/functions/releaseByExcel/', map);
     return responseBody;
   }
 

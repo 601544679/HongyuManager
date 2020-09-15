@@ -102,13 +102,13 @@ class _ImageBuilderState extends State<ImageBuilder>
   @override
   Widget build(BuildContext context) {
     var allData = FinishDataEntity().fromJson(widget.data);
-    //print('data是: ${widget.data}');
+    print('data是: ${widget.data}');
 
     List contentList = [
       date(allData.result.allMessage.departureDate) ?? '无日期',
       allData.result.allMessage.logisticsOrderNo ?? '无物流单号',
       allData.result.allMessage.waybillId,
-      allData.result.allMessage.companyId ?? '无命一客户',
+      allData.result.allMessage.companyId ?? '无名义客户',
       allData.result.allMessage.projectName ?? '无项目部名称',
       allData.result.allMessage.constructionCompanyName ?? '无施工单位',
       allData.result.allMessage.projectAddress ?? '无项目地址',
