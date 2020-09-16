@@ -1,3 +1,5 @@
+import 'package:amap_map_fluttify/amap_map_fluttify.dart';
+
 import 'mainPage.dart';
 import 'releaseOrder.dart';
 import 'login.dart';
@@ -16,7 +18,6 @@ String dropDownButtonValue = '0';
 final String orderTabName = '订单详情';
 final String userTabName = '公司';
 final String homeTabName = '主页';
-
 
 //releaseOrder
 //发布订单没有车牌号码，司机接单后才添加车牌号码
@@ -110,7 +111,6 @@ List<String> jsonTitle = [
   'loadingRemarks'
 ];
 
-
 //finishPage
 List titleList = [
   '送货日期',
@@ -173,3 +173,5 @@ List arrayTitleList = [
   '装车备注',
   //loadingRemarks                               和坚487单,要求带搬运，穿着整齐，长裤，带安全帽，反光衣，
 ];
+
+

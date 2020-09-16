@@ -245,7 +245,7 @@ class Server {
 //todo 根据Excel发布订单
   releaseByExcel(Map map) async {
     var responseBody;
-    responseBody = _post('/1.1/functions/releaseByExcel/', map);
+    responseBody = _post('/1.1/functions/testFunction/', map);
     return responseBody;
   }
 

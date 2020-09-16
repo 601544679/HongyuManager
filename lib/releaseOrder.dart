@@ -110,10 +110,11 @@ class _ReleaseOrderState extends State<ReleaseOrder>
       }
     }
     //裁剪去掉标题
-    //cutList = rowToList.sublist(1, rowToList.length-1);
-    cutList = rowToList.sublist(1, 5);
+    cutList = rowToList.sublist(1, rowToList.length - 1);
+    //cutList = rowToList.sublist(1, 5);
     valueToMap.clear();
     //格式处理
+    var lating;
     for (var value in cutList) {
       List allList = List();
       for (int i = 0; i < value.length; i++) {
@@ -135,38 +136,46 @@ class _ReleaseOrderState extends State<ReleaseOrder>
     aa.clear();
     int success = 0;
     int failed = 0;
+    Fluttertoast.showToast(msg: '开始上传', toastLength: Toast.LENGTH_SHORT);
     for (var value in valueToMap) {
-      Fluttertoast.showToast(msg: '开始上传', toastLength: Toast.LENGTH_SHORT);
       Map<String, dynamic> map = {};
       map = Map.fromIterables(jsonTitle, value);
       //print('map----${map}');
-      print('地址 ${map['projectAddress']}');
-      var lating = await changeLat(map['projectAddress']);
-      print('值1 ${lating.latitude},${lating.longitude}');
-      Map<String, dynamic> map2 = {};
-      map2 = {"__type": "GeoPoint"};
-      map2.addAll({'latitude': lating.latitude});
-      map2.addAll({'longitude': lating.longitude});
-      map.addAll({'destination': map2});
-      map.addAll({"destinationName": place(map['projectAddress'])});
+      //print('地址 ${map['projectAddress']}');
+      if (map['projectAddress'] != '-') {
+        lating = await changeLat(map['projectAddress']);
+        print('值1 ${lating.latitude},${lating.longitude}');
+        Map<String, dynamic> map2 = {};
+        map2 = {"__type": "GeoPoint"};
+        map2.addAll({'latitude': lating.latitude});
+        map2.addAll({'longitude': lating.longitude});
+        map.addAll({'destination': map2});
+        map.addAll({"destinationName": place(map['projectAddress'])});
+      }
       bool result = true;
-      var a;
+      var responseBody;
       print('当前请求$map');
       if (result) {
-        a = await Server().releaseByExcel(map);
-        print('结果--${a}');
-        if (a != null) {
+        responseBody = await Server().releaseByExcel(map);
+        print('结果--$responseBody');
+        if (responseBody != null) {
           setState(() {
             result = true;
           });
-          if (a['result'] == 'success') {
-            success++;
+          print('responseBody$responseBody');
+          if (responseBody['result'].toString().contains('success')) {
+            setState(() {
+              success++;
+            });
           } else {
-            failed++;
+            setState(() {
+              failed++;
+            });
           }
         }
       }
     }
+
     Fluttertoast.showToast(
         msg: '成功上传$success条数据,失败$failed条', toastLength: Toast.LENGTH_SHORT);
   }
@@ -430,15 +439,27 @@ class _ReleaseOrderState extends State<ReleaseOrder>
   //返回目的地发货地
   String place(String location) {
     if (location.contains('省')) {
+      //省
       return location.substring(
-          location.indexOf('省') + 1, location.indexOf('市'));
+          location.indexOf('省') + 1,
+          location.indexOf('市') == -1
+              ? location.indexOf('县') + 1
+              : location.indexOf('市') + 1);
     } else if (location.contains('自治')) {
+      //自治区
       return location.substring(
-          location.indexOf('区') + 1, location.indexOf('市'));
+          location.indexOf('区') + 1, location.indexOf('市') + 1);
     } else if (location.contains('特别')) {
+      //港澳
       return location.substring(0, 2);
+    } else if (location.contains('北京') ||
+        location.contains('天津') ||
+        location.contains('上海') ||
+        location.contains('重庆')) {
+      return location.substring(0, location.indexOf('市') + 1);
     } else {
-      return location.substring(0, location.indexOf('市'));
+      //不规则
+      return location.substring(0, 2);
     }
   }
 }
