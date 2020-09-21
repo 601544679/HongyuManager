@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:amap_map_fluttify/amap_map_fluttify.dart';
+import 'package:amap_all_fluttify/amap_all_fluttify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -19,7 +19,11 @@ void main() async {
   if (userT != null) {
     user = User.fromJson(json.decode(userT));
   }
-  await AmapCore.init('011a00c27fd168fcca1e3f3bb7dc443d');
+  //await AmapCore.init('011a00c27fd168fcca1e3f3bb7dc443d');
+  await enableFluttifyLog(false);
+  await AmapService.init(
+      iosKey: '011a00c27fd168fcca1e3f3bb7dc443d',
+      androidKey: 'af09ea1166a0e280c02679d263859be2');
   runApp(MyApp(user: user));
 }
 
@@ -40,7 +44,9 @@ class MyApp extends StatelessWidget {
               navigatorKey: navigatorState,
               routes: routes,
               theme: ThemeData(primaryColor: Colors.indigo[colorNum]),
-              home: LoginPage(user: user,));
+              home: LoginPage(
+                user: user,
+              ));
         },
       );
     });

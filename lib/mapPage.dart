@@ -1,9 +1,9 @@
-import 'package:amap_location/amap_location.dart';
-import 'package:amap_map_fluttify/amap_map_fluttify.dart';
+//import 'package:amap_location/amap_location.dart';
+
+import 'package:amap_all_fluttify/amap_all_fluttify.dart';
 import 'package:flutter/material.dart';
 import 'sizeConfig.dart';
 import 'constant.dart';
-import 'package:amap_core_fluttify/amap_core_fluttify.dart';
 import 'server.dart';
 
 class MapPage extends StatefulWidget {
@@ -98,8 +98,10 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void dispose() {
     //停止监听定位、销毁定位
-    AMapLocationClient.stopLocation();
-    AMapLocationClient.shutdown();
+    /* AMapLocationClient.stopLocation();
+    AMapLocationClient.shutdown();*/
+    AmapLocation.stopLocation();
+    AmapLocation.dispose();
     super.dispose();
   }
 
@@ -254,6 +256,7 @@ class _MapScreenState extends State<MapScreen> {
     List<MarkerOption> marks = [];
     for (int i = 0; i < widget.waybill['latitude'].length; i++) {
       //print('获取:${widget.waybill['latitude'][i].toDouble()}');
+      //print('长度:${widget.waybill['latitude'].length}');
       marks.add(MarkerOption(
           latLng: LatLng(widget.waybill['latitude'][i].toDouble(),
               widget.waybill['longitude'][i].toDouble()),

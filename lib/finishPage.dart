@@ -1,4 +1,5 @@
-import 'package:amap_map_fluttify/amap_map_fluttify.dart';
+
+import 'package:amap_all_fluttify/amap_all_fluttify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -139,7 +140,7 @@ class _ImageBuilderState extends State<ImageBuilder>
       detailList.add(allData.result.allMessage.loadingRemarks[i]);
       cutList.add(detailList);
     }
-    print('整理--${cutList}');
+    //print('整理--${cutList}');
 
     TabController controller = TabController(length: 3, vsync: this);
     return Scaffold(
@@ -534,11 +535,12 @@ class _MapScreenState extends State<MapScreen>
     return Scaffold(
       body: Column(
         children: [
-          SizedBox(
-            height: SizeConfig.heightMultiplier * 50,
+          Expanded(
             child: AmapView(
               mapType: MapType.Standard,
               showScaleControl: true,
+              showCompass: true,
+              showZoomControl: true,
               zoomLevel: 15,
               maskDelay: Duration(milliseconds: 500),
               centerCoordinate: LatLng(widget.waybill['latitude'][0],
@@ -559,7 +561,8 @@ class _MapScreenState extends State<MapScreen>
   List<MarkerOption> makeOptions() {
     List<MarkerOption> marks = [];
     for (int i = 0; i < widget.waybill['latitude'].length; i++) {
-      //print('获取:${widget.waybill['latitude'][i].toDouble()}');
+      print('获取:${widget.waybill['latitude'][i].toDouble()}');
+      print('长度:${widget.waybill['latitude'].length}');
       marks.add(MarkerOption(
           latLng: LatLng(widget.waybill['latitude'][i].toDouble(),
               widget.waybill['longitude'][i].toDouble()),

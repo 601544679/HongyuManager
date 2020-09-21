@@ -37,6 +37,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
   @override
   Widget build(BuildContext context) {
     var wbill = WaybillEntity().fromJson(widget.waybill);
+    //wbill.result.sort((a, b) => b.departureDate.compareTo(a.departureDate));
     return ListView.builder(
       itemBuilder: (context, index) {
         //print('类型：${wbill.result[index].runtimeType}');

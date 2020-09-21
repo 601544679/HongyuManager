@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:amap_map_fluttify/amap_map_fluttify.dart';
+import 'package:amap_all_fluttify/amap_all_fluttify.dart';
+import 'package:amap_search_fluttify/amap_search_fluttify.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -152,10 +153,12 @@ class _ReleaseOrderState extends State<ReleaseOrder>
         map.addAll({'destination': map2});
         map.addAll({"destinationName": place(map['projectAddress'])});
       }
+      //RLogger.instance.d(map.toString());
       bool result = true;
       var responseBody;
       print('当前请求$map');
-      if (result) {
+      //todo 上传送货单
+       if (result) {
         responseBody = await Server().releaseByExcel(map);
         print('结果--$responseBody');
         if (responseBody != null) {
@@ -432,7 +435,8 @@ class _ReleaseOrderState extends State<ReleaseOrder>
   //地址转经纬度
   changeLat(String address) async {
     final geocodeList =
-        await AmapSearch.instance.searchGeocode(address, city: place(address));
+        await AmapSearch.searchGeocode(address, city: place(address));
+    //final geocodeList = await AmapSearch.instance.searchGeocode(address, city: place(address));
     return geocodeList[0].latLng;
   }
 
@@ -446,7 +450,7 @@ class _ReleaseOrderState extends State<ReleaseOrder>
               ? location.indexOf('县') + 1
               : location.indexOf('市') + 1);
     } else if (location.contains('自治')) {
-      //自治区
+      //少数民族自治区
       return location.substring(
           location.indexOf('区') + 1, location.indexOf('市') + 1);
     } else if (location.contains('特别')) {
@@ -456,6 +460,7 @@ class _ReleaseOrderState extends State<ReleaseOrder>
         location.contains('天津') ||
         location.contains('上海') ||
         location.contains('重庆')) {
+      //直辖市
       return location.substring(0, location.indexOf('市') + 1);
     } else {
       //不规则
