@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'sizeConfig.dart';
 import 'constant.dart';
 import 'getOrderData.dart';
+import 'mySearch.dart';
+import 'server.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderTab extends StatefulWidget {
   @override
@@ -10,6 +13,13 @@ class OrderTab extends StatefulWidget {
 
 class _OrderTabState extends State<OrderTab> {
   List<DropdownMenuItem> dropdownMenuItem = List();
+  List result;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +28,25 @@ class _OrderTabState extends State<OrderTab> {
         title: Text(orderTabName),
         centerTitle: true,
         automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+              icon: Icon(
+                Icons.search,
+                color: Colors.white,
+              ),
+              onPressed: () async {
+               /* var response = await Server().searchSuggestion();
+                result = response['result'];*/
+                Future<SharedPreferences> _prefs =
+                    SharedPreferences.getInstance();
+                final SharedPreferences preferences = await _prefs;
+                final history =  preferences.getStringList('historyList');
+                print('历史$history');
+                showSearch(
+                    context: context, delegate: searchbar(result, history));
+                //print('$result');
+              })
+        ],
       ),
       body: Column(
         children: [

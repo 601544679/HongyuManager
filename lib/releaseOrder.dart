@@ -14,6 +14,8 @@ import 'package:excel/excel.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'constant.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'uploadDialog.dart';
+import 'constant.dart';
 
 //发布订单
 class ReleaseOrder extends StatefulWidget {
@@ -111,8 +113,8 @@ class _ReleaseOrderState extends State<ReleaseOrder>
       }
     }
     //裁剪去掉标题
-    cutList = rowToList.sublist(1, rowToList.length - 1);
-    //cutList = rowToList.sublist(1, 5);
+    //cutList = rowToList.sublist(1, rowToList.length - 1);
+    cutList = rowToList.sublist(1, 12);
     valueToMap.clear();
     //格式处理
     var lating;
@@ -135,52 +137,13 @@ class _ReleaseOrderState extends State<ReleaseOrder>
     //转化为map
     List aa = List();
     aa.clear();
-    int success = 0;
-    int failed = 0;
     Fluttertoast.showToast(msg: '开始上传', toastLength: Toast.LENGTH_SHORT);
-    for (var value in valueToMap) {
-      Map<String, dynamic> map = {};
-      map = Map.fromIterables(jsonTitle, value);
-      //print('map----${map}');
-      //print('地址 ${map['projectAddress']}');
-      if (map['projectAddress'] != '-') {
-        lating = await changeLat(map['projectAddress']);
-        print('值1 ${lating.latitude},${lating.longitude}');
-        Map<String, dynamic> map2 = {};
-        map2 = {"__type": "GeoPoint"};
-        map2.addAll({'latitude': lating.latitude});
-        map2.addAll({'longitude': lating.longitude});
-        map.addAll({'destination': map2});
-        map.addAll({"destinationName": place(map['projectAddress'])});
-      }
-      //RLogger.instance.d(map.toString());
-      bool result = true;
-      var responseBody;
-      print('当前请求$map');
-      //todo 上传送货单
-       if (result) {
-        responseBody = await Server().releaseByExcel(map);
-        print('结果--$responseBody');
-        if (responseBody != null) {
-          setState(() {
-            result = true;
-          });
-          print('responseBody$responseBody');
-          if (responseBody['result'].toString().contains('success')) {
-            setState(() {
-              success++;
-            });
-          } else {
-            setState(() {
-              failed++;
-            });
-          }
-        }
-      }
-    }
-
-    Fluttertoast.showToast(
-        msg: '成功上传$success条数据,失败$failed条', toastLength: Toast.LENGTH_SHORT);
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return uploadDialog(valueToMap);
+        });
   }
 
   @override
@@ -318,18 +281,28 @@ class _ReleaseOrderState extends State<ReleaseOrder>
                                       .millisecondsSinceEpoch
                                 };
                                 break;
-                              case 3:
-                              case 15:
-                              case 16:
-                              case 17:
-                              case 18:
-                              case 19:
                               case 20:
                               case 21:
                               case 22:
                               case 23:
                               case 24:
                               case 25:
+                                List ll = List();
+                                for (int i = 0;
+                                    i < value.split('\n').length;
+                                    i++) {
+                                  ll.add(value.split('\n')[i] == " "
+                                      ? ''
+                                      : double.parse(value.split('\n')[i]));
+                                }
+                                map1 = {jsonTitle[index]: ll};
+                                break;
+                              case 3:
+                              case 15:
+                              case 16:
+                              case 17:
+                              case 18:
+                              case 19:
                               case 26:
                               case 27:
                                 List ll = List();
@@ -419,7 +392,7 @@ class _ReleaseOrderState extends State<ReleaseOrder>
                 break;
             }
 
-            //RLogger.instance.d(jsonEncode(map), tag: 'ff');
+            RLogger.instance.d(jsonEncode(map), tag: 'ff');
           }
         },
         child: Text(
@@ -430,41 +403,5 @@ class _ReleaseOrderState extends State<ReleaseOrder>
         ),
       ),
     );
-  }
-
-  //地址转经纬度
-  changeLat(String address) async {
-    final geocodeList =
-        await AmapSearch.searchGeocode(address, city: place(address));
-    //final geocodeList = await AmapSearch.instance.searchGeocode(address, city: place(address));
-    return geocodeList[0].latLng;
-  }
-
-  //返回目的地发货地
-  String place(String location) {
-    if (location.contains('省')) {
-      //省
-      return location.substring(
-          location.indexOf('省') + 1,
-          location.indexOf('市') == -1
-              ? location.indexOf('县') + 1
-              : location.indexOf('市') + 1);
-    } else if (location.contains('自治')) {
-      //少数民族自治区
-      return location.substring(
-          location.indexOf('区') + 1, location.indexOf('市') + 1);
-    } else if (location.contains('特别')) {
-      //港澳
-      return location.substring(0, 2);
-    } else if (location.contains('北京') ||
-        location.contains('天津') ||
-        location.contains('上海') ||
-        location.contains('重庆')) {
-      //直辖市
-      return location.substring(0, location.indexOf('市') + 1);
-    } else {
-      //不规则
-      return location.substring(0, 2);
-    }
   }
 }

@@ -163,48 +163,6 @@ class Server {
     return responseBody;
   }
 
-//todo 返回运输中订单
-  getWaybillTransport() async {
-    var responseBody;
-    responseBody = _post('/1.1/functions/getWaybillTransport/', {});
-    return responseBody
-        /*{
-      'ID': '运输单号',
-      'startLocationName': '出发地',
-      'destinationName': '目的地',
-      'driverName': '司机名',
-      'state': '订单状态',
-      'projectName': '项目名称',
-      'ConstructionUnit': '施工单位',
-      'arrivalTime': '计划到达时间',
-      'message': '送货单信息',
-      'supplier': '业务员姓名',
-      'date': '发货日期'
-    }*/
-        ;
-  }
-
-//todo 返回已完成订单
-  getWaybillHistoryAdmin() async {
-    var responseBody;
-    responseBody = _post('/1.1/functions/getWaybillHistoryAdmin/', {});
-    return responseBody;
-
-    /* {
-      'ID': '运输单号',
-      'startLocationName': '出发地',
-      'destinationName': '目的地',
-      'driverName': '司机名',
-      'state': '订单状态',
-      'projectName': '项目名称',
-      'ConstructionUnit': '施工单位',
-      'arrivalTime': '计划到达时间',
-      'message': '送货单信息',
-      'supplier': '业务员姓名',
-      'date': '发货日期'
-    }*/
-  }
-
   // todo 根据value返回订单
   //value=0 返回所有订单
   //value=1 返回运输中订单
@@ -215,25 +173,6 @@ class Server {
     return responseBody;
   }
 
-  //todo 返回所有订单
-  getAllWaybill() async {
-    var responseBody;
-    responseBody = _post('/1.1/functions/getAllWaybill/', {});
-    return /* {
-      'ID': '运输单号',
-      'startLocationName': '出发地',
-      'destinationName': '目的地',
-      'driverName': '司机名',
-      'state': '订单状态',
-      'projectName': '项目名称',
-      'ConstructionUnit': '施工单位',
-      'arrivalTime': '计划到达时间',
-      'message': '送货单信息',
-      'supplier': '业务员姓名',
-      'departureDate': '发货日期',
-    }*/
-        responseBody;
-  }
 
   //todo 发布订单
   releaseWaybill(Map map) async {
@@ -245,7 +184,7 @@ class Server {
 //todo 根据Excel发布订单
   releaseByExcel(Map map) async {
     var responseBody;
-    responseBody = _post('/1.1/functions/testFunction/', map);
+    responseBody = _post('/1.1/functions/releaseByExcel/', map);
     return responseBody;
   }
 
@@ -278,6 +217,20 @@ class Server {
       },
     ]*/
         responseBody;
+  }
+
+  //todo搜索单张订单
+  searchWaybill(String waybillId)async{
+    var responseBody;
+    responseBody = _post('/1.1/functions/searchWaybill/',{'waybillid': waybillId});
+    return responseBody;
+  }
+
+  //todo 搜索
+  searchSuggestion(String text) async {
+    var responseBody;
+    responseBody = _post('/1.1/functions/suggestion/', {'waybillid': text});
+    return responseBody;
   }
 
   posUpdate(String waybillid, double lat, lon, String positionname) {

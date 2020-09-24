@@ -178,16 +178,6 @@ class _ImageBuilderState extends State<ImageBuilder>
   }
 }
 
-//日期转换
-String date(int millTime) {
-  DateTime a = DateTime.fromMillisecondsSinceEpoch(millTime);
-  a.year;
-  a.month;
-  a.day;
-  return (formatDate(
-      DateTime(a.year, a.month, a.day), [yyyy, '年', mm, '月', dd, '日']));
-}
-
 //Text样式
 Text textStyle(String data, double fontSize, {FontWeight fontWeight}) {
   return Text(

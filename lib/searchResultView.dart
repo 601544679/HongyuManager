@@ -1,33 +1,23 @@
-import 'dart:math';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mydemo/generated/json/waybill_entity_helper.dart';
-import 'package:mydemo/mapPage.dart';
-import 'package:mydemo/waybill_entity.dart';
-import 'sizeConfig.dart';
-import 'package:date_format/date_format.dart';
-import 'userclass.dart';
-import 'server.dart';
-import 'constant.dart';
+import 'package:mydemo/search_result_entity.dart';
 import 'finishPage.dart';
+import 'mapPage.dart';
+import 'server.dart';
+import 'sizeConfig.dart';
+import 'constant.dart';
 import 'package:r_logger/r_logger.dart';
 
-//根据下拉菜单使用网络请求
-class OrderNetWorkWidget extends StatefulWidget {
-  final waybill;
+class resultView extends StatefulWidget {
+  String query;
 
-//构造方法传入请求成功后的数据
-  OrderNetWorkWidget({this.waybill});
+  resultView(this.query);
 
   @override
-  _OrderNetWorkWidgetState createState() => _OrderNetWorkWidgetState();
+  _resultViewState createState() => _resultViewState();
 }
 
-class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
-  var fontSize = SizeConfig.heightMultiplier * 2;
-  var sizedBoxHeight = SizeConfig.heightMultiplier;
-  List titleList = ['序号', '色号', '规格', '数量', '发货数量', '开单单位', '送货单价', '明细备注'];
+class _resultViewState extends State<resultView> {
+  var response;
 
   @override
   void initState() {
@@ -35,31 +25,106 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
     super.initState();
   }
 
+  getDataFuture() async {
+    print('传入单号:${widget.query}');
+    response = await Server().searchWaybill(widget.query);
+    print('单号结果:${response}');
+    return response;
+  }
+
   @override
   Widget build(BuildContext context) {
-    var wbill = WaybillEntity().fromJson(widget.waybill);
-    //wbill.result.sort((a, b) => b.departureDate.compareTo(a.departureDate));
+    return FutureBuilder(
+      // ignore: missing_return
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.done:
+            print('done');
+            if (snapshot.hasError) {
+              return Text("Error: ${snapshot.error}");
+            } else if (snapshot.hasData) {
+              print('hasData');
+              // 请求成功，显示数据
+              return ResultBuilder(snapshot.data, widget.query);
+            }
+            break;
+          case ConnectionState.none:
+            print('none');
+            break;
+          case ConnectionState.waiting:
+            print('waiting');
+            return Scaffold(
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: SizeConfig.heightMultiplier,
+                    ),
+                    CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          Colors.indigo[colorNum]),
+                    ),
+                    SizedBox(
+                      height: SizeConfig.heightMultiplier,
+                    ),
+                    Text('正在加载..')
+                  ],
+                ),
+              ),
+            );
+            break;
+          case ConnectionState.active:
+            print('active');
+            break;
+        }
+      },
+      future: getDataFuture(),
+    );
+  }
+}
+
+class ResultBuilder extends StatefulWidget {
+  final data;
+  String query;
+
+  ResultBuilder(this.data, this.query);
+
+  @override
+  _ResultBuilderState createState() => _ResultBuilderState();
+}
+
+class _ResultBuilderState extends State<ResultBuilder> {
+  var fontSize = SizeConfig.heightMultiplier * 2;
+  var sizedBoxHeight = SizeConfig.heightMultiplier;
+  List titleList = ['序号', '色号', '规格', '数量', '发货数量', '开单单位', '送货单价', '明细备注'];
+
+  @override
+  Widget build(BuildContext context) {
+    print('数据${widget.data}');
+    //RLogger.instance.d(widget.data.toString());
+    var result = SearchResultEntity().fromJson(widget.data);
     return ListView.builder(
       itemBuilder: (context, index) {
-        //print('类型：${wbill.result[index].runtimeType}');
+        //print('类型：${widget.data[index].runtimeType}');
         return InkWell(
           onTap: () {
             print(index);
             //根据运输状态进行跳转
-            switch (wbill.result[index].status) {
+            switch (result.result[index].state) {
               case 'inProgress':
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => MapPage(
-                            orderNumber: wbill.result[index].waybillId)));
+                            orderNumber: result.result[index].waybillID)));
                 break;
               case 'Finished':
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => FinishPage(
-                            orderNumber: wbill.result[index].waybillId)));
+                            orderNumber: result.result[index].waybillID)));
                 break;
             }
           },
@@ -78,7 +143,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                       textStyle('运输单号：', fontSize),
                       Expanded(
                         child: textStyle(
-                            '${wbill.result[index].waybillId ?? '无运输单号'}',
+                            '${result.result[index].waybillID ?? '无运输单号'}',
                             fontSize),
                       )
                     ],
@@ -90,7 +155,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                       textStyle('项目名称：', fontSize),
                       Expanded(
                           child: textStyle(
-                              '${wbill.result[index].projectName ?? '无项目名'}',
+                              '${result.result[index].projectName ?? '无项目名'}',
                               fontSize))
                     ],
                   ),
@@ -101,7 +166,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                       textStyle('施工单位：', fontSize),
                       Expanded(
                           child: textStyle(
-                              '${wbill.result[index].constructionCompanyName ?? '无施工单位'}',
+                              '${result.result[index].constructionCompanyName ?? '无施工单位'}',
                               fontSize))
                     ],
                   ),
@@ -111,19 +176,19 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                     children: [
                       Expanded(
                         child: textStyle(
-                            '${wbill.result[index].startLocationName ?? '出发地'}',
+                            '${result.result[index].startLocationName ?? '出发地'}',
                             fontSize * 2,
                             fontWeight: FontWeight.bold,
                             textAlign: TextAlign.center),
                         flex: 2,
                       ),
                       Expanded(
-                        child: goodStatus(wbill.result[index].status),
+                        child: goodStatus(result.result[index].state),
                         flex: 1,
                       ),
                       Expanded(
                         child: textStyle(
-                            '${wbill.result[index].destinationName ?? '目的地'}',
+                            '${result.result[index].destinationName ?? '目的地'}',
                             fontSize * 2,
                             fontWeight: FontWeight.bold,
                             textAlign: TextAlign.center),
@@ -136,14 +201,14 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                     children: [
                       Expanded(
                           child: Text(
-                        '司机：${wbill.result[index].driver == null ? '无司机' : wbill.result[index].driver.username}',
+                        '司机：${result.result[index].driverName == null ? '无司机' : result.result[index].driverName.username}',
                         textAlign: TextAlign.center,
                         style:
                             TextStyle(fontSize: SizeConfig.widthMultiplier * 4),
                       )),
                       Expanded(
                           child: Text(
-                        '业务员：${wbill.result[index].supplierContactPerson ?? '无业务员'}',
+                        '业务员：${result.result[index].supplierContactPerson ?? '无业务员'}',
                         textAlign: TextAlign.center,
                         style:
                             TextStyle(fontSize: SizeConfig.widthMultiplier * 4),
@@ -160,7 +225,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                   GoodsDetail(
                     index: index,
                     titleList: titleList,
-                    totalList: wbill.result[index],
+                    totalList: result.result[index],
                   ),
                   SizedBox(height: sizedBoxHeight),
                   Row(
@@ -178,7 +243,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       textStyle(
-                        '${date(wbill.result[index].departureDate ?? '无出发日期')}',
+                        '${date(result.result[index].departureDate ?? '无出发日期')}',
                         fontSize,
                         color: Colors.red,
                       ),
@@ -188,7 +253,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                         height: SizeConfig.heightMultiplier * 4,
                       ),
                       textStyle(
-                          '${date(wbill.result[index].arrivalTime ?? '无到货日期')}',
+                          '${date(result.result[index].arrivalTime ?? '无到货日期')}',
                           fontSize,
                           color: Colors.green,
                           textAlign: TextAlign.center),
@@ -200,7 +265,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
           ),
         );
       },
-      itemCount: wbill.result.length,
+      itemCount: result.result.length,
     );
   }
 
@@ -249,7 +314,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
     }
   }
 
-
+  //样式
   Text textStyle(String data, double size,
       {FontWeight fontWeight, Color color, TextAlign textAlign}) {
     return Text(
@@ -267,7 +332,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
 //todo 写控件传值
 class GoodsDetail extends StatefulWidget {
   int index;
-  WaybillResult totalList;
+  SearchResultResult totalList;
   List titleList;
 
   GoodsDetail({this.index, this.totalList, this.titleList});

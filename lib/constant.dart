@@ -1,5 +1,7 @@
-import 'package:amap_map_fluttify/amap_map_fluttify.dart';
-
+import 'package:amap_all_fluttify/amap_all_fluttify.dart';
+import 'package:date_format/date_format.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'mainPage.dart';
 import 'releaseOrder.dart';
 import 'login.dart';
@@ -174,4 +176,74 @@ List arrayTitleList = [
   //loadingRemarks                               和坚487单,要求带搬运，穿着整齐，长裤，带安全帽，反光衣，
 ];
 
+//日期转换
+String date(int millTime) {
+  DateTime a = DateTime.fromMillisecondsSinceEpoch(millTime);
+  a.year;
+  a.month;
+  a.day;
+  return (formatDate(
+      DateTime(a.year, a.month, a.day), [yyyy, '年', mm, '月', dd, '日']));
+}
+
+
+
+//地址转经纬度
+changeLat(String address) async {
+  final geocodeList =
+      await AmapSearch.searchGeocode(address, city: place(address));
+  //final geocodeList = await AmapSearch.instance.searchGeocode(address, city: place(address));
+  return geocodeList[0].latLng;
+}
+
+//返回目的地发货地
+String place(String location) {
+  if (location.contains('省')) {
+    //省
+    return location.substring(
+        location.indexOf('省') + 1,
+        location.indexOf('市') == -1
+            ? location.indexOf('县') + 1
+            : location.indexOf('市') + 1);
+  } else if (location.contains('自治')) {
+    //少数民族自治区
+    return location.substring(
+        location.indexOf('区') + 1, location.indexOf('市') + 1);
+  } else if (location.contains('特别')) {
+    //港澳
+    return location.substring(0, 2);
+  } else if (location.contains('北京') ||
+      location.contains('天津') ||
+      location.contains('上海') ||
+      location.contains('重庆')) {
+    //直辖市
+    return location.substring(0, location.indexOf('市') + 1);
+  } else {
+    //不规则
+    return location.substring(0, 2);
+  }
+}
+
+//添加到历史记录
+putHistory(String historyItem) async {
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  final SharedPreferences preferences = await _prefs;
+  List<String> history = preferences.getStringList('historyList');
+  if (history != null) {
+    if (history.length >= 10) {
+      print('长度${history.length}');
+      history.removeAt(0);
+      print('剪$history');
+      history.add(historyItem);
+      print('加$history');
+    } else {
+      history.add(historyItem);
+      print('否则$history');
+    }
+  } else {
+    history = List();
+    history.add(historyItem);
+  }
+  await preferences.setStringList('historyList', history);
+}
 

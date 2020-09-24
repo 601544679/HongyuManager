@@ -130,7 +130,8 @@ class _MapScreenState extends State<MapScreen> {
               child: AmapView(
                 mapType: MapType.Standard,
                 showScaleControl: true,
-                zoomLevel: 15,
+                showCompass: true,
+                showZoomControl: true,
                 maskDelay: Duration(milliseconds: 500),
                 centerCoordinate: LatLng(widget.waybill['latitude'][0],
                     widget.waybill['longitude'][0]),

@@ -7,6 +7,8 @@ import 'package:mydemo/finish_data_entity.dart';
 import 'package:mydemo/generated/json/finish_data_entity_helper.dart';
 import 'package:mydemo/waybill_entity.dart';
 import 'package:mydemo/generated/json/waybill_entity_helper.dart';
+import 'package:mydemo/search_result_entity.dart';
+import 'package:mydemo/generated/json/search_result_entity_helper.dart';
 
 class JsonConvert<T> {
 	T fromJson(Map<String, dynamic> json) {
@@ -29,7 +31,12 @@ class JsonConvert<T> {
 			return waybillResultDriverFromJson(data as WaybillResultDriver, json) as T;			case WaybillResultDriverACL:
 			return waybillResultDriverACLFromJson(data as WaybillResultDriverACL, json) as T;			case WaybillResultDriverACLOwner:
 			return waybillResultDriverACLOwnerFromJson(data as WaybillResultDriverACLOwner, json) as T;			case WaybillResultDestination:
-			return waybillResultDestinationFromJson(data as WaybillResultDestination, json) as T;    }
+			return waybillResultDestinationFromJson(data as WaybillResultDestination, json) as T;			case SearchResultEntity:
+			return searchResultEntityFromJson(data as SearchResultEntity, json) as T;			case SearchResultResult:
+			return searchResultResultFromJson(data as SearchResultResult, json) as T;			case SearchResultResultDriverName:
+			return searchResultResultDriverNameFromJson(data as SearchResultResultDriverName, json) as T;			case SearchResultResultDriverNameACL:
+			return searchResultResultDriverNameACLFromJson(data as SearchResultResultDriverNameACL, json) as T;			case SearchResultResultDriverNameACLOwner:
+			return searchResultResultDriverNameACLOwnerFromJson(data as SearchResultResultDriverNameACLOwner, json) as T;    }
     return data as T;
   }
 
@@ -45,7 +52,12 @@ class JsonConvert<T> {
 			return waybillResultDriverToJson(data as WaybillResultDriver);			case WaybillResultDriverACL:
 			return waybillResultDriverACLToJson(data as WaybillResultDriverACL);			case WaybillResultDriverACLOwner:
 			return waybillResultDriverACLOwnerToJson(data as WaybillResultDriverACLOwner);			case WaybillResultDestination:
-			return waybillResultDestinationToJson(data as WaybillResultDestination);    }
+			return waybillResultDestinationToJson(data as WaybillResultDestination);			case SearchResultEntity:
+			return searchResultEntityToJson(data as SearchResultEntity);			case SearchResultResult:
+			return searchResultResultToJson(data as SearchResultResult);			case SearchResultResultDriverName:
+			return searchResultResultDriverNameToJson(data as SearchResultResultDriverName);			case SearchResultResultDriverNameACL:
+			return searchResultResultDriverNameACLToJson(data as SearchResultResultDriverNameACL);			case SearchResultResultDriverNameACLOwner:
+			return searchResultResultDriverNameACLOwnerToJson(data as SearchResultResultDriverNameACLOwner);    }
     return data as T;
   }
   //Go back to a single instance by type
@@ -61,7 +73,12 @@ class JsonConvert<T> {
 			return WaybillResultDriver().fromJson(json);			case 'WaybillResultDriverACL':
 			return WaybillResultDriverACL().fromJson(json);			case 'WaybillResultDriverACLOwner':
 			return WaybillResultDriverACLOwner().fromJson(json);			case 'WaybillResultDestination':
-			return WaybillResultDestination().fromJson(json);    }
+			return WaybillResultDestination().fromJson(json);			case 'SearchResultEntity':
+			return SearchResultEntity().fromJson(json);			case 'SearchResultResult':
+			return SearchResultResult().fromJson(json);			case 'SearchResultResultDriverName':
+			return SearchResultResultDriverName().fromJson(json);			case 'SearchResultResultDriverNameACL':
+			return SearchResultResultDriverNameACL().fromJson(json);			case 'SearchResultResultDriverNameACLOwner':
+			return SearchResultResultDriverNameACLOwner().fromJson(json);    }
     return null;
   }
 
@@ -78,7 +95,12 @@ class JsonConvert<T> {
 			return List<WaybillResultDriver>();			case 'WaybillResultDriverACL':
 			return List<WaybillResultDriverACL>();			case 'WaybillResultDriverACLOwner':
 			return List<WaybillResultDriverACLOwner>();			case 'WaybillResultDestination':
-			return List<WaybillResultDestination>();    }
+			return List<WaybillResultDestination>();			case 'SearchResultEntity':
+			return List<SearchResultEntity>();			case 'SearchResultResult':
+			return List<SearchResultResult>();			case 'SearchResultResultDriverName':
+			return List<SearchResultResultDriverName>();			case 'SearchResultResultDriverNameACL':
+			return List<SearchResultResultDriverNameACL>();			case 'SearchResultResultDriverNameACLOwner':
+			return List<SearchResultResultDriverNameACLOwner>();    }
     return null;
   }
 
