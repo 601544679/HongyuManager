@@ -111,6 +111,13 @@ class _MapScreenState extends State<MapScreen> {
     //print('经纬度: ${widget.waybill['latitude'].length}');
     print("目的地：${widget.waybill['destination']['latitude']}");
     print("目的地：${widget.waybill['destination']['longitude']}");
+    List titleList = ['送货单号：', '送货地址：', '收货人：', '收货人电话：'];
+    List contentList = [
+      widget.waybill['ID'],
+      widget.waybill['address'],
+      widget.waybill['receiver'],
+      widget.waybill['receiverPhone']
+    ];
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -165,33 +172,19 @@ class _MapScreenState extends State<MapScreen> {
                 borderRadius: BorderRadius.circular(20.0),
                 shadowColor: Colors.grey,
                 color: Colors.grey[300],
-                elevation: 0,
+                elevation: 2,
                 child: Padding(
                   padding: EdgeInsets.all(ScreenUtil().setWidth(54)),
-                  child: Column(
-                    children: [
-                      Row(
+                  child: Expanded(
+                      child: ListView.separated(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            '送货单号：${widget.waybill['ID']}',
-                            style: TextStyle(
-                              fontSize: ScreenUtil().setHeight(50),
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: ScreenUtil().setHeight(23),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            '送货地址：',
+                            titleList[index],
                             style: TextStyle(
                                 fontSize: ScreenUtil().setHeight(50),
                                 fontFamily: 'Montserrat',
@@ -200,7 +193,9 @@ class _MapScreenState extends State<MapScreen> {
                           ),
                           Expanded(
                             child: Text(
-                              '${widget.waybill['address']}',
+                              index == 2
+                                  ? '   ' + contentList[index]
+                                  : contentList[index],
                               style: TextStyle(
                                   fontSize: ScreenUtil().setHeight(50),
                                   fontFamily: 'Montserrat',
@@ -209,41 +204,15 @@ class _MapScreenState extends State<MapScreen> {
                             ),
                           )
                         ],
-                      ),
-                      SizedBox(
+                      );
+                    },
+                    itemCount: titleList.length,
+                    separatorBuilder: (context, index) {
+                      return SizedBox(
                         height: ScreenUtil().setHeight(23),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            '收货人：    ${widget.waybill['receiver']}',
-                            style: TextStyle(
-                                fontSize: ScreenUtil().setHeight(50),
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: ScreenUtil().setHeight(23),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            '收货人电话： ${widget.waybill['receiverPhone']}',
-                            style: TextStyle(
-                                fontSize: ScreenUtil().setHeight(50),
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                      );
+                    },
+                  )),
                 ),
               ),
             ),
