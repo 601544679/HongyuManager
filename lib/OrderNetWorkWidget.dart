@@ -7,6 +7,7 @@ import 'package:mydemo/mapPage.dart';
 import 'package:mydemo/waybill_entity.dart';
 import 'sizeConfig.dart';
 import 'package:date_format/date_format.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'userclass.dart';
 import 'server.dart';
 import 'constant.dart';
@@ -25,8 +26,8 @@ class OrderNetWorkWidget extends StatefulWidget {
 }
 
 class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
-  var fontSize = SizeConfig.heightMultiplier * 2;
-  var sizedBoxHeight = SizeConfig.heightMultiplier;
+  var fontSize = ScreenUtil().setSp(43, allowFontScalingSelf: true);
+  var sizedBoxHeight = ScreenUtil().setHeight(23);
   List titleList = ['序号', '色号', '规格', '数量', '发货数量', '开单单位', '送货单价', '明细备注'];
 
   @override
@@ -66,10 +67,10 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
           child: Card(
             child: Padding(
               padding: EdgeInsets.only(
-                  left: SizeConfig.widthMultiplier * 2,
-                  right: SizeConfig.widthMultiplier * 2,
-                  top: SizeConfig.heightMultiplier,
-                  bottom: SizeConfig.heightMultiplier),
+                  left: ScreenUtil().setWidth(22),
+                  right: ScreenUtil().setWidth(22),
+                  top: ScreenUtil().setHeight(23),
+                  bottom: ScreenUtil().setHeight(23)),
               child: Column(
                 children: [
                   Row(
@@ -139,14 +140,14 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                         '司机：${wbill.result[index].driver == null ? '无司机' : wbill.result[index].driver.username}',
                         textAlign: TextAlign.center,
                         style:
-                            TextStyle(fontSize: SizeConfig.widthMultiplier * 4),
+                            TextStyle(fontSize: ScreenUtil().setWidth(44)),
                       )),
                       Expanded(
                           child: Text(
                         '业务员：${wbill.result[index].supplierContactPerson ?? '无业务员'}',
                         textAlign: TextAlign.center,
                         style:
-                            TextStyle(fontSize: SizeConfig.widthMultiplier * 4),
+                            TextStyle(fontSize:  ScreenUtil().setWidth(44)),
                       )),
                     ],
                   ),
@@ -171,7 +172,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                     ],
                   ),
                   Divider(
-                    height: SizeConfig.heightMultiplier,
+                    height: ScreenUtil().setHeight(23),
                     color: Colors.black,
                   ),
                   Row(
@@ -185,7 +186,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                       Container(
                         color: Colors.grey,
                         width: 1,
-                        height: SizeConfig.heightMultiplier * 4,
+                        height:ScreenUtil().setHeight(90),
                       ),
                       textStyle(
                           '${date(wbill.result[index].arrivalTime ?? '无到货日期')}',
@@ -213,8 +214,8 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
           children: [
             textStyle('运输中', fontSize, color: Colors.red),
             Image.asset('images/arrow.png',
-                width: SizeConfig.widthMultiplier * 10,
-                height: SizeConfig.heightMultiplier * 4,
+                width: ScreenUtil().setWidth(108),
+                height: ScreenUtil().setHeight(90),
                 fit: BoxFit.cover,
                 color: Colors.red),
           ],
@@ -226,8 +227,8 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
           children: [
             textStyle('已完成', fontSize, color: Colors.green),
             Image.asset('images/arrow.png',
-                width: SizeConfig.widthMultiplier * 10,
-                height: SizeConfig.heightMultiplier * 4,
+                width: ScreenUtil().setWidth(108),
+                height: ScreenUtil().setHeight(90),
                 fit: BoxFit.cover,
                 color: Colors.green),
           ],
@@ -239,8 +240,8 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
           children: [
             textStyle('待分配', fontSize, color: Colors.lime),
             Image.asset('images/arrow.png',
-                width: SizeConfig.widthMultiplier * 10,
-                height: SizeConfig.heightMultiplier * 4,
+                width: ScreenUtil().setWidth(108),
+                height: ScreenUtil().setHeight(90),
                 fit: BoxFit.cover,
                 color: Colors.lime),
           ],
@@ -248,7 +249,6 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
         break;
     }
   }
-
 
   Text textStyle(String data, double size,
       {FontWeight fontWeight, Color color, TextAlign textAlign}) {
@@ -314,10 +314,15 @@ class _GoodsDetailState extends State<GoodsDetail> {
     List allList = List();
     //RLogger.instance.d('传入的数据${widget.totalList}');
     //print('几条记录${widget.totalList.xkNo.length}---index---${widget.index + 1}');
+    /*print(
+        '${widget.totalList.billingColor[0].substring(0, widget.totalList.billingColor[0].indexOf('('))}');*/
     for (int i = 0; i < widget.totalList.xkNo.length; i++) {
       List cutList = List();
       cutList.add(i + 1);
-      cutList.add(widget.totalList.billingColor[i]);
+      cutList.add(widget.totalList.billingColor[i].contains('(') == true
+          ? widget.totalList.billingColor[i]
+              .substring(0, widget.totalList.billingColor[i].indexOf('('))
+          : '');
       cutList.add(widget.totalList.size[i]);
       cutList.add(widget.totalList.quantity[i]);
       cutList.add(widget.totalList.sendQuantity[i]);
@@ -332,8 +337,9 @@ class _GoodsDetailState extends State<GoodsDetail> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
-          dataRowHeight: SizeConfig.heightMultiplier * 3,
-          headingRowHeight: SizeConfig.heightMultiplier * 4,
+          columnSpacing: ScreenUtil().setWidth(54),
+          dataRowHeight: ScreenUtil().setHeight(68),
+          headingRowHeight: ScreenUtil().setHeight(90),
           columns: dataColumn(widget.titleList),
           rows: dataRow(allList)),
     );

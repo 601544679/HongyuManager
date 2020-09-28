@@ -3,6 +3,7 @@ import 'package:mydemo/OrderNetWorkWidget.dart';
 import 'constant.dart';
 import 'sizeConfig.dart';
 import 'userclass.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'server.dart';
 import 'package:r_logger/r_logger.dart';
 

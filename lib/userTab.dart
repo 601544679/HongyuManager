@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'constant.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'sizeConfig.dart';
 
 class UserTab extends StatefulWidget {
@@ -67,7 +68,7 @@ class _UserTabState extends State<UserTab> {
           UnconstrainedBox(
               child: Padding(
                   padding:
-                      EdgeInsets.only(right: SizeConfig.widthMultiplier * 5),
+                      EdgeInsets.only(right: ScreenUtil().setWidth(54)),
                   child: InkWell(
                       child: Wrap(
                         children: [Icon(Icons.exit_to_app), Text('退出')],

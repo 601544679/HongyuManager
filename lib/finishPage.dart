@@ -1,5 +1,4 @@
-
-import 'package:amap_all_fluttify/amap_all_fluttify.dart';
+import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -13,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:date_format/date_format.dart';
 import 'package:r_logger/r_logger.dart';
 import 'constant.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 //查看已完成订单的详细信息
 class FinishPage extends StatefulWidget {
@@ -55,14 +55,14 @@ class _FinishPageState extends State<FinishPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: SizeConfig.heightMultiplier,
+                      height: ScreenUtil().setHeight(23),
                     ),
                     CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
                           Colors.indigo[colorNum]),
                     ),
                     SizedBox(
-                      height: SizeConfig.heightMultiplier,
+                      height: ScreenUtil().setHeight(23),
                     ),
                     Text('正在加载...')
                   ],
@@ -128,7 +128,11 @@ class _ImageBuilderState extends State<ImageBuilder>
       detailList.add(allData.result.allMessage.materialsNumber[i]);
       detailList.add(allData.result.allMessage.clientId[i]);
       detailList.add(allData.result.allMessage.size[i]);
-      detailList.add(allData.result.allMessage.billingColor[i]);
+      detailList.add(
+          allData.result.allMessage.billingColor[i].contains('(') == true
+              ? allData.result.allMessage.billingColor[i].substring(
+                  0, allData.result.allMessage.billingColor[i].indexOf('('))
+              : '');
       detailList.add(allData.result.allMessage.billingUnit[i]);
       detailList.add(allData.result.allMessage.sendQuantity[i]);
       detailList.add(allData.result.allMessage.quantity[i]);
@@ -150,25 +154,31 @@ class _ImageBuilderState extends State<ImageBuilder>
             bottom: TabBar(
                 indicatorWeight: 4.0,
                 labelPadding:
-                    EdgeInsets.only(bottom: SizeConfig.heightMultiplier),
+                    EdgeInsets.only(bottom: ScreenUtil().setHeight(23)),
                 indicatorColor: Colors.white,
                 controller: controller,
                 tabs: [
                   Text(
                     '送货单信息',
-                    style: TextStyle(fontSize: SizeConfig.heightMultiplier * 2),
+                    style: TextStyle(
+                        fontSize:
+                            ScreenUtil().setSp(45, allowFontScalingSelf: true)),
                   ),
                   Text(
                     '签收照片',
-                    style: TextStyle(fontSize: SizeConfig.heightMultiplier * 2),
+                    style: TextStyle(
+                        fontSize:
+                            ScreenUtil().setSp(45, allowFontScalingSelf: true)),
                   ),
                   Text(
                     '途径点',
-                    style: TextStyle(fontSize: SizeConfig.heightMultiplier * 2),
+                    style: TextStyle(
+                        fontSize:
+                            ScreenUtil().setSp(45, allowFontScalingSelf: true)),
                   ),
                 ]),
           ),
-          preferredSize: Size.fromHeight(SizeConfig.heightMultiplier * 11)),
+          preferredSize: Size.fromHeight(ScreenUtil().setHeight(248))),
       body: TabBarView(controller: controller, children: [
         waybillDetailTab(titleList, contentList, arrayTitleList, cutList),
         signForPicture(allData),
@@ -241,7 +251,7 @@ List<DataColumn> dataColumn(List contentList) {
         Text(
           contentList[i],
           style: TextStyle(
-              fontSize: SizeConfig.heightMultiplier * 2,
+              fontSize: ScreenUtil().setSp(45, allowFontScalingSelf: true),
               color: Colors.black,
               fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
@@ -303,20 +313,20 @@ class waybillDetailTab extends StatefulWidget {
 class _waybillDetailTabState extends State<waybillDetailTab>
     with AutomaticKeepAliveClientMixin {
   @override
-  var fontSize = SizeConfig.heightMultiplier * 2;
-  var fontSize1 = SizeConfig.heightMultiplier * 2.5;
+  var fontSize = ScreenUtil().setSp(45, allowFontScalingSelf: true);
+  var fontSize1 = ScreenUtil().setSp(50, allowFontScalingSelf: true);
   var flex1 = 1;
   var flex2 = 2;
   var textAlign = TextAlign.right;
-  var containerWidth = SizeConfig.widthMultiplier * 94;
+  var containerWidth = ScreenUtil().setWidth(1015);
 
   Widget build(BuildContext context) {
     return Padding(
         padding: EdgeInsets.only(
-            left: SizeConfig.widthMultiplier * 3,
-            top: SizeConfig.heightMultiplier,
-            right: SizeConfig.widthMultiplier * 3,
-            bottom: SizeConfig.heightMultiplier),
+            left: ScreenUtil().setWidth(33),
+            top: ScreenUtil().setHeight(23),
+            right: ScreenUtil().setWidth(33),
+            bottom: ScreenUtil().setHeight(23)),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -337,7 +347,7 @@ class _waybillDetailTabState extends State<waybillDetailTab>
                           child: textStyle(widget.contentList[index], fontSize1,
                               fontWeight: FontWeight.bold)),
                       SizedBox(
-                        height: SizeConfig.heightMultiplier,
+                        height: ScreenUtil().setHeight(23),
                       ),
                     ],
                   );
@@ -345,12 +355,12 @@ class _waybillDetailTabState extends State<waybillDetailTab>
                 itemCount: widget.titleList.length,
               ),
               SizedBox(
-                height: SizeConfig.heightMultiplier,
+                height: ScreenUtil().setHeight(23),
               ),
               textStyle('货物明细', fontSize),
               Divider(
                 color: Colors.black,
-                height: SizeConfig.heightMultiplier,
+                height: ScreenUtil().setHeight(23),
               ),
               contentHorizontal(widget.arrayTitleList, widget.cutList),
               Divider(color: Colors.black),
@@ -390,10 +400,10 @@ class _signForPictureState extends State<signForPicture>
             children: [
               Text(
                 s[index],
-                style: TextStyle(fontSize: SizeConfig.heightMultiplier * 3),
+                style: TextStyle(fontSize: ScreenUtil().setHeight(68)),
               ),
               SizedBox(
-                height: SizeConfig.heightMultiplier,
+                height: ScreenUtil().setHeight(23),
               ),
               InkWell(
                 child: AspectRatio(
@@ -416,7 +426,7 @@ class _signForPictureState extends State<signForPicture>
                 },
               ),
               SizedBox(
-                height: SizeConfig.heightMultiplier,
+                height: ScreenUtil().setHeight(23),
               )
             ],
           ),
@@ -469,7 +479,7 @@ class _finishMapPageState extends State<finishMapPage>
                       Colors.indigo[colorNum]),
                 ),
                 SizedBox(
-                  height: SizeConfig.heightMultiplier * 2,
+                  height: ScreenUtil().setHeight(45),
                 ),
                 Text(
                   '正在加载中...',
@@ -564,10 +574,10 @@ class _MapScreenState extends State<MapScreen>
             widget.waybill['destination']['latitude'].toDouble() ?? 23.03509484,
             widget.waybill['destination']['longitude'].toDouble() ??
                 113.13402564),
-        title: 'test',
+        title: widget.waybill['projectAddress'] ?? '',
         widget: Container(
-          height: SizeConfig.heightMultiplier * 4.5,
-          width: SizeConfig.widthMultiplier * 15,
+          height: ScreenUtil().setHeight(101),
+          width: ScreenUtil().setWidth(162),
           child: Material(
             borderRadius: BorderRadius.circular(30),
             shadowColor: Colors.transparent,
@@ -592,8 +602,8 @@ class _MapScreenState extends State<MapScreen>
   Container showOptions(int i) {
     if (i == 0) {
       return Container(
-        height: SizeConfig.widthMultiplier * 6,
-        width: SizeConfig.widthMultiplier * 18,
+        height: ScreenUtil().setWidth(65),
+        width: ScreenUtil().setWidth(195),
         child: Material(
           borderRadius: BorderRadius.circular(30),
           shadowColor: Colors.transparent,
@@ -606,8 +616,8 @@ class _MapScreenState extends State<MapScreen>
       );
     } else if (i == widget.waybill['latitude'].length - 1) {
       return Container(
-        height: SizeConfig.widthMultiplier * 10,
-        width: SizeConfig.widthMultiplier * 40,
+        height: ScreenUtil().setWidth(108),
+        width: ScreenUtil().setWidth(432),
         child: Material(
           borderRadius: BorderRadius.circular(30),
           shadowColor: Colors.transparent,
@@ -620,8 +630,8 @@ class _MapScreenState extends State<MapScreen>
       );
     } else {
       return Container(
-        height: SizeConfig.widthMultiplier * 3,
-        width: SizeConfig.widthMultiplier * 3,
+        height: ScreenUtil().setWidth(33),
+        width: ScreenUtil().setWidth(33),
         child: Material(
           borderRadius: BorderRadius.circular(30),
           shadowColor: Colors.transparent,

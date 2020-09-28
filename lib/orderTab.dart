@@ -5,6 +5,7 @@ import 'getOrderData.dart';
 import 'mySearch.dart';
 import 'server.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OrderTab extends StatefulWidget {
   @override
@@ -35,12 +36,12 @@ class _OrderTabState extends State<OrderTab> {
                 color: Colors.white,
               ),
               onPressed: () async {
-               /* var response = await Server().searchSuggestion();
+                /* var response = await Server().searchSuggestion();
                 result = response['result'];*/
                 Future<SharedPreferences> _prefs =
                     SharedPreferences.getInstance();
                 final SharedPreferences preferences = await _prefs;
-                final history =  preferences.getStringList('historyList');
+                final history = preferences.getStringList('historyList');
                 print('历史$history');
                 showSearch(
                     context: context, delegate: searchbar(result, history));
@@ -58,7 +59,9 @@ class _OrderTabState extends State<OrderTab> {
             children: [
               DropdownButtonHideUnderline(
                   child: DropdownButton(
-                style: TextStyle(fontSize: SizeConfig.heightMultiplier * 2),
+                style: TextStyle(
+                    fontSize:
+                        ScreenUtil().setSp(45, allowFontScalingSelf: true)),
                 value: dropDownButtonValue,
                 items: [
                   DropdownMenuItem(
@@ -66,7 +69,8 @@ class _OrderTabState extends State<OrderTab> {
                       '所有订单',
                       style: TextStyle(
                           color: Colors.indigo[colorNum],
-                          fontSize: SizeConfig.widthMultiplier * 5),
+                          fontSize: ScreenUtil()
+                              .setSp(55, allowFontScalingSelf: true)),
                     ),
                     value: '0',
                   ),
@@ -75,7 +79,8 @@ class _OrderTabState extends State<OrderTab> {
                         '运输中',
                         style: TextStyle(
                             color: Colors.indigo[colorNum],
-                            fontSize: SizeConfig.widthMultiplier * 5),
+                            fontSize: ScreenUtil()
+                                .setSp(55, allowFontScalingSelf: true)),
                       ),
                       value: '1'),
                   DropdownMenuItem(
@@ -83,7 +88,8 @@ class _OrderTabState extends State<OrderTab> {
                         '已完成',
                         style: TextStyle(
                             color: Colors.indigo[colorNum],
-                            fontSize: SizeConfig.widthMultiplier * 5),
+                            fontSize: ScreenUtil()
+                                .setSp(55, allowFontScalingSelf: true)),
                       ),
                       value: '2')
                 ],
@@ -96,7 +102,7 @@ class _OrderTabState extends State<OrderTab> {
                 icon: Icon(
                   Icons.arrow_drop_down,
                   color: Colors.indigo[colorNum],
-                  size: SizeConfig.heightMultiplier * 4,
+                  size: ScreenUtil().setHeight(90),
                 ),
               ))
             ],

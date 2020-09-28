@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:amap_all_fluttify/amap_all_fluttify.dart';
 import 'package:amap_search_fluttify/amap_search_fluttify.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +14,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'constant.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'uploadDialog.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'constant.dart';
 
 //发布订单
@@ -23,8 +23,8 @@ class ReleaseOrder extends StatefulWidget {
   _ReleaseOrderState createState() => _ReleaseOrderState();
 }
 
-class _ReleaseOrderState extends State<ReleaseOrder>
-    with AmapSearchDisposeMixin {
+class _ReleaseOrderState
+    extends State<ReleaseOrder> /*with AmapSearchDisposeMixin*/ {
   Map<String, dynamic> map = {};
   final _releaseFormKey = GlobalKey<FormState>();
   List valueList = List();
@@ -99,7 +99,7 @@ class _ReleaseOrderState extends State<ReleaseOrder>
     rowMap.clear();
     //遍历Excel
     for (var table in excel.tables.keys) {
-      print('table：${table}');
+      print('table：$table');
       print('maxCols：${excel.tables[table].maxCols}');
       print('maxRows：${excel.tables[table].maxRows}');
       for (var row in excel.tables[table].rows) {
@@ -147,6 +147,13 @@ class _ReleaseOrderState extends State<ReleaseOrder>
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    AmapSearch.instance.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var _controllers = <TextEditingController>[];
     for (var i = 0; i < list.length; i++) {
@@ -171,10 +178,10 @@ class _ReleaseOrderState extends State<ReleaseOrder>
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(
-            SizeConfig.widthMultiplier * 2,
-            SizeConfig.heightMultiplier,
-            SizeConfig.widthMultiplier * 2,
-            SizeConfig.heightMultiplier),
+            ScreenUtil().setWidth(22),
+            ScreenUtil().setHeight(23),
+            ScreenUtil().setWidth(22),
+            ScreenUtil().setHeight(23)),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -183,12 +190,13 @@ class _ReleaseOrderState extends State<ReleaseOrder>
                 children: [
                   Text('订单内容',
                       style: TextStyle(
-                          fontSize: SizeConfig.heightMultiplier * 2,
+                          fontSize: ScreenUtil()
+                              .setSp(47, allowFontScalingSelf: true),
                           fontWeight: FontWeight.bold))
                 ],
               ),
               SizedBox(
-                height: SizeConfig.heightMultiplier,
+                height: ScreenUtil().setHeight(23),
               ),
               TextField(
                 maxLines: null,
@@ -229,11 +237,11 @@ class _ReleaseOrderState extends State<ReleaseOrder>
                     hintText: '请粘贴复制的订单内容',
                     border: OutlineInputBorder(
                         borderSide:
-                            BorderSide(width: SizeConfig.widthMultiplier),
+                            BorderSide(width: ScreenUtil().setWidth(18)),
                         borderRadius: BorderRadius.circular(15))),
               ),
               SizedBox(
-                height: SizeConfig.widthMultiplier,
+                height: ScreenUtil().setHeight(10),
               ),
               Form(
                 key: _releaseFormKey,
@@ -249,13 +257,14 @@ class _ReleaseOrderState extends State<ReleaseOrder>
                             Text(
                               '${index + 1}:${list[index]}',
                               style: TextStyle(
-                                  fontSize: SizeConfig.heightMultiplier * 2,
+                                  fontSize: ScreenUtil()
+                                      .setSp(47, allowFontScalingSelf: true),
                                   fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
                         SizedBox(
-                          height: SizeConfig.widthMultiplier,
+                          height: ScreenUtil().setHeight(10),
                         ),
                         TextFormField(
                           // ignore: missing_return
@@ -337,15 +346,16 @@ class _ReleaseOrderState extends State<ReleaseOrder>
                               hintText: '请输入${list[index]}',
                               border: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                      width: SizeConfig.heightMultiplier,
+                                      width: ScreenUtil().setWidth(18),
                                       color: Colors.grey),
                                   borderRadius: BorderRadius.circular(15)),
                               hintStyle: TextStyle(
-                                  fontSize: SizeConfig.heightMultiplier * 1.5)),
+                                  fontSize: ScreenUtil()
+                                      .setSp(40, allowFontScalingSelf: true))),
                           maxLines: null,
                         ),
                         SizedBox(
-                          height: SizeConfig.heightMultiplier,
+                          height: ScreenUtil().setHeight(23),
                         )
                       ],
                     );
@@ -398,7 +408,7 @@ class _ReleaseOrderState extends State<ReleaseOrder>
         child: Text(
           '发布订单',
           style: TextStyle(
-              fontSize: SizeConfig.heightMultiplier * 2,
+              fontSize: ScreenUtil().setSp(47, allowFontScalingSelf: true),
               fontWeight: FontWeight.bold),
         ),
       ),

@@ -4,6 +4,7 @@ import 'homeTab.dart';
 import 'orderTab.dart';
 import 'userTab.dart';
 import 'constant.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -25,12 +26,12 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    print('currentTab: ${currentTab}');
+    print('currentTab: $currentTab');
     return Scaffold(
       body: currentScreen,
       bottomNavigationBar: BottomAppBar(
         child: Container(
-          height: SizeConfig.heightMultiplier * 9,
+          height: ScreenUtil().setHeight(203),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -49,7 +50,7 @@ class _HomeState extends State<Home> {
                   children: [
                     Icon(
                       Icons.home,
-                      size: SizeConfig.heightMultiplier * 3,
+                      size:  ScreenUtil().setHeight(68),
                       color: currentTab == 0
                           ? Colors.indigo[colorNum]
                           : Colors.grey,
@@ -78,7 +79,7 @@ class _HomeState extends State<Home> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.reorder,
-                        size: SizeConfig.heightMultiplier * 3,
+                        size:  ScreenUtil().setHeight(68),
                         color: currentTab == 1
                             ? Colors.indigo[colorNum]
                             : Colors.grey),
@@ -106,7 +107,7 @@ class _HomeState extends State<Home> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.directions_car,
-                        size: SizeConfig.heightMultiplier * 3,
+                        size:  ScreenUtil().setHeight(68),
                         color: currentTab == 2
                             ? Colors.indigo[colorNum]
                             : Colors.grey),

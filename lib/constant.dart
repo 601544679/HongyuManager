@@ -1,4 +1,5 @@
-import 'package:amap_all_fluttify/amap_all_fluttify.dart';
+
+import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -191,7 +192,7 @@ String date(int millTime) {
 //地址转经纬度
 changeLat(String address) async {
   final geocodeList =
-      await AmapSearch.searchGeocode(address, city: place(address));
+      await AmapSearch.instance.searchGeocode(address, city: place(address));
   //final geocodeList = await AmapSearch.instance.searchGeocode(address, city: place(address));
   return geocodeList[0].latLng;
 }

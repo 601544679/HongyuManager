@@ -1,10 +1,11 @@
 //import 'package:amap_location/amap_location.dart';
 
-import 'package:amap_all_fluttify/amap_all_fluttify.dart';
+import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:flutter/material.dart';
 import 'sizeConfig.dart';
 import 'constant.dart';
 import 'server.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -52,7 +53,7 @@ class _MapPageState extends State<MapPage> {
                       Colors.indigo[colorNum]),
                 ),
                 SizedBox(
-                  height: SizeConfig.heightMultiplier * 2,
+                  height: ScreenUtil().setHeight(45),
                 ),
                 Text(
                   '正在加载中...',
@@ -100,8 +101,8 @@ class _MapScreenState extends State<MapScreen> {
     //停止监听定位、销毁定位
     /* AMapLocationClient.stopLocation();
     AMapLocationClient.shutdown();*/
-    AmapLocation.stopLocation();
-    AmapLocation.dispose();
+    AmapLocation.instance.stopLocation();
+    AmapLocation.instance.dispose();
     super.dispose();
   }
 
@@ -126,12 +127,13 @@ class _MapScreenState extends State<MapScreen> {
         child: Column(
           children: [
             SizedBox(
-              height: SizeConfig.heightMultiplier * 50,
+              height: ScreenUtil().setHeight(1124),
               child: AmapView(
                 mapType: MapType.Standard,
                 showScaleControl: true,
                 showCompass: true,
                 showZoomControl: true,
+                zoomLevel: 15,
                 maskDelay: Duration(milliseconds: 500),
                 centerCoordinate: LatLng(widget.waybill['latitude'][0],
                     widget.waybill['longitude'][0]),
@@ -145,29 +147,27 @@ class _MapScreenState extends State<MapScreen> {
             ),
             Container(
               padding: EdgeInsets.only(
-                  top: SizeConfig.heightMultiplier * 1.5,
-                  left: 10.0,
-                  right: 10.0),
-              height: SizeConfig.heightMultiplier * 6.58,
+                  top: ScreenUtil().setHeight(34), left: 10.0, right: 10.0),
+              height: ScreenUtil().setHeight(148),
               child: Text(
                 '送货信息',
                 style: TextStyle(
-                    fontSize: SizeConfig.heightMultiplier * 2.19,
+                    fontSize: ScreenUtil().setHeight(50),
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
               ),
             ),
             Container(
-              padding: EdgeInsets.all(SizeConfig.widthMultiplier * 2),
-              width: SizeConfig.widthMultiplier * 97.32,
+              padding: EdgeInsets.all(ScreenUtil().setWidth(22)),
+              width: ScreenUtil().setWidth(1051),
               child: Material(
                 borderRadius: BorderRadius.circular(20.0),
                 shadowColor: Colors.grey,
                 color: Colors.grey[300],
-                elevation: 7.0,
+                elevation: 0,
                 child: Padding(
-                  padding: EdgeInsets.all(SizeConfig.widthMultiplier * 5),
+                  padding: EdgeInsets.all(ScreenUtil().setWidth(54)),
                   child: Column(
                     children: [
                       Row(
@@ -176,7 +176,7 @@ class _MapScreenState extends State<MapScreen> {
                           Text(
                             '送货单号：${widget.waybill['ID']}',
                             style: TextStyle(
-                              fontSize: SizeConfig.heightMultiplier * 2.19,
+                              fontSize: ScreenUtil().setHeight(50),
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
@@ -185,7 +185,7 @@ class _MapScreenState extends State<MapScreen> {
                         ],
                       ),
                       SizedBox(
-                        height: SizeConfig.heightMultiplier,
+                        height: ScreenUtil().setHeight(23),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -193,7 +193,7 @@ class _MapScreenState extends State<MapScreen> {
                           Text(
                             '送货地址：',
                             style: TextStyle(
-                                fontSize: SizeConfig.heightMultiplier * 2.19,
+                                fontSize: ScreenUtil().setHeight(50),
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black),
@@ -202,7 +202,7 @@ class _MapScreenState extends State<MapScreen> {
                             child: Text(
                               '${widget.waybill['address']}',
                               style: TextStyle(
-                                  fontSize: SizeConfig.heightMultiplier * 2.19,
+                                  fontSize: ScreenUtil().setHeight(50),
                                   fontFamily: 'Montserrat',
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black),
@@ -211,7 +211,7 @@ class _MapScreenState extends State<MapScreen> {
                         ],
                       ),
                       SizedBox(
-                        height: SizeConfig.heightMultiplier,
+                        height: ScreenUtil().setHeight(23),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -219,7 +219,7 @@ class _MapScreenState extends State<MapScreen> {
                           Text(
                             '收货人：    ${widget.waybill['receiver']}',
                             style: TextStyle(
-                                fontSize: SizeConfig.heightMultiplier * 2.19,
+                                fontSize: ScreenUtil().setHeight(50),
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black),
@@ -227,7 +227,7 @@ class _MapScreenState extends State<MapScreen> {
                         ],
                       ),
                       SizedBox(
-                        height: SizeConfig.heightMultiplier,
+                        height: ScreenUtil().setHeight(23),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -235,7 +235,7 @@ class _MapScreenState extends State<MapScreen> {
                           Text(
                             '收货人电话： ${widget.waybill['receiverPhone']}',
                             style: TextStyle(
-                                fontSize: SizeConfig.heightMultiplier * 2.19,
+                                fontSize: ScreenUtil().setHeight(50),
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black),
@@ -269,10 +269,10 @@ class _MapScreenState extends State<MapScreen> {
             widget.waybill['destination']['latitude'].toDouble() ?? 23.03509484,
             widget.waybill['destination']['longitude'].toDouble() ??
                 113.13402564),
-        title: 'test',
+        title: widget.waybill['projectAddress'] ?? '',
         widget: Container(
-          height: SizeConfig.heightMultiplier * 4.5,
-          width: SizeConfig.widthMultiplier * 15,
+          height: ScreenUtil().setHeight(101),
+          width: ScreenUtil().setWidth(162),
           child: Material(
             borderRadius: BorderRadius.circular(30),
             shadowColor: Colors.transparent,
@@ -297,8 +297,8 @@ class _MapScreenState extends State<MapScreen> {
   Container showOptions(int i) {
     if (i == 0) {
       return Container(
-        height: SizeConfig.widthMultiplier * 6,
-        width: SizeConfig.widthMultiplier * 18,
+        height: ScreenUtil().setWidth(65),
+        width: ScreenUtil().setWidth(195),
         child: Material(
           borderRadius: BorderRadius.circular(30),
           shadowColor: Colors.transparent,
@@ -311,8 +311,8 @@ class _MapScreenState extends State<MapScreen> {
       );
     } else if (i == widget.waybill['latitude'].length - 1) {
       return Container(
-        height: SizeConfig.widthMultiplier * 10,
-        width: SizeConfig.widthMultiplier * 40,
+        height: ScreenUtil().setWidth(108),
+        width: ScreenUtil().setWidth(432),
         child: Material(
           borderRadius: BorderRadius.circular(30),
           shadowColor: Colors.transparent,
@@ -325,8 +325,8 @@ class _MapScreenState extends State<MapScreen> {
       );
     } else {
       return Container(
-        height: SizeConfig.widthMultiplier * 3,
-        width: SizeConfig.widthMultiplier * 3,
+        height: ScreenUtil().setWidth(33),
+        width: ScreenUtil().setWidth(33),
         child: Material(
           borderRadius: BorderRadius.circular(30),
           shadowColor: Colors.transparent,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'sizeConfig.dart';
 import 'constant.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeTab extends StatefulWidget {
   @override
@@ -26,19 +27,19 @@ class _HomeTabState extends State<HomeTab> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),
                   border: Border.all(width: 1, color: Colors.grey)),
-              height: SizeConfig.heightMultiplier * 25,
-              width: SizeConfig.heightMultiplier * 25,
+              height: ScreenUtil().setHeight(562),
+              width: ScreenUtil().setHeight(562),
               child: Icon(
                 Icons.add,
-                size: SizeConfig.widthMultiplier * 10,
+                size: ScreenUtil().setWidth(108),
               ),
             ),
             SizedBox(
-              height: SizeConfig.heightMultiplier * 3,
+              height: ScreenUtil().setHeight(68),
             ),
             Text(
               '发布订单',
-              style: TextStyle(fontSize: SizeConfig.heightMultiplier * 2),
+              style: TextStyle(fontSize: ScreenUtil().setSp(45,allowFontScalingSelf: true)),
             )
           ],
         )),
