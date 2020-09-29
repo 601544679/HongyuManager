@@ -11,7 +11,7 @@ class UserTab extends StatefulWidget {
   _UserTabState createState() => _UserTabState();
 }
 
-class _UserTabState extends State<UserTab> {
+class _UserTabState extends State<UserTab> with AutomaticKeepAliveClientMixin {
   bool visible = false;
   List<String> s = [
     '顺丰速递',
@@ -62,84 +62,59 @@ class _UserTabState extends State<UserTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          UnconstrainedBox(
-              child: Padding(
-                  padding:
-                      EdgeInsets.only(right: ScreenUtil().setWidth(54)),
-                  child: InkWell(
-                      child: Wrap(
-                        children: [Icon(Icons.exit_to_app), Text('退出')],
-                      ),
-                      onTap: () async {
-                        SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
-                        prefs.clear();
-                        final storage = new FlutterSecureStorage();
-                        await storage.deleteAll();
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, "/loginPage", (route) => route == null);
-                      }))),
-        ],
-        title: Text(userTabName),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-      ),
-      body: SingleChildScrollView(
-        child: ListView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  ListTile(
-                    onTap: () {
-                      setState(() {
-                        currentTab = index;
-                        if (currentTab == index) {
-                          visible = !visible;
-                        }
-                      });
-                    },
-                    title: Text(
-                      s[index],
-                      style: TextStyle(
-                          color: showVisible(currentTab, index, visible)
-                              ? Colors.indigo[colorNum]
-                              : Colors.black,
-                          fontWeight: showVisible(currentTab, index, visible)
-                              ? FontWeight.bold
-                              : FontWeight.normal),
-                    ),
-                    trailing: Icon(
-                      showVisible(currentTab, index, visible)
-                          ? Icons.arrow_drop_up
-                          : Icons.arrow_drop_down,
-                      color: showVisible(currentTab, index, visible)
-                          ? Colors.indigo[colorNum]
-                          : Colors.grey,
-                    ),
+    super.build(context);
+    return SingleChildScrollView(
+      child: ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                ListTile(
+                  onTap: () {
+                    setState(() {
+                      currentTab = index;
+                      if (currentTab == index) {
+                        visible = !visible;
+                      }
+                    });
+                  },
+                  title: Text(
+                    s[index],
+                    style: TextStyle(
+                        color: showVisible(currentTab, index, visible)
+                            ? Colors.indigo[colorNum]
+                            : Colors.black,
+                        fontWeight: showVisible(currentTab, index, visible)
+                            ? FontWeight.bold
+                            : FontWeight.normal),
                   ),
-                  Visibility(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return Center(
-                          child: Text(carNoList[index]),
-                        );
-                      },
-                      itemCount: carNoList.length,
-                    ),
-                    visible: showVisible(currentTab, index, visible),
-                  )
-                ],
-              );
-            },
-            itemCount: s.length),
-      ),
+                  trailing: Icon(
+                    showVisible(currentTab, index, visible)
+                        ? Icons.arrow_drop_up
+                        : Icons.arrow_drop_down,
+                    color: showVisible(currentTab, index, visible)
+                        ? Colors.indigo[colorNum]
+                        : Colors.grey,
+                  ),
+                ),
+                Visibility(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return Center(
+                        child: Text(carNoList[index]),
+                      );
+                    },
+                    itemCount: carNoList.length,
+                  ),
+                  visible: showVisible(currentTab, index, visible),
+                )
+              ],
+            );
+          },
+          itemCount: s.length),
     );
   }
 
@@ -150,4 +125,8 @@ class _UserTabState extends State<UserTab> {
       return false;
     }
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

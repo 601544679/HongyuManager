@@ -18,9 +18,7 @@ final routes = {
 };
 int currentTab = 0;
 String dropDownButtonValue = '0';
-final String orderTabName = '订单详情';
-final String userTabName = '公司';
-final String homeTabName = '主页';
+
 
 //releaseOrder
 //发布订单没有车牌号码，司机接单后才添加车牌号码

@@ -40,6 +40,12 @@ class _ReleaseOrderState
   double latitude = 0;
   double longitude = 0;
 
+  //滚动监听
+  ScrollController scrollController = ScrollController();
+  bool showToTopBtn = false;
+  double position;
+  var bb;
+
   List valueToMap = List();
 
   TextInputType _textInputType(int index) {
@@ -117,7 +123,6 @@ class _ReleaseOrderState
     cutList = rowToList.sublist(1, 12);
     valueToMap.clear();
     //格式处理
-    var lating;
     for (var value in cutList) {
       List allList = List();
       for (int i = 0; i < value.length; i++) {
@@ -147,10 +152,41 @@ class _ReleaseOrderState
   }
 
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    bb = PageStorage.of(context).readState(context);
+    if (bb != null) {}
+  }
+
+  @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     AmapSearch.instance.dispose();
+    scrollController.dispose();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    scrollController.addListener(() {
+      print('滚动位置:${scrollController.offset}');
+      print('滚动位置1:${scrollController.initialScrollOffset}');
+      setState(() {
+        position = scrollController.offset;
+      });
+      if (scrollController.offset < 300 && showToTopBtn) {
+        setState(() {
+          showToTopBtn = false;
+        });
+      } else if (scrollController.offset >= 300 && showToTopBtn == false) {
+        setState(() {
+          showToTopBtn = true;
+        });
+      }
+    });
   }
 
   @override
@@ -183,6 +219,7 @@ class _ReleaseOrderState
             ScreenUtil().setWidth(22),
             ScreenUtil().setHeight(23)),
         child: SingleChildScrollView(
+          controller: scrollController,
           child: Column(
             children: [
               Row(
@@ -367,49 +404,76 @@ class _ReleaseOrderState
           ),
         ),
       ),
-      floatingActionButton: FlatButton(
-        color: Colors.indigo[colorNum],
-        textColor: Colors.white,
-        onPressed: () async {
-          //todo 发布订单
-          //print("7777${_controllers[7].text}");
-          if (_releaseFormKey.currentState.validate()) {
-            _releaseFormKey.currentState.save();
-            //print('TextFiled信息: ${valueList}');
-            //print('map信息: ${map}');
-            //print('map信息: ${jsonEncode(map)}');
-            var lating = await changeLat(_controllers[7].text);
-            print('值1 ${lating.latitude},${lating.longitude}');
-            Map<String, dynamic> map2 = {};
-            map2 = {"__type": "GeoPoint"};
-            map2.addAll({'latitude': lating.latitude});
-            map2.addAll({'longitude': lating.longitude});
-            map.addAll({'destination': map2});
-            var result = await Server().releaseWaybill(map);
-            print('结果$result');
-            switch (result['result']) {
-              case '订单已存在':
-                Fluttertoast.showToast(
-                    msg: result['result'], toastLength: Toast.LENGTH_SHORT);
-                break;
-              case 'success':
-                Fluttertoast.showToast(
-                    msg: '订单发布成功', toastLength: Toast.LENGTH_SHORT);
-                break;
-              default:
-                Fluttertoast.showToast(
-                    msg: result['result'], toastLength: Toast.LENGTH_SHORT);
-                break;
-            }
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: Container(
+        height: ScreenUtil().setHeight(300),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Visibility(
+                visible: showToTopBtn,
+                child: Container(
+                  height: ScreenUtil().setHeight(100),
+                  width: ScreenUtil().setHeight(100),
+                  child: FloatingActionButton(
+                    elevation: 0,
+                    onPressed: () {
+                      scrollController.animateTo(0,
+                          duration: Duration(seconds: 1), curve: Curves.ease);
+                    },
+                    child: Icon(Icons.arrow_upward),
+                  ),
+                )),
+            SizedBox(height: ScreenUtil().setHeight(50),),
+            FlatButton(
+              color: Colors.indigo[colorNum],
+              textColor: Colors.white,
+              onPressed: () async {
+                //todo 发布订单
+                //print("7777${_controllers[7].text}");
+                if (_releaseFormKey.currentState.validate()) {
+                  _releaseFormKey.currentState.save();
+                  //print('TextFiled信息: ${valueList}');
+                  //print('map信息: ${map}');
+                  //print('map信息: ${jsonEncode(map)}');
+                  var lating = await changeLat(_controllers[7].text);
+                  print('值1 ${lating.latitude},${lating.longitude}');
+                  Map<String, dynamic> map2 = {};
+                  map2 = {"__type": "GeoPoint"};
+                  map2.addAll({'latitude': lating.latitude});
+                  map2.addAll({'longitude': lating.longitude});
+                  map.addAll({'destination': map2});
+                  var result = await Server().releaseWaybill(map);
+                  print('结果$result');
+                  switch (result['result']) {
+                    case '订单已存在':
+                      Fluttertoast.showToast(
+                          msg: result['result'],
+                          toastLength: Toast.LENGTH_SHORT);
+                      break;
+                    case 'success':
+                      Fluttertoast.showToast(
+                          msg: '订单发布成功', toastLength: Toast.LENGTH_SHORT);
+                      break;
+                    default:
+                      Fluttertoast.showToast(
+                          msg: result['result'],
+                          toastLength: Toast.LENGTH_SHORT);
+                      break;
+                  }
 
-            RLogger.instance.d(jsonEncode(map), tag: 'ff');
-          }
-        },
-        child: Text(
-          '发布订单',
-          style: TextStyle(
-              fontSize: ScreenUtil().setSp(47, allowFontScalingSelf: true),
-              fontWeight: FontWeight.bold),
+                  RLogger.instance.d(jsonEncode(map), tag: 'ff');
+                }
+              },
+              child: Text(
+                '发布订单',
+                style: TextStyle(
+                    fontSize:
+                        ScreenUtil().setSp(47, allowFontScalingSelf: true),
+                    fontWeight: FontWeight.bold),
+              ),
+            )
+          ],
         ),
       ),
     );

@@ -8,18 +8,26 @@ import 'server.dart';
 import 'package:r_logger/r_logger.dart';
 
 //获取订单数据
+
 class getOrderData extends StatefulWidget {
   @override
   _getOrderDataState createState() => _getOrderDataState();
   String state;
 
-  getOrderData(this.state);
+  getOrderData(this.state, {Key key}) : super(key: key);
 }
 
 class _getOrderDataState extends State<getOrderData> {
   DateTime historydate;
   var waybills;
   var waybillRecord;
+  var saveFutureBuilder;
+
+  //被父组件调用的方法
+  chidFunction() {
+    print('我被父组件调用了');
+    // netWorkChildKey.currentState.backToTop();
+  }
 
   @override
   void initState() {
@@ -44,6 +52,7 @@ class _getOrderDataState extends State<getOrderData> {
                 //todo 网络请求数据,传入UI
                 child: OrderNetWorkWidget(
                   waybill: waybillRecord,
+                  key: netWorkChildKey,
                 ),
               );
             }

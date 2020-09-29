@@ -15,11 +15,13 @@ import 'finishPage.dart';
 import 'package:r_logger/r_logger.dart';
 
 //根据下拉菜单使用网络请求
+GlobalKey<_OrderNetWorkWidgetState> netWorkChildKey = GlobalKey(); //一定要指定<>
+
 class OrderNetWorkWidget extends StatefulWidget {
   final waybill;
 
 //构造方法传入请求成功后的数据
-  OrderNetWorkWidget({this.waybill});
+  OrderNetWorkWidget({this.waybill, Key key});
 
   @override
   _OrderNetWorkWidgetState createState() => _OrderNetWorkWidgetState();
@@ -29,18 +31,61 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
   var fontSize = ScreenUtil().setSp(43, allowFontScalingSelf: true);
   var sizedBoxHeight = ScreenUtil().setHeight(23);
   List titleList = ['序号', '色号', '规格', '数量', '发货数量', '开单单位', '送货单价', '明细备注'];
+  ScrollController controller = ScrollController();
+  bool showToTopBtn = false;
+  double position;
+  var bb;
+
+  //返回顶部
+  void backToTop() {
+    controller.animateTo(0, duration: Duration(seconds: 1), curve: Curves.ease);
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    controller.addListener(() {
+      //print('滚动位置:${controller.offset}');
+      //print('滚动位置1:${controller.initialScrollOffset}');
+      setState(() {
+        position = controller.offset;
+      });
+      if (controller.offset < 300 && showToTopBtn) {
+        setState(() {
+          showToTopBtn = false;
+        });
+      } else if (controller.offset >= 300 && showToTopBtn == false) {
+        setState(() {
+          showToTopBtn = true;
+        });
+      }
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    bb = PageStorage.of(context).readState(context);
+    if (bb != null) {}
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    print('position--$position');
+    MyNotification(showToTopBtn).dispatch(context);
     var wbill = WaybillEntity().fromJson(widget.waybill);
     //wbill.result.sort((a, b) => b.departureDate.compareTo(a.departureDate));
     return ListView.builder(
+      controller: controller,
       itemBuilder: (context, index) {
         //print('类型：${wbill.result[index].runtimeType}');
         return InkWell(
@@ -139,15 +184,13 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                           child: Text(
                         '司机：${wbill.result[index].driver == null ? '无司机' : wbill.result[index].driver.username}',
                         textAlign: TextAlign.center,
-                        style:
-                            TextStyle(fontSize: ScreenUtil().setWidth(44)),
+                        style: TextStyle(fontSize: ScreenUtil().setWidth(44)),
                       )),
                       Expanded(
                           child: Text(
                         '业务员：${wbill.result[index].supplierContactPerson ?? '无业务员'}',
                         textAlign: TextAlign.center,
-                        style:
-                            TextStyle(fontSize:  ScreenUtil().setWidth(44)),
+                        style: TextStyle(fontSize: ScreenUtil().setWidth(44)),
                       )),
                     ],
                   ),
@@ -186,7 +229,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                       Container(
                         color: Colors.grey,
                         width: 1,
-                        height:ScreenUtil().setHeight(90),
+                        height: ScreenUtil().setHeight(90),
                       ),
                       textStyle(
                           '${date(wbill.result[index].arrivalTime ?? '无到货日期')}',
@@ -344,4 +387,10 @@ class _GoodsDetailState extends State<GoodsDetail> {
           rows: dataRow(allList)),
     );
   }
+}
+
+class MyNotification extends Notification {
+  bool showTopButton;
+
+  MyNotification(this.showTopButton);
 }

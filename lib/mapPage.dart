@@ -174,46 +174,44 @@ class _MapScreenState extends State<MapScreen> {
                 color: Colors.grey[300],
                 elevation: 2,
                 child: Padding(
-                  padding: EdgeInsets.all(ScreenUtil().setWidth(54)),
-                  child: Expanded(
-                      child: ListView.separated(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            titleList[index],
-                            style: TextStyle(
-                                fontSize: ScreenUtil().setHeight(50),
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ),
-                          Expanded(
-                            child: Text(
-                              index == 2
-                                  ? '   ' + contentList[index]
-                                  : contentList[index],
+                    padding: EdgeInsets.all(ScreenUtil().setWidth(54)),
+                    child: ListView.separated(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              titleList[index],
                               style: TextStyle(
                                   fontSize: ScreenUtil().setHeight(50),
                                   fontFamily: 'Montserrat',
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black),
                             ),
-                          )
-                        ],
-                      );
-                    },
-                    itemCount: titleList.length,
-                    separatorBuilder: (context, index) {
-                      return SizedBox(
-                        height: ScreenUtil().setHeight(23),
-                      );
-                    },
-                  )),
-                ),
+                            Expanded(
+                              child: Text(
+                                index == 2
+                                    ? '   ' + contentList[index]
+                                    : contentList[index],
+                                style: TextStyle(
+                                    fontSize: ScreenUtil().setHeight(50),
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                              ),
+                            )
+                          ],
+                        );
+                      },
+                      itemCount: titleList.length,
+                      separatorBuilder: (context, index) {
+                        return SizedBox(
+                          height: ScreenUtil().setHeight(23),
+                        );
+                      },
+                    )),
               ),
             ),
           ],
@@ -264,73 +262,47 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   Container showOptions(int i) {
+    double height;
+    double width;
     if (i == 0) {
-      return Container(
-        height: ScreenUtil().setWidth(65),
-        width: ScreenUtil().setWidth(195),
-        child: Material(
-          borderRadius: BorderRadius.circular(30),
-          shadowColor: Colors.transparent,
-          color: Colors.indigo[colorNum],
-          elevation: 7.0,
-          child: Center(
-            child: lastOptions(i),
-          ),
-        ),
-      );
+      height = ScreenUtil().setWidth(65);
+      width = ScreenUtil().setWidth(195);
     } else if (i == widget.waybill['latitude'].length - 1) {
-      return Container(
-        height: ScreenUtil().setWidth(108),
-        width: ScreenUtil().setWidth(432),
-        child: Material(
-          borderRadius: BorderRadius.circular(30),
-          shadowColor: Colors.transparent,
-          color: Colors.indigo[colorNum],
-          elevation: 7.0,
-          child: Center(
-            child: lastOptions(i),
-          ),
-        ),
-      );
+      height = ScreenUtil().setWidth(150);
+      width = ScreenUtil().setWidth(432);
     } else {
-      return Container(
-        height: ScreenUtil().setWidth(33),
-        width: ScreenUtil().setWidth(33),
-        child: Material(
-          borderRadius: BorderRadius.circular(30),
-          shadowColor: Colors.transparent,
-          color: Colors.indigo[colorNum],
-          elevation: 7.0,
-          child: Center(
-            child: lastOptions(i),
-          ),
-        ),
-      );
+      height = ScreenUtil().setWidth(33);
+      width = ScreenUtil().setWidth(33);
     }
+    return Container(
+      height: height,
+      width: width,
+      child: Material(
+        borderRadius: BorderRadius.circular(30),
+        shadowColor: Colors.transparent,
+        color: Colors.indigo[colorNum],
+        child: Center(
+          child: lastOptions(i),
+        ),
+      ),
+    );
   }
 
   Text lastOptions(int i) {
+    String text;
     if (i == 0) {
-      return Text('当前位置',
-          style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Montserrat'));
+      text = '当前位置';
     } else if (i == widget.waybill['latitude'].length - 1) {
       String startTime = widget.waybill['createdAt'][i];
-      return Text('开始运输${startTime.substring(0, 10)}',
-          style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Montserrat'));
+      text =
+          '开始运输\n${startTime.substring(0, 10)}\n${startTime.substring(11, 19)}';
     } else {
-      return Text(
-        '',
+      text = '';
+    }
+    return Text(text,
         style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontFamily: 'Montserrat'),
-      );
-    }
+            fontFamily: 'Montserrat'));
   }
 }
