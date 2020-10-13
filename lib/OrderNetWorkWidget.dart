@@ -1,18 +1,10 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mydemo/generated/json/waybill_entity_helper.dart';
 import 'package:mydemo/mapPage.dart';
 import 'package:mydemo/waybill_entity.dart';
-import 'sizeConfig.dart';
-import 'package:date_format/date_format.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'userclass.dart';
-import 'server.dart';
 import 'constant.dart';
 import 'finishPage.dart';
-import 'package:r_logger/r_logger.dart';
 
 //根据下拉菜单使用网络请求
 GlobalKey<_OrderNetWorkWidgetState> netWorkChildKey = GlobalKey(); //一定要指定<>
@@ -82,7 +74,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
   Widget build(BuildContext context) {
     print('position--$position');
     MyNotification(showToTopBtn).dispatch(context);
-    var wbill = WaybillEntity().fromJson(widget.waybill);
+    WaybillEntity wbill = WaybillEntity().fromJson(widget.waybill);
     //wbill.result.sort((a, b) => b.departureDate.compareTo(a.departureDate));
     return ListView.builder(
       controller: controller,
@@ -157,7 +149,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                     children: [
                       Expanded(
                         child: textStyle(
-                            '${wbill.result[index].startLocationName ?? '出发地'}',
+                            '${wbill.result[index].startLocationName == ' ' ? '佛山市' : wbill.result[index].startLocationName}',
                             fontSize * 2,
                             fontWeight: FontWeight.bold,
                             textAlign: TextAlign.center),
@@ -232,7 +224,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                         height: ScreenUtil().setHeight(90),
                       ),
                       textStyle(
-                          '${date(wbill.result[index].arrivalTime ?? '无到货日期')}',
+                          '${wbill.result[index].estimatedArrivalTime == -1 ? '无到货日期' : date(wbill.result[index].estimatedArrivalTime)}',
                           fontSize,
                           color: Colors.green,
                           textAlign: TextAlign.center),
@@ -380,7 +372,7 @@ class _GoodsDetailState extends State<GoodsDetail> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
-          columnSpacing: ScreenUtil().setWidth(54),
+          columnSpacing: ScreenUtil().setWidth(60),
           dataRowHeight: ScreenUtil().setHeight(68),
           headingRowHeight: ScreenUtil().setHeight(90),
           columns: dataColumn(widget.titleList),

@@ -16,6 +16,8 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+  AmapController amapController;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -25,7 +27,15 @@ class _MapPageState extends State<MapPage> {
   _loadWaybill() async {
     print('_loadWaybill');
     var result = await Server().getWaybillAdmin(widget.orderNumber);
-    //print('订单信息: ${result['result']}');
+    //print('订单信息: ${result['result'].runtimeType}');
+   /* do {
+      var result = await Server().getWaybillAdmin(widget.orderNumber, page: 1);
+    } while (result['result']['latitude'].length == 100);
+    {
+      var dd = await Server().getWaybillAdmin(widget.orderNumber, page: 1);
+      result['result']['latitude'].addAll(dd['result']['latitude']);
+    }*/
+    //print('长度--${result['result']['latitude'].length}');
     //print('ID:${result['result']['ID']}');
     return (result['result']);
   }
@@ -65,7 +75,7 @@ class _MapPageState extends State<MapPage> {
         case ConnectionState.done:
           print('done');
           if (snapshot.hasError) return Text('Error: ${snapshot.error}');
-          print('snapshot.data: ${snapshot.data}');
+          print('snapshot.data: ${snapshot.data['latitude'].length}');
           return MapScreen(waybill: snapshot.data);
         default:
           return null;
@@ -101,8 +111,8 @@ class _MapScreenState extends State<MapScreen> {
     //停止监听定位、销毁定位
     /* AMapLocationClient.stopLocation();
     AMapLocationClient.shutdown();*/
-    AmapLocation.instance.stopLocation();
-    AmapLocation.instance.dispose();
+    /*AmapLocation.instance.stopLocation();
+    AmapLocation.instance.dispose();*/
     super.dispose();
   }
 
@@ -111,6 +121,12 @@ class _MapScreenState extends State<MapScreen> {
     //print('经纬度: ${widget.waybill['latitude'].length}');
     print("目的地：${widget.waybill['destination']['latitude']}");
     print("目的地：${widget.waybill['destination']['longitude']}");
+    List<LatLng> latLngList = List();
+    for (int i = 0; i < widget.waybill['latitude'].length; i++) {
+      LatLng latLng = LatLng(widget.waybill['latitude'][i].toDouble(),
+          widget.waybill['longitude'][i].toDouble());
+      latLngList.add(latLng);
+    }
     List titleList = ['送货单号：', '送货地址：', '收货人：', '收货人电话：'];
     List contentList = [
       widget.waybill['ID'],
@@ -137,9 +153,6 @@ class _MapScreenState extends State<MapScreen> {
               height: ScreenUtil().setHeight(1124),
               child: AmapView(
                 mapType: MapType.Standard,
-                showScaleControl: true,
-                showCompass: true,
-                showZoomControl: true,
                 zoomLevel: 15,
                 maskDelay: Duration(milliseconds: 500),
                 centerCoordinate: LatLng(widget.waybill['latitude'][0],
@@ -149,6 +162,13 @@ class _MapScreenState extends State<MapScreen> {
                   await controller?.showMyLocation(MyLocationOption(
                       myLocationType: MyLocationType.Follow,
                       interval: Duration(seconds: 10)));
+                  /*await controller
+                      .addPolyline(PolylineOption(latLngList: latLngList));*/
+                  await controller.showTraffic(true);
+                  await controller.showCompass(true);
+                  //await controller.showLocateControl(true);
+                  await controller.showScaleControl(true);
+                  await controller.showZoomControl(true);
                 },
               ),
             ),

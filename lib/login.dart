@@ -1,12 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:leancloud_storage/leancloud.dart';
 import 'sizeConfig.dart';
 import 'constant.dart';
 import 'userClass.dart';
 import 'server.dart';
 import 'mainPage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'loginDialog.dart';
+import 'package:device_info/device_info.dart';
 
 class LoginPage extends StatefulWidget {
   final User user;
@@ -24,17 +29,35 @@ class _LoginPageState extends State<LoginPage> {
   final _loginformKey = GlobalKey<FormState>();
 
   autoLogin(context) async {
-    if (checkBoxValue &&
-        widget.user?.phoneNumber != null &&
-        widget.user?.password != null) {
-      var response = await server.mobilePhoneLogin(
-          widget.user?.phoneNumber ?? null,
-          widget.user?.password ?? null,
-          false);
+    if ( //checkBoxValue &&
+        widget.user?.phoneNumber != '' && widget.user?.password != '') {
+      var response = await showDialog(
+          context: context,
+          builder: (_) {
+            return loginDialog(
+              outsideDismiss: false,
+              requestCallBack: server.mobilePhoneLogin(
+                  widget.user?.phoneNumber ?? null,
+                  widget.user?.password ?? null,
+                  false),
+            );
+          });
       if (response != null) {
+        Fluttertoast.showToast(msg: '登录成功');
         Navigator.pushNamedAndRemoveUntil(
             context, "/homePage", (route) => route == null);
       }
+    }
+  }
+
+  getDevice() async {
+    DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidDeviceInfo = await deviceInfoPlugin.androidInfo;
+      print('安卓设备--${androidDeviceInfo.androidId}');
+    } else if (Platform.isIOS) {
+      IosDeviceInfo iosDeviceInfo = await deviceInfoPlugin.iosInfo;
+      print('苹果设备--${iosDeviceInfo.utsname.machine}');
     }
   }
 
@@ -42,7 +65,9 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    //绘制完成后回调
     WidgetsBinding.instance.addPostFrameCallback((_) => autoLogin(context));
+    getDevice();
   }
 
   @override
@@ -61,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
     print('系统字体缩放比例--${ScreenUtil().scaleText}');
     User _user = widget.user ?? User();
     if (_user?.password != null && _user?.password != "") {
-      checkBoxValue = true;
+      //checkBoxValue = true;
       _passwordControl.text = _user.password;
     }
     return Scaffold(
@@ -132,9 +157,12 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                   labelText: '输入手机号码'),
                             ),
-                            SizedBox(height: ScreenUtil().setHeight(50),),
+                            SizedBox(
+                              height: ScreenUtil().setHeight(50),
+                            ),
                             TextFormField(
-                              controller: _passwordControl,
+                              //controller: _passwordControl,
+                              initialValue: _user.password,
                               obscureText: true,
                               // ignore: missing_return
                               style: TextStyle(
@@ -233,8 +261,17 @@ class _LoginPageState extends State<LoginPage> {
                             if (_loginformKey.currentState.validate()) {
                               _loginformKey.currentState.save();
                               //"13802621111", "123456"
-                              var response = await server.mobilePhoneLogin(
-                                  _user.phoneNumber, _user.password);
+                              var response = await showDialog(
+                                  context: context,
+                                  builder: (_) {
+                                    return loginDialog(
+                                        outsideDismiss: false,
+                                        requestCallBack:
+                                            server.mobilePhoneLogin(
+                                                _user.phoneNumber,
+                                                _user.password));
+                                  });
+                              print('response--${response}');
                               if (response != null) {
                                 _user.sessionToken = response['sessionToken'];
                                 _user.idNumber = response['identityNo'];
@@ -245,11 +282,19 @@ class _LoginPageState extends State<LoginPage> {
                                 _user.isSave = checkBoxValue;
                                 _user.saveUser(_user);
                                 print(response);
-                                Navigator.pushNamedAndRemoveUntil(context,
-                                    "/homePage", (route) => route == null);
-                              } else {
+                                //进行身份验证，管理者才能登录管理者端
+                                if (response['role'] == 'Manager') {
+                                  Fluttertoast.showToast(
+                                      msg: '登录成功',
+                                      toastLength: Toast.LENGTH_SHORT);
+                                  Navigator.pushNamedAndRemoveUntil(context,
+                                      "/homePage", (route) => route == null);
+                                } else {
+                                  Fluttertoast.showToast(msg: '非管理者用户');
+                                }
+                              } else if (response == null) {
                                 Fluttertoast.showToast(
-                                    msg: '登录失败',
+                                    msg: '账号和密码错误',
                                     toastLength: Toast.LENGTH_SHORT);
                               }
                             }
@@ -286,50 +331,52 @@ class _LoginPageState extends State<LoginPage> {
                     height: SizeConfig.heightMultiplier,
                     color: Colors.grey,
                   ),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(20),
+                  ),
                   Column(
                     children: [
-                      FlatButton(
-                          onPressed: () {},
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.build,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.build,
+                            color: Colors.indigo[colorNum],
+                          ),
+                          SizedBox(
+                            width: ScreenUtil().setWidth(33),
+                          ),
+                          Text(
+                            '技术支持：',
+                            style: TextStyle(
                                 color: Colors.indigo[colorNum],
-                              ),
-                              SizedBox(
-                                width: ScreenUtil().setWidth(33),
-                              ),
-                              Text(
-                                '技术支持：纠结个分节符',
-                                style: TextStyle(
-                                    color: Colors.indigo[colorNum],
-                                    fontSize: ScreenUtil()
-                                        .setSp(45, allowFontScalingSelf: true)),
-                              )
-                            ],
-                          )),
-                      FlatButton(
-                          onPressed: () {},
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.call,
+                                fontSize: ScreenUtil()
+                                    .setSp(45, allowFontScalingSelf: true)),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: ScreenUtil().setHeight(100),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.call,
+                            color: Colors.indigo[colorNum],
+                          ),
+                          SizedBox(
+                            width: ScreenUtil().setWidth(33),
+                          ),
+                          Text(
+                            '联系电话：',
+                            style: TextStyle(
                                 color: Colors.indigo[colorNum],
-                              ),
-                              SizedBox(
-                                width:  ScreenUtil().setWidth(33),
-                              ),
-                              Text(
-                                '联系电话：13659874521',
-                                style: TextStyle(
-                                    color: Colors.indigo[colorNum],
-                                    fontSize: ScreenUtil()
-                                        .setSp(45, allowFontScalingSelf: true)),
-                              )
-                            ],
-                          )),
+                                fontSize: ScreenUtil()
+                                    .setSp(45, allowFontScalingSelf: true)),
+                          )
+                        ],
+                      ),
                     ],
                   )
                 ],

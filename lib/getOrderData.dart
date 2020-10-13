@@ -43,6 +43,8 @@ class _getOrderDataState extends State<getOrderData> {
         switch (snapshot.connectionState) {
           case ConnectionState.done:
             print('done');
+            //print('done---${snapshot.hashCode}');
+            //print('done---${snapshot.data}');
             if (snapshot.hasError) {
               return Text("Error: ${snapshot.error}");
             } else if (snapshot.hasData) {
@@ -89,9 +91,10 @@ class _getOrderDataState extends State<getOrderData> {
 
   //todo 根据选择下拉菜单的值请求订单数据
   Future _getData(String state) async {
+    var responseBody;
     waybillRecord = await Server().getWaybillByValue(state);
     //waybills = waybillRecord['result'];
-    //print('返回的类型${waybillRecord.runtimeType}');
+    print('返回的内容---$waybillRecord');
     //RLogger.instance.d(waybills.toString());
     return waybillRecord;
   }

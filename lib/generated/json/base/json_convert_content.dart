@@ -27,10 +27,10 @@ class JsonConvert<T> {
 			return finishDataResultAllMessageDriverFromJson(data as FinishDataResultAllMessageDriver, json) as T;			case FinishDataResultAllMessageDestination:
 			return finishDataResultAllMessageDestinationFromJson(data as FinishDataResultAllMessageDestination, json) as T;			case WaybillEntity:
 			return waybillEntityFromJson(data as WaybillEntity, json) as T;			case WaybillResult:
-			return waybillResultFromJson(data as WaybillResult, json) as T;			case WaybillResultDriver:
-			return waybillResultDriverFromJson(data as WaybillResultDriver, json) as T;			case WaybillResultDriverACL:
-			return waybillResultDriverACLFromJson(data as WaybillResultDriverACL, json) as T;			case WaybillResultDriverACLOwner:
-			return waybillResultDriverACLOwnerFromJson(data as WaybillResultDriverACLOwner, json) as T;			case WaybillResultDestination:
+			return waybillResultFromJson(data as WaybillResult, json) as T;			case WaybillResultCar:
+			return waybillResultCarFromJson(data as WaybillResultCar, json) as T;			case WaybillResultSignedWaybillPhoto:
+			return waybillResultSignedWaybillPhotoFromJson(data as WaybillResultSignedWaybillPhoto, json) as T;			case WaybillResultDriver:
+			return waybillResultDriverFromJson(data as WaybillResultDriver, json) as T;			case WaybillResultDestination:
 			return waybillResultDestinationFromJson(data as WaybillResultDestination, json) as T;			case SearchResultEntity:
 			return searchResultEntityFromJson(data as SearchResultEntity, json) as T;			case SearchResultResult:
 			return searchResultResultFromJson(data as SearchResultResult, json) as T;			case SearchResultResultDriverName:
@@ -48,10 +48,10 @@ class JsonConvert<T> {
 			return finishDataResultAllMessageDriverToJson(data as FinishDataResultAllMessageDriver);			case FinishDataResultAllMessageDestination:
 			return finishDataResultAllMessageDestinationToJson(data as FinishDataResultAllMessageDestination);			case WaybillEntity:
 			return waybillEntityToJson(data as WaybillEntity);			case WaybillResult:
-			return waybillResultToJson(data as WaybillResult);			case WaybillResultDriver:
-			return waybillResultDriverToJson(data as WaybillResultDriver);			case WaybillResultDriverACL:
-			return waybillResultDriverACLToJson(data as WaybillResultDriverACL);			case WaybillResultDriverACLOwner:
-			return waybillResultDriverACLOwnerToJson(data as WaybillResultDriverACLOwner);			case WaybillResultDestination:
+			return waybillResultToJson(data as WaybillResult);			case WaybillResultCar:
+			return waybillResultCarToJson(data as WaybillResultCar);			case WaybillResultSignedWaybillPhoto:
+			return waybillResultSignedWaybillPhotoToJson(data as WaybillResultSignedWaybillPhoto);			case WaybillResultDriver:
+			return waybillResultDriverToJson(data as WaybillResultDriver);			case WaybillResultDestination:
 			return waybillResultDestinationToJson(data as WaybillResultDestination);			case SearchResultEntity:
 			return searchResultEntityToJson(data as SearchResultEntity);			case SearchResultResult:
 			return searchResultResultToJson(data as SearchResultResult);			case SearchResultResultDriverName:
@@ -69,10 +69,10 @@ class JsonConvert<T> {
 			return FinishDataResultAllMessageDriver().fromJson(json);			case 'FinishDataResultAllMessageDestination':
 			return FinishDataResultAllMessageDestination().fromJson(json);			case 'WaybillEntity':
 			return WaybillEntity().fromJson(json);			case 'WaybillResult':
-			return WaybillResult().fromJson(json);			case 'WaybillResultDriver':
-			return WaybillResultDriver().fromJson(json);			case 'WaybillResultDriverACL':
-			return WaybillResultDriverACL().fromJson(json);			case 'WaybillResultDriverACLOwner':
-			return WaybillResultDriverACLOwner().fromJson(json);			case 'WaybillResultDestination':
+			return WaybillResult().fromJson(json);			case 'WaybillResultCar':
+			return WaybillResultCar().fromJson(json);			case 'WaybillResultSignedWaybillPhoto':
+			return WaybillResultSignedWaybillPhoto().fromJson(json);			case 'WaybillResultDriver':
+			return WaybillResultDriver().fromJson(json);			case 'WaybillResultDestination':
 			return WaybillResultDestination().fromJson(json);			case 'SearchResultEntity':
 			return SearchResultEntity().fromJson(json);			case 'SearchResultResult':
 			return SearchResultResult().fromJson(json);			case 'SearchResultResultDriverName':
@@ -91,10 +91,10 @@ class JsonConvert<T> {
 			return List<FinishDataResultAllMessageDriver>();			case 'FinishDataResultAllMessageDestination':
 			return List<FinishDataResultAllMessageDestination>();			case 'WaybillEntity':
 			return List<WaybillEntity>();			case 'WaybillResult':
-			return List<WaybillResult>();			case 'WaybillResultDriver':
-			return List<WaybillResultDriver>();			case 'WaybillResultDriverACL':
-			return List<WaybillResultDriverACL>();			case 'WaybillResultDriverACLOwner':
-			return List<WaybillResultDriverACLOwner>();			case 'WaybillResultDestination':
+			return List<WaybillResult>();			case 'WaybillResultCar':
+			return List<WaybillResultCar>();			case 'WaybillResultSignedWaybillPhoto':
+			return List<WaybillResultSignedWaybillPhoto>();			case 'WaybillResultDriver':
+			return List<WaybillResultDriver>();			case 'WaybillResultDestination':
 			return List<WaybillResultDestination>();			case 'SearchResultEntity':
 			return List<SearchResultEntity>();			case 'SearchResultResult':
 			return List<SearchResultResult>();			case 'SearchResultResultDriverName':

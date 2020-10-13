@@ -81,6 +81,7 @@ class _FinishPageState extends State<FinishPage> {
 
   imageFuture() async {
     var finishData = await Server().getFinishImage(widget.orderNumber);
+    print('finishPage--data${finishData}');
     return finishData;
   }
 }
@@ -131,7 +132,7 @@ class _ImageBuilderState extends State<ImageBuilder>
       detailList.add(
           allData.result.allMessage.billingColor[i].contains('(') == true
               ? allData.result.allMessage.billingColor[i].substring(
-                  0, allData.result.allMessage.billingColor[i].indexOf('('))
+              0, allData.result.allMessage.billingColor[i].indexOf('('))
               : '');
       detailList.add(allData.result.allMessage.billingUnit[i]);
       detailList.add(allData.result.allMessage.sendQuantity[i]);
@@ -154,7 +155,7 @@ class _ImageBuilderState extends State<ImageBuilder>
             bottom: TabBar(
                 indicatorWeight: 4.0,
                 labelPadding:
-                    EdgeInsets.only(bottom: ScreenUtil().setHeight(23)),
+                EdgeInsets.only(bottom: ScreenUtil().setHeight(23)),
                 indicatorColor: Colors.white,
                 controller: controller,
                 tabs: [
@@ -162,19 +163,19 @@ class _ImageBuilderState extends State<ImageBuilder>
                     '送货单信息',
                     style: TextStyle(
                         fontSize:
-                            ScreenUtil().setSp(45, allowFontScalingSelf: true)),
+                        ScreenUtil().setSp(45, allowFontScalingSelf: true)),
                   ),
                   Text(
                     '签收照片',
                     style: TextStyle(
                         fontSize:
-                            ScreenUtil().setSp(45, allowFontScalingSelf: true)),
+                        ScreenUtil().setSp(45, allowFontScalingSelf: true)),
                   ),
                   Text(
                     '途径点',
                     style: TextStyle(
                         fontSize:
-                            ScreenUtil().setSp(45, allowFontScalingSelf: true)),
+                        ScreenUtil().setSp(45, allowFontScalingSelf: true)),
                   ),
                 ]),
           ),
@@ -247,18 +248,18 @@ List<DataColumn> dataColumn(List contentList) {
   for (int i = 0; i < contentList.length; i++) {
     columnList.add(DataColumn(
         label: Row(
-      children: [
-        Text(
-          contentList[i],
-          style: TextStyle(
-              fontSize: ScreenUtil().setSp(45, allowFontScalingSelf: true),
-              color: Colors.black,
-              fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
-        )
-      ],
-      mainAxisAlignment: MainAxisAlignment.center,
-    )));
+          children: [
+            Text(
+              contentList[i],
+              style: TextStyle(
+                  fontSize: ScreenUtil().setSp(45, allowFontScalingSelf: true),
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            )
+          ],
+          mainAxisAlignment: MainAxisAlignment.center,
+        )));
   }
   print('标题${columnList.length}');
   print(columnList);
@@ -392,48 +393,48 @@ class _signForPictureState extends State<signForPicture>
   Widget build(BuildContext context) {
     return Container(
         child: ListView.builder(
-      itemBuilder: (context, index) {
-        return Container(
-          //color: Colors.red,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                s[index],
-                style: TextStyle(fontSize: ScreenUtil().setHeight(68)),
-              ),
-              SizedBox(
-                height: ScreenUtil().setHeight(23),
-              ),
-              InkWell(
-                child: AspectRatio(
-                  aspectRatio: 16 / 10,
-                  child: Image.network(
-                    widget.allData.result.imageUrl[index],
-                    fit: BoxFit.cover,
+          itemBuilder: (context, index) {
+            return Container(
+              //color: Colors.red,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    s[index],
+                    style: TextStyle(fontSize: ScreenUtil().setHeight(68)),
                   ),
-                ),
-                onTap: () {
-                  Fluttertoast.showToast(
-                      msg: '${s[index]}', toastLength: Toast.LENGTH_SHORT);
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (context) {
-                        return dialogImageBuilder(
-                            widget.allData.result.imageUrl, index);
-                      });
-                },
+                  SizedBox(
+                    height: ScreenUtil().setHeight(23),
+                  ),
+                  InkWell(
+                    child: AspectRatio(
+                      aspectRatio: 16 / 10,
+                      child: Image.network(
+                        widget.allData.result.imageUrl[index],
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    onTap: () {
+                      Fluttertoast.showToast(
+                          msg: '${s[index]}', toastLength: Toast.LENGTH_SHORT);
+                      showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) {
+                            return dialogImageBuilder(
+                                widget.allData.result.imageUrl, index);
+                          });
+                    },
+                  ),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(23),
+                  )
+                ],
               ),
-              SizedBox(
-                height: ScreenUtil().setHeight(23),
-              )
-            ],
-          ),
-        );
-      },
-      itemCount: widget.allData.result.imageUrl.length,
-    ));
+            );
+          },
+          itemCount: widget.allData.result.imageUrl.length,
+        ));
   }
 
   @override
@@ -538,9 +539,6 @@ class _MapScreenState extends State<MapScreen>
           Expanded(
             child: AmapView(
               mapType: MapType.Standard,
-              showScaleControl: true,
-              showCompass: true,
-              showZoomControl: true,
               zoomLevel: 15,
               maskDelay: Duration(milliseconds: 500),
               centerCoordinate: LatLng(widget.waybill['latitude'][0],
@@ -550,6 +548,11 @@ class _MapScreenState extends State<MapScreen>
                 await controller?.showMyLocation(MyLocationOption(
                     myLocationType: MyLocationType.Follow,
                     interval: Duration(seconds: 10)));
+                await controller.showTraffic(true);
+                await controller.showCompass(true);
+                //await controller.showLocateControl(true);
+                await controller.showScaleControl(true);
+                await controller.showZoomControl(true);
               },
             ),
           ),
@@ -600,74 +603,48 @@ class _MapScreenState extends State<MapScreen>
   }
 
   Container showOptions(int i) {
+    double height;
+    double width;
     if (i == 0) {
-      return Container(
-        height: ScreenUtil().setWidth(65),
-        width: ScreenUtil().setWidth(195),
-        child: Material(
-          borderRadius: BorderRadius.circular(30),
-          shadowColor: Colors.transparent,
-          color: Colors.indigo[colorNum],
-          elevation: 7.0,
-          child: Center(
-            child: lastOptions(i),
-          ),
-        ),
-      );
+      height = ScreenUtil().setWidth(65);
+      width = ScreenUtil().setWidth(195);
     } else if (i == widget.waybill['latitude'].length - 1) {
-      return Container(
-        height: ScreenUtil().setWidth(108),
-        width: ScreenUtil().setWidth(432),
-        child: Material(
-          borderRadius: BorderRadius.circular(30),
-          shadowColor: Colors.transparent,
-          color: Colors.indigo[colorNum],
-          elevation: 7.0,
-          child: Center(
-            child: lastOptions(i),
-          ),
-        ),
-      );
+      height = ScreenUtil().setWidth(150);
+      width = ScreenUtil().setWidth(432);
     } else {
-      return Container(
-        height: ScreenUtil().setWidth(33),
-        width: ScreenUtil().setWidth(33),
-        child: Material(
-          borderRadius: BorderRadius.circular(30),
-          shadowColor: Colors.transparent,
-          color: Colors.indigo[colorNum],
-          elevation: 7.0,
-          child: Center(
-            child: lastOptions(i),
-          ),
-        ),
-      );
+      height = ScreenUtil().setWidth(33);
+      width = ScreenUtil().setWidth(33);
     }
+    return Container(
+      height: height,
+      width: width,
+      child: Material(
+        borderRadius: BorderRadius.circular(30),
+        shadowColor: Colors.transparent,
+        color: Colors.indigo[colorNum],
+        child: Center(
+          child: lastOptions(i),
+        ),
+      ),
+    );
   }
 
   Text lastOptions(int i) {
+    String text;
     if (i == 0) {
-      return Text('当前位置',
-          style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Montserrat'));
+      text = '当前位置';
     } else if (i == widget.waybill['latitude'].length - 1) {
       String startTime = widget.waybill['createdAt'][i];
-      return Text('开始运输${startTime.substring(0, 10)}',
-          style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Montserrat'));
+      text =
+      '开始运输\n${startTime.substring(0, 10)}\n${startTime.substring(11, 19)}';
     } else {
-      return Text(
-        '',
+      text = '';
+    }
+    return Text(text,
         style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontFamily: 'Montserrat'),
-      );
-    }
+            fontFamily: 'Montserrat'));
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mydemo/server.dart';
 import 'sizeConfig.dart';
 import 'constant.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,8 +23,8 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(15),
                 border: Border.all(width: 1, color: Colors.grey)),
-            height: ScreenUtil().setHeight(562),
-            width: ScreenUtil().setHeight(562),
+            height: ScreenUtil().setWidth(562),
+            width: ScreenUtil().setWidth(562),
             child: Icon(
               Icons.add,
               size: ScreenUtil().setWidth(108),
@@ -39,7 +40,9 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
           )
         ],
       )),
-      onTap: () {
+      onTap: () async {
+        var aa = await Server().getAll();
+        print('ffffffffff${aa}');
         Navigator.pushNamed(context, '/releaseOrder');
       },
     );

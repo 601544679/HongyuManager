@@ -39,6 +39,23 @@ class _ReleaseOrderState
   bool visible = false;
   double latitude = 0;
   double longitude = 0;
+  var _controllers = <TextEditingController>[];
+  List driverMessage = [
+    '派车单单号',
+    '送货单号',
+    '车牌号码',
+    '运输公司',
+    '公司名称',
+    '司机电话',
+    '司机姓名',
+    '证件号码',
+    '道路运输证',
+    '从业资格证',
+    '预计到达日'
+  ];
+
+  //判断是司机表还是送货单表
+  String firstTitle;
 
   //滚动监听
   ScrollController scrollController = ScrollController();
@@ -94,6 +111,7 @@ class _ReleaseOrderState
     }
   }
 
+//excel格式一定要xlsx
   readExcel(String filePath) async {
     var file = filePath;
     var bytes = File(file).readAsBytesSync();
@@ -103,52 +121,73 @@ class _ReleaseOrderState
     mapList.clear();
     allMap.clear();
     rowMap.clear();
+
     //遍历Excel
     for (var table in excel.tables.keys) {
       print('table：$table');
       print('maxCols：${excel.tables[table].maxCols}');
       print('maxRows：${excel.tables[table].maxRows}');
+      //判断是司机表还是送货单表
+      setState(() {
+        firstTitle = excel.tables[table].rows[0][0].toString();
+      });
       for (var row in excel.tables[table].rows) {
         for (int i = 0; i < row.length; i++) {
           if (row[i] == null) {
             row[i] = '';
           }
-          //print('${i}---${row[i]}');
+          print('$i---${row[i]}');
         }
         rowToList.add(row);
       }
     }
+    print('标题----$firstTitle');
     //裁剪去掉标题
     //cutList = rowToList.sublist(1, rowToList.length - 1);
     cutList = rowToList.sublist(1, 12);
     valueToMap.clear();
-    //格式处理
-    for (var value in cutList) {
-      List allList = List();
-      for (int i = 0; i < value.length; i++) {
-        List valueToList = List();
-        if (i == 0) {
-          value[i] = DateTime.parse(value[i]).millisecondsSinceEpoch;
-          allList.add(value[i]);
-        } else if (i == 3 || i > 14) {
-          valueToList = [value[i]];
-          allList.add(valueToList);
-        } else {
-          allList.add(value[i]);
+    if (firstTitle == '送货日期') {
+      //格式处理
+      for (var value in cutList) {
+        List allList = List();
+        for (int i = 0; i < value.length; i++) {
+          List valueToList = List();
+          if (i == 0) {
+            value[i] = DateTime.parse(value[i]).millisecondsSinceEpoch;
+            allList.add(value[i]);
+          } else if (i == 3 || i > 14) {
+            valueToList = [value[i]];
+            allList.add(valueToList);
+          } else {
+            allList.add(value[i]);
+          }
         }
+        valueToMap.add(allList);
       }
-      valueToMap.add(allList);
+    } else {
+      //上传司机信息
+      for (var value in cutList) {
+        List allList = List();
+        for (int i = 0; i < value.length; i++) {
+          List valueToList = List();
+          if (i == 0||i==1||i==24||i==25||i==27||i==28||i==29||i==25) {
+            valueToList.add(value[i]);
+          }
+        }
+        valueToMap.add(allList);
+      }
     }
+
     //转化为map
     List aa = List();
     aa.clear();
     Fluttertoast.showToast(msg: '开始上传', toastLength: Toast.LENGTH_SHORT);
-    showDialog(
+    /* showDialog(
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return uploadDialog(valueToMap);
-        });
+          return uploadDialog(valueToMap, firstTitle == '送货日期' ? true : false);
+        });*/
   }
 
   @override
@@ -191,7 +230,6 @@ class _ReleaseOrderState
 
   @override
   Widget build(BuildContext context) {
-    var _controllers = <TextEditingController>[];
     for (var i = 0; i < list.length; i++) {
       var _controller = new TextEditingController();
       _controllers.add(_controller);
@@ -219,6 +257,7 @@ class _ReleaseOrderState
             ScreenUtil().setWidth(22),
             ScreenUtil().setHeight(23)),
         child: SingleChildScrollView(
+          //todo bug监听滚动不能填充，解决TextFromFiled的controller变量放在build外面
           controller: scrollController,
           child: Column(
             children: [
@@ -268,13 +307,14 @@ class _ReleaseOrderState
                       }
                     }
                     //print('value${value}');
+                    //print('长度---${_controllers[20].text}');
                   }
                 },
                 decoration: InputDecoration(
                     hintText: '请粘贴复制的订单内容',
                     border: OutlineInputBorder(
                         borderSide:
-                            BorderSide(width: ScreenUtil().setWidth(18)),
+                        BorderSide(width: ScreenUtil().setWidth(18)),
                         borderRadius: BorderRadius.circular(15))),
               ),
               SizedBox(
@@ -335,8 +375,8 @@ class _ReleaseOrderState
                               case 25:
                                 List ll = List();
                                 for (int i = 0;
-                                    i < value.split('\n').length;
-                                    i++) {
+                                i < value.split('\n').length;
+                                i++) {
                                   ll.add(value.split('\n')[i] == " "
                                       ? ''
                                       : double.parse(value.split('\n')[i]));
@@ -353,8 +393,8 @@ class _ReleaseOrderState
                               case 27:
                                 List ll = List();
                                 for (int i = 0;
-                                    i < value.split('\n').length;
-                                    i++) {
+                                i < value.split('\n').length;
+                                i++) {
                                   ll.add(value.split('\n')[i] == " "
                                       ? ''
                                       : value.split('\n')[i]);
@@ -406,7 +446,7 @@ class _ReleaseOrderState
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Container(
-        height: ScreenUtil().setHeight(300),
+        height: ScreenUtil().setHeight(350),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -424,7 +464,9 @@ class _ReleaseOrderState
                     child: Icon(Icons.arrow_upward),
                   ),
                 )),
-            SizedBox(height: ScreenUtil().setHeight(50),),
+            SizedBox(
+              height: ScreenUtil().setHeight(50),
+            ),
             FlatButton(
               color: Colors.indigo[colorNum],
               textColor: Colors.white,
@@ -434,7 +476,7 @@ class _ReleaseOrderState
                 if (_releaseFormKey.currentState.validate()) {
                   _releaseFormKey.currentState.save();
                   //print('TextFiled信息: ${valueList}');
-                  //print('map信息: ${map}');
+                  print('map信息: ${map}');
                   //print('map信息: ${jsonEncode(map)}');
                   var lating = await changeLat(_controllers[7].text);
                   print('值1 ${lating.latitude},${lating.longitude}');
@@ -469,7 +511,7 @@ class _ReleaseOrderState
                 '发布订单',
                 style: TextStyle(
                     fontSize:
-                        ScreenUtil().setSp(47, allowFontScalingSelf: true),
+                    ScreenUtil().setSp(47, allowFontScalingSelf: true),
                     fontWeight: FontWeight.bold),
               ),
             )

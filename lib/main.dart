@@ -8,6 +8,7 @@ import 'package:mydemo/sizeConfig.dart';
 import 'login.dart';
 import 'constant.dart';
 import 'userClass.dart';
+import 'package:leancloud_storage/leancloud.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +25,9 @@ void main() async {
   await AmapService.instance.init(
       iosKey: '011a00c27fd168fcca1e3f3bb7dc443d',
       androidKey: 'af09ea1166a0e280c02679d263859be2');
-
+  LeanCloud.initialize(
+      '24PJDWahD7Pww2cDice6F6Er-gzGzoHsz', 'mrcuLNzhXH6uJ3gTtGi0Ttg7',
+      server: 'https://24pjdwah.lc-cn-n1-shared.com');
   runApp(MyApp(user: user));
 }
 

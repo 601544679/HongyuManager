@@ -6,8 +6,9 @@ import 'sizeConfig.dart';
 
 class uploadDialog extends StatefulWidget {
   final List map;
+  bool isOrder;
 
-  uploadDialog(this.map);
+  uploadDialog(this.map, this.isOrder);
 
   @override
   _uploadDialogState createState() => _uploadDialogState();
@@ -19,7 +20,15 @@ class _uploadDialogState extends State<uploadDialog> {
   int failed = 0;
   String text = '开始上传';
 
+//判断是司机表还是送货单表
   _uploadData() async {
+    //todo
+    if (widget.isOrder == true) {
+      //送货单
+    } else {
+      //司机信息
+
+    }
     for (var value in widget.map) {
       Map<String, dynamic> map = {};
       map = Map.fromIterables(jsonTitle, value);
@@ -159,14 +168,14 @@ class _uploadDialogState extends State<uploadDialog> {
                     disabledColor: Colors.white,
                     onPressed: _finish(success) == true
                         ? () {
-                            Navigator.pop(context);
-                          }
+                      Navigator.pop(context);
+                    }
                         : null,
                     //null就是disable不能点击
                     child: Text(
                       '确定',
                       style:
-                          TextStyle(fontSize: SizeConfig.heightMultiplier * 3),
+                      TextStyle(fontSize: SizeConfig.heightMultiplier * 3),
                     ),
                   ),
                 )
