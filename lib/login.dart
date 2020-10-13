@@ -212,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
                           }),
                       InkWell(
                         child: Text(
-                          '记住密码',
+                          '自动登录',
                           style: TextStyle(
                               fontSize: ScreenUtil()
                                   .setSp(45, allowFontScalingSelf: true)),
@@ -297,6 +297,9 @@ class _LoginPageState extends State<LoginPage> {
                                     msg: '账号和密码错误',
                                     toastLength: Toast.LENGTH_SHORT);
                               }
+                              var refreshToken = await Server()
+                                  .refreshToken(_user.sessionToken);
+                              print('refreshToken--${refreshToken}');
                             }
                           },
                           child: Text(

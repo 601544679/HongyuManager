@@ -372,7 +372,7 @@ class _GoodsDetailState extends State<GoodsDetail> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
-          columnSpacing: ScreenUtil().setWidth(60),
+          //columnSpacing: ScreenUtil().setWidth(60),
           dataRowHeight: ScreenUtil().setHeight(68),
           headingRowHeight: ScreenUtil().setHeight(90),
           columns: dataColumn(widget.titleList),

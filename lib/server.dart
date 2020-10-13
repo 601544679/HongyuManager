@@ -12,9 +12,7 @@ class Server {
   static GlobalKey<NavigatorState> navigatorState;
 
   final String _baseUrl = 'https://24pjdwah.lc-cn-n1-shared.com';
-
   final String _appID = '24PJDWahD7Pww2cDice6F6Er-gzGzoHsz';
-
   final String _appKey = 'mrcuLNzhXH6uJ3gTtGi0Ttg7';
 
   final String _signUpUrl = '/1.1/usersByMobilePhone';
@@ -172,8 +170,8 @@ class Server {
   //根据订单号查询订单信息，要做分页查询
   getWaybillAdmin(String waybillid, {int page = 0}) async {
     var responseBody;
-    responseBody = await useDio('/1.1/functions/getWaybillAdmin',
-        {'waybillid': waybillid});
+    responseBody = await useDio(
+        '/1.1/functions/getWaybillAdmin', {'waybillid': waybillid});
     print('getWaybillAdmin--${responseBody}');
     return responseBody;
   }
@@ -244,34 +242,6 @@ class Server {
         '/1.1/functions/getFinishImage', {'waybillid': orderNumber});
     print('getFinishImage---${responseBody}');
     return responseBody;
-
-    /* var responseBody;
-    responseBody =
-        _post('/1.1/functions/getFinishImage/', {'waybillid': orderNumber});
-    return */ /*[
-      {
-        'allMessage':
-         {
-        '订单的所有信息'
-        ...
-      'XK_NO':[销售单号,销售单号1,销售单号2],
-      'materialsNumber':[物料号,物料号1,物料号2],
-      'client_ID':[客户编码,客户编码1,客户编码2]
-      'size':[规格,规格1,规格2]
-      'billingColor':[色号,色号1,色号2]，
-      'BillingUnit':[单位,单位1,单位2],
-      'sendQuantity':[发货数量,发货数量1,发货数量2]
-      'quantity':[数量,数量1,数量2]
-      'M2':[M2,M2(1),M2(2)]
-      'unitPrice':[单价,单价1,单价2]
-      'palletsNumber':[托板数,托板数1,托板数2]
-      'ShippingWeight':[发货重量,发货重量1,发货重量2]
-      'detailedRemark':[明细备注,明细备注1,明细备注2]
-      'loadingRemarks':[装车备注,装车备注,装车备注]
-        }
-      },
-    ]*/ /*
-        responseBody;*/
   }
 
   //todo搜索单张订单
@@ -310,6 +280,21 @@ class Server {
     responseBody = await dio.get(_baseUrl +
         '/1.1/scan/classes/positionInfo?where={"waybill_ID":"GCZC00021375"}');
     print('获取所有--${jsonDecode(responseBody.toString())['cursor']}');
+    return responseBody;
+  }
+
+  //单设备登录刷新token
+  refreshToken(String token) async {
+    print('网址--${_baseUrl + '/1.1/users/' + token + '/refreshSessionToken'}');
+    var responseBody;
+    BaseOptions options = BaseOptions(baseUrl: _baseUrl);
+    options.headers['X-LC-Id'] = _appID;
+    options.headers['X-LC-Key'] = _appKey;
+    options.headers['X-LC-Session'] = token;
+    Dio dio = Dio(options);
+    responseBody = await dio
+        .put(_baseUrl + '/1.1/users/' + token + '/refreshSessionToken');
+    print('Server--refreshToken--${refreshToken}');
     return responseBody;
   }
 
