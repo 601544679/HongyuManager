@@ -23,8 +23,36 @@ class _resultViewState extends State<resultView> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    print('resultView--initState');
   }
 
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    print('resultView--didChangeDependencies');
+  }
+
+  @override
+  void didUpdateWidget(resultView oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    print('resultView--didUpdateWidget');
+  }
+
+  @override
+  void deactivate() {
+    // TODO: implement deactivate
+    super.deactivate();
+    print('resultView--deactivate');
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    print('resultView--dispose');
+  }
   getDataFuture() async {
     print('传入单号:${widget.query}');
     response = await Server().searchWaybill(widget.query);
@@ -34,6 +62,7 @@ class _resultViewState extends State<resultView> {
 
   @override
   Widget build(BuildContext context) {
+    print('resultView--build');
     return FutureBuilder(
       // ignore: missing_return
       builder: (context, snapshot) {

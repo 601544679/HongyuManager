@@ -30,6 +30,41 @@ class _searchSuggestionState extends State<searchSuggestion> {
     return response;
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print('searchSuggestion--initState');
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    print('searchSuggestion--didChangeDependencies');
+  }
+
+  @override
+  void didUpdateWidget(searchSuggestion oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    print('searchSuggestion--didUpdateWidget');
+  }
+
+  @override
+  void deactivate() {
+    // TODO: implement deactivate
+    super.deactivate();
+    print('searchSuggestion--deactivate');
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    print('searchSuggestion--dispose');
+  }
+  
 //展示历史记录
   List<Widget> showHistory(BuildContext context, List historyList) {
     List<Widget> history = List();

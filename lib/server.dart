@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:leancloud_storage/leancloud.dart';
 
 import 'login.dart';
 import 'userClass.dart';
@@ -23,6 +24,8 @@ class Server {
 
   //用dio代替,dio网址后面不能有/
   useDio(String url, Map map) async {
+    var result;
+    var error;
     User user = await User().getUser();
     print('token--${user.sessionToken}');
     print('useDio--map: $map');
@@ -31,17 +34,25 @@ class Server {
     options.headers["X-LC-Key"] = _appKey;
     options.headers['X-LC-Session'] = user.sessionToken;
     options.headers['content-type'] = 'application/json';
+    options.connectTimeout = 10000;
+    options.receiveTimeout = 10000;
     print('headers--${options.headers}');
     Dio dio = Dio(options);
-    var response = await dio.post(_baseUrl + url, data: map);
-    print('response ${response.data}');
-    print('code--${response.statusCode}');
-    print('message--${response.statusMessage}');
-    /* if (response.statusCode == 200) {*/
-    return jsonDecode(response.toString());
-    /* } else {
-      return response.statusCode;
-    }*/
+    try {
+      result = await dio.post(_baseUrl + url, data: map);
+    } on DioError catch (e) {
+      print('error=${e.response.data}');
+      print('error=${e.response.headers}');
+      print('error=${e.response.request}');
+      error = e.response.data;
+    }
+    if (error != null) {
+      return error['code'];
+    } else if (error == null) {
+      if (result.statusCode == 200) {
+        return jsonDecode(result.toString());
+      }
+    }
   }
 
   _upload(String localImagePath, filename) async {
@@ -168,12 +179,37 @@ class Server {
 
   //todo
   //根据订单号查询订单信息，要做分页查询
-  getWaybillAdmin(String waybillid, {int page = 0}) async {
+  getWaybillAdmin(String waybillid) async {
     var responseBody;
     responseBody = await useDio(
         '/1.1/functions/getWaybillAdmin', {'waybillid': waybillid});
-    print('getWaybillAdmin--${responseBody}');
+    print('getWaybillAdmin--${responseBody.runtimeType}');
     return responseBody;
+  }
+
+//todo 遍历
+  getAll(String tableName, String waybillId, bool hasCursor,
+      {String cursor}) async {
+    var responseBody;
+    final String _appKey = 'U6rS9PAaDubYYkd8ejK3Eoho,master';
+    BaseOptions options = BaseOptions(baseUrl: _baseUrl);
+    options.headers['X-LC-Id'] = _appID;
+    options.headers["X-LC-Key"] = _appKey;
+    options.headers['content-type'] = 'application/json';
+    print('headers--${options.headers}');
+    Dio dio = Dio(options);
+    //{"waybill_ID":"GCZC00021375"}
+    //一定要加双引号完全按照api测试工具的形式，传入map缺少双引号，会返回400
+    print(
+        '网址=${_baseUrl + '/1.1/scan/classes/$tableName?where={"waybill_ID":"$waybillId"}'}');
+    hasCursor == true
+        ? responseBody = await dio.get(_baseUrl +
+            '/1.1/scan/classes/$tableName?where={"waybill_ID":"$waybillId"}&cursor=$cursor')
+        // &order=createdAt  createdAt从新到旧，-createdAt从旧到新
+        : responseBody = await dio.get(_baseUrl +
+            '/1.1/scan/classes/$tableName?where={"waybill_ID":"$waybillId"}');
+    print('获取所有--${jsonDecode(responseBody.toString())['cursor']}');
+    return jsonDecode(responseBody.toString());
   }
 
   // todo 根据value返回订单
@@ -240,7 +276,7 @@ class Server {
     print('getFinishImage--单号--${orderNumber}');
     responseBody = await useDio(
         '/1.1/functions/getFinishImage', {'waybillid': orderNumber});
-    print('getFinishImage---${responseBody}');
+    print('getFinishImage---${responseBody.runtimeType}');
     return responseBody;
   }
 
@@ -267,25 +303,10 @@ class Server {
     return responseBody;*/
   }
 
-//todo 遍历
-  getAll() async {
-    var responseBody;
-    final String _appKey = 'U6rS9PAaDubYYkd8ejK3Eoho,master';
-    BaseOptions options = BaseOptions(baseUrl: _baseUrl);
-    options.headers['X-LC-Id'] = _appID;
-    options.headers["X-LC-Key"] = _appKey;
-    options.headers['content-type'] = 'application/json';
-    print('headers--${options.headers}');
-    Dio dio = Dio(options);
-    responseBody = await dio.get(_baseUrl +
-        '/1.1/scan/classes/positionInfo?where={"waybill_ID":"GCZC00021375"}');
-    print('获取所有--${jsonDecode(responseBody.toString())['cursor']}');
-    return responseBody;
-  }
-
   //单设备登录刷新token
-  refreshToken(String token) async {
-    print('网址--${_baseUrl + '/1.1/users/' + token + '/refreshSessionToken'}');
+  refreshToken(String token, String objectId) async {
+    print(
+        '网址--${_baseUrl + '/1.1/users/' + objectId + '/refreshSessionToken'}');
     var responseBody;
     BaseOptions options = BaseOptions(baseUrl: _baseUrl);
     options.headers['X-LC-Id'] = _appID;
@@ -293,9 +314,9 @@ class Server {
     options.headers['X-LC-Session'] = token;
     Dio dio = Dio(options);
     responseBody = await dio
-        .put(_baseUrl + '/1.1/users/' + token + '/refreshSessionToken');
+        .put(_baseUrl + '/1.1/users/' + objectId + '/refreshSessionToken');
     print('Server--refreshToken--${refreshToken}');
-    return responseBody;
+    return jsonDecode(responseBody.toString());
   }
 
   checkLogin(String sessionToken) {

@@ -28,6 +28,7 @@ void main() async {
   LeanCloud.initialize(
       '24PJDWahD7Pww2cDice6F6Er-gzGzoHsz', 'mrcuLNzhXH6uJ3gTtGi0Ttg7',
       server: 'https://24pjdwah.lc-cn-n1-shared.com');
+  LCLogger.setLevel(3);//一定要放在main不然不显示具体错误信息
   runApp(MyApp(user: user));
 }
 
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('main--build');
     // TODO: implement build
     return LayoutBuilder(builder: (context, constraints) {
       return OrientationBuilder(

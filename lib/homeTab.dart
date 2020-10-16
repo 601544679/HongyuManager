@@ -11,8 +11,45 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print('HomeTab--initState');
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    print('HomeTab--didChangeDependencies');
+  }
+
+  @override
+  void didUpdateWidget(HomeTab oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    print('HomeTab--didUpdateWidget');
+  }
+
+  @override
+  void deactivate() {
+    // TODO: implement deactivate
+    super.deactivate();
+    print('HomeTab--deactivate');
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    print('HomeTab--dispose');
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
+    print('HomeTab--build');
+
     return InkWell(
       child: Center(
           child: Column(
@@ -41,8 +78,6 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
         ],
       )),
       onTap: () async {
-        var aa = await Server().getAll();
-        print('ffffffffff${aa}');
         Navigator.pushNamed(context, '/releaseOrder');
       },
     );

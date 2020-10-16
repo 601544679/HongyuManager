@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/screenutil.dart';
@@ -27,25 +28,49 @@ class _LoginPageState extends State<LoginPage> {
   final server = Server();
   TextEditingController _passwordControl = new TextEditingController();
   final _loginformKey = GlobalKey<FormState>();
+  FocusNode focusNodeNum = FocusNode(); //控制手机号码焦点
+  FocusNode focusNodePas = FocusNode(); //控制密码焦点
 
   autoLogin(context) async {
+    var refreshToken;
+    User _user = User();
     if ( //checkBoxValue &&
-        widget.user?.phoneNumber != '' && widget.user?.password != '') {
+        widget.user?.phoneNumber != '' &&
+            widget.user?.password != '' &&
+            widget.user?.phoneNumber != null) {
       var response = await showDialog(
           context: context,
           builder: (_) {
             return loginDialog(
               outsideDismiss: false,
-              requestCallBack: server.mobilePhoneLogin(
-                  widget.user?.phoneNumber ?? null,
-                  widget.user?.password ?? null,
-                  false),
+              requestCallBack: LCUser.loginByMobilePhoneNumber(
+                widget.user?.phoneNumber ?? null,
+                widget.user?.password ?? null,
+              ),
             );
           });
       if (response != null) {
-        Fluttertoast.showToast(msg: '登录成功');
+        print('sessionToken=${widget.user.sessionToken}');
+        print('user  sessionToken=${_user.sessionToken}');
+        print('objectId=${widget.user.objectId}');
+        print('phoneNumber=${widget.user.phoneNumber}');
+        print('password=${widget.user.password}');
         Navigator.pushNamedAndRemoveUntil(
             context, "/homePage", (route) => route == null);
+        try {
+          refreshToken = await Server()
+              .refreshToken(widget.user.sessionToken, widget.user.objectId);
+          //更新缓存的token
+          LCUser.loginByMobilePhoneNumber(
+              widget.user.phoneNumber, widget.user.password);
+          print('自动登录refreshToken--${refreshToken}');
+          _user.sessionToken = refreshToken['sessionToken'];
+          print('自动登录更新--${_user.sessionToken}');
+          _user.saveUser(_user);
+          Fluttertoast.showToast(msg: '自动登录成功');
+        } on DioError catch (e) {
+          print('error=${e.response.data}');
+        }
       }
     }
   }
@@ -68,10 +93,40 @@ class _LoginPageState extends State<LoginPage> {
     //绘制完成后回调
     WidgetsBinding.instance.addPostFrameCallback((_) => autoLogin(context));
     getDevice();
+    print('LoginPage--initState');
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    print('LoginPage--didChangeDependencies');
+  }
+
+  @override
+  void didUpdateWidget(LoginPage oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    print('LoginPage--didUpdateWidget');
+  }
+
+  @override
+  void deactivate() {
+    // TODO: implement deactivate
+    super.deactivate();
+    print('LoginPage--deactivate');
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    print('LoginPage--dispose');
   }
 
   @override
   Widget build(BuildContext context) {
+    print('LoginPage--build');
     ScreenUtil.init(context,
         designSize: Size(1080, 2248), allowFontScaling: false);
     print('像素密度--${ScreenUtil().pixelRatio}');
@@ -127,6 +182,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: Column(
                           children: [
                             TextFormField(
+                              focusNode: focusNodeNum,
                               initialValue: _user.phoneNumber,
                               validator: (value) {
                                 if (value.trim().isEmpty) {
@@ -163,6 +219,7 @@ class _LoginPageState extends State<LoginPage> {
                             TextFormField(
                               //controller: _passwordControl,
                               initialValue: _user.password,
+                              focusNode: focusNodePas,
                               obscureText: true,
                               // ignore: missing_return
                               style: TextStyle(
@@ -261,45 +318,74 @@ class _LoginPageState extends State<LoginPage> {
                             if (_loginformKey.currentState.validate()) {
                               _loginformKey.currentState.save();
                               //"13802621111", "123456"
+                              focusNodeNum.unfocus();
+                              focusNodePas.unfocus();
                               var response = await showDialog(
                                   context: context,
                                   builder: (_) {
                                     return loginDialog(
                                         outsideDismiss: false,
                                         requestCallBack:
-                                            server.mobilePhoneLogin(
+                                            LCUser.loginByMobilePhoneNumber(
                                                 _user.phoneNumber,
                                                 _user.password));
                                   });
-                              print('response--${response}');
-                              if (response != null) {
+                              print('输出=${response.runtimeType}');
+                              if (response.runtimeType ==
+                                  LCUser /*response != null*/) {
                                 _user.sessionToken = response['sessionToken'];
                                 _user.idNumber = response['identityNo'];
                                 _user.name = response['username'];
                                 _user.company = response['company'];
                                 _user.phoneNumber =
                                     response['mobilePhoneNumber'];
+                                //_user.objectId = response['objectId'];
+                                //用sdk
+                                _user.objectId = response.objectId;
                                 _user.isSave = checkBoxValue;
                                 _user.saveUser(_user);
-                                print(response);
                                 //进行身份验证，管理者才能登录管理者端
                                 if (response['role'] == 'Manager') {
                                   Fluttertoast.showToast(
                                       msg: '登录成功',
                                       toastLength: Toast.LENGTH_SHORT);
+                                  var refreshToken = await Server()
+                                      .refreshToken(
+                                          _user.sessionToken, _user.objectId);
+                                  print('refreshToken--${refreshToken}');
+                                  //更新缓存的token
+                                  LCUser.loginByMobilePhoneNumber(
+                                      _user.phoneNumber, _user.password);
+                                  _user.sessionToken =
+                                      refreshToken['sessionToken'];
+                                  print('更新--${_user.sessionToken}');
+                                  _user.saveUser(_user);
                                   Navigator.pushNamedAndRemoveUntil(context,
                                       "/homePage", (route) => route == null);
                                 } else {
                                   Fluttertoast.showToast(msg: '非管理者用户');
                                 }
-                              } else if (response == null) {
+                              } else if (response.runtimeType == LCException) {
+                                if (response.code == 210) {
+                                  Fluttertoast.showToast(
+                                      msg: '账号或密码错误',
+                                      toastLength: Toast.LENGTH_SHORT);
+                                } else if (response.code == 219) {
+                                  Fluttertoast.showToast(
+                                      msg: response.message,
+                                      toastLength: Toast.LENGTH_LONG);
+                                } else if (response.code == 211) {
+                                  Fluttertoast.showToast(
+                                      msg: '不存在此用户',
+                                      toastLength: Toast.LENGTH_LONG);
+                                }
+                              } else if (response.runtimeType == DioError) {
+                                //print('网络错误${response.data}');
+                                print('网络错误error--${response.error}');
                                 Fluttertoast.showToast(
-                                    msg: '账号和密码错误',
-                                    toastLength: Toast.LENGTH_SHORT);
+                                    msg: '网络连接超时',
+                                    toastLength: Toast.LENGTH_LONG);
                               }
-                              var refreshToken = await Server()
-                                  .refreshToken(_user.sessionToken);
-                              print('refreshToken--${refreshToken}');
                             }
                           },
                           child: Text(

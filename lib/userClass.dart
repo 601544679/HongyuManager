@@ -13,6 +13,7 @@ class User {
   String name;
   String company;
   String currentWaybill;
+  String objectId;
   bool isSave;
 
   User() {
@@ -23,6 +24,7 @@ class User {
     name = null;
     company = null;
     currentWaybill = null;
+    objectId = null;
     isSave = null;
   }
 
@@ -92,6 +94,7 @@ class User {
         sessionToken = json['sessionToken'],
         company = json['company'],
         currentWaybill = json['currentWaybill'],
+        objectId = json['objectId'],
         password = json['password'];
 
   Map<String, dynamic> toJson() =>
@@ -102,6 +105,7 @@ class User {
         'sessionToken': sessionToken,
         'company': company,
         'currentWaybill': currentWaybill,
+        'objectId': objectId,
         'password': password,
       };
 }

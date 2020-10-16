@@ -22,6 +22,7 @@ class _getOrderDataState extends State<getOrderData> {
   var waybills;
   var waybillRecord;
   var saveFutureBuilder;
+  Future getData;
 
   //被父组件调用的方法
   chidFunction() {
@@ -33,10 +34,40 @@ class _getOrderDataState extends State<getOrderData> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    print('getOrderData--initState');
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    print('getOrderData--didChangeDependencies');
+  }
+
+  @override
+  void didUpdateWidget(getOrderData oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    print('getOrderData--didUpdateWidget');
+  }
+
+  @override
+  void deactivate() {
+    // TODO: implement deactivate
+    super.deactivate();
+    print('getOrderData--deactivate');
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    print('getOrderData--dispose');
   }
 
   @override
   Widget build(BuildContext context) {
+    print('getOrderData--build');
     return FutureBuilder(
       // ignore: missing_return
       builder: (context, snapshot) {
@@ -94,8 +125,7 @@ class _getOrderDataState extends State<getOrderData> {
     var responseBody;
     waybillRecord = await Server().getWaybillByValue(state);
     //waybills = waybillRecord['result'];
-    print('返回的内容---$waybillRecord');
-    //RLogger.instance.d(waybills.toString());
+    print('返回的类型---${waybillRecord.runtimeType}');
     return waybillRecord;
   }
 }

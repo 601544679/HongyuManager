@@ -2,16 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:mydemo/constant.dart';
-import 'package:mydemo/finish_data_entity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'finishPage.dart';
-import 'server.dart';
-import 'mapPage.dart';
-import 'sizeConfig.dart';
 import 'searchSuggestion.dart';
 import 'constant.dart';
 import 'searchResultView.dart';
-import 'package:event_bus/event_bus.dart';
 import 'package:mydemo/myEventBus.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 

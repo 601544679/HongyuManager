@@ -1,12 +1,12 @@
-
 import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:leancloud_storage/leancloud.dart';
+import 'package:mydemo/userClass.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login.dart';
 import 'mainPage.dart';
 import 'releaseOrder.dart';
-
 
 final int colorNum = 600;
 final String home = '主页';
@@ -178,15 +178,13 @@ List arrayTitleList = [
 
 //日期转换
 String date(int millTime) {
-  DateTime a = DateTime.fromMillisecondsSinceEpoch(millTime);
-  a.year;
-  a.month;
-  a.day;
-  return (formatDate(
-      DateTime(a.year, a.month, a.day), [yyyy, '年', mm, '月', dd, '日']));
+  DateTime time = DateTime.fromMillisecondsSinceEpoch(millTime);
+  time.year;
+  time.month;
+  time.day;
+  return (formatDate(DateTime(time.year, time.month, time.day),
+      [yyyy, '年', mm, '月', dd, '日']));
 }
-
-
 
 //地址转经纬度
 changeLat(String address) async {
@@ -246,4 +244,3 @@ putHistory(String historyItem) async {
   }
   await preferences.setStringList('historyList', history);
 }
-

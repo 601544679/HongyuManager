@@ -25,11 +25,41 @@ class _OrderTabState extends State<OrderTab> with AutomaticKeepAliveClientMixin{
   void initState() {
     // TODO: implement initState
     super.initState();
+    print('OrderTab--initState');
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    print('OrderTab--didChangeDependencies');
+  }
+
+  @override
+  void didUpdateWidget(OrderTab oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    print('OrderTab--didUpdateWidget');
+  }
+
+  @override
+  void deactivate() {
+    // TODO: implement deactivate
+    super.deactivate();
+    print('OrderTab--deactivate');
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    print('OrderTab--dispose');
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    print('OrderTab--build');
     List<DropdownMenuItem> dropdownMenuItemList = List();
     List<String> title = [
       '所有订单',

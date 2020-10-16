@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:leancloud_storage/leancloud.dart';
 
 class loginDialog extends StatefulWidget {
   String loadingText;
@@ -20,19 +21,26 @@ class loginDialog extends StatefulWidget {
 }
 
 class _loginDialogState extends State<loginDialog> {
+  var result;
+  var error;
+
   _dismissDialog() {
     Navigator.pop(context);
   }
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (widget.requestCallBack != null) {
-      widget.requestCallBack.then((value) {
-        Navigator.pop(context, value);
-      });
-    }
+    //getResult();
+    widget.requestCallBack.then((value) {
+      print('啥玩意${value.runtimeType}');
+      Navigator.pop(context,value);
+    }).catchError((onError) {
+      print('啥玩意1--${onError}');
+      Navigator.pop(context,onError);
+    });
   }
 
   @override

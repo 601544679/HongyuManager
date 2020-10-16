@@ -58,11 +58,41 @@ class _UserTabState extends State<UserTab> with AutomaticKeepAliveClientMixin {
     // TODO: implement initState
     super.initState();
     currentTab = s.length + 1;
+    print('UserTab--initState');
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    print('UserTab--didChangeDependencies');
+  }
+
+  @override
+  void didUpdateWidget(UserTab oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    print('UserTab--didUpdateWidget');
+  }
+
+  @override
+  void deactivate() {
+    // TODO: implement deactivate
+    super.deactivate();
+    print('UserTab--deactivate');
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    print('UserTab--dispose');
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    print('UserTab--build');
     return SingleChildScrollView(
       child: ListView.builder(
           shrinkWrap: true,
