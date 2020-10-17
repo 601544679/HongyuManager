@@ -18,7 +18,7 @@ import 'uploadDialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'constant.dart';
 
-//发布订单
+//发布送货单
 class ReleaseOrder extends StatefulWidget {
   @override
   _ReleaseOrderState createState() => _ReleaseOrderState();
@@ -308,7 +308,7 @@ class _ReleaseOrderState
           )
         : Scaffold(
             appBar: AppBar(
-              title: Text('发布订单'),
+              title: Text('发布送货单'),
               actions: [
                 MaterialButton(
                   onPressed: () {
@@ -547,7 +547,7 @@ class _ReleaseOrderState
                     color: Colors.indigo[colorNum],
                     textColor: Colors.white,
                     onPressed: () async {
-                      //todo 发布订单
+                      //todo 发布送货单
                       //print("7777${_controllers[7].text}");
                       if (_releaseFormKey.currentState.validate()) {
                         _releaseFormKey.currentState.save();
@@ -584,7 +584,7 @@ class _ReleaseOrderState
                       }
                     },
                     child: Text(
-                      '发布订单',
+                      '发布送货单',
                       style: TextStyle(
                           fontSize: ScreenUtil()
                               .setSp(47, allowFontScalingSelf: true),

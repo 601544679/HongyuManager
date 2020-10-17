@@ -49,28 +49,31 @@ class _LoginPageState extends State<LoginPage> {
               ),
             );
           });
-      if (response != null) {
-        print('sessionToken=${widget.user.sessionToken}');
-        print('user  sessionToken=${_user.sessionToken}');
+      if (response.runtimeType == LCUser) {
+        print('sessionToken=${response.sessionToken}');
+        print('user  sessionToken=${response['sessionToken']}');
         print('objectId=${widget.user.objectId}');
         print('phoneNumber=${widget.user.phoneNumber}');
         print('password=${widget.user.password}');
-        Navigator.pushNamedAndRemoveUntil(
-            context, "/homePage", (route) => route == null);
+
         try {
           refreshToken = await Server()
-              .refreshToken(widget.user.sessionToken, widget.user.objectId);
+              .refreshToken(response.sessionToken, response.objectId);
           //更新缓存的token
           LCUser.loginByMobilePhoneNumber(
               widget.user.phoneNumber, widget.user.password);
           print('自动登录refreshToken--${refreshToken}');
           _user.sessionToken = refreshToken['sessionToken'];
           print('自动登录更新--${_user.sessionToken}');
-          _user.saveUser(_user);
+          await _user.saveUser(_user);
           Fluttertoast.showToast(msg: '自动登录成功');
         } on DioError catch (e) {
           print('error=${e.response.data}');
         }
+        Navigator.pushNamedAndRemoveUntil(
+            context, "/homePage", (route) => route == null);
+      } else if (response.runtimeType == LCException) {
+        print('autoLogin--error${response.code}');
       }
     }
   }
@@ -333,9 +336,9 @@ class _LoginPageState extends State<LoginPage> {
                               print('输出=${response.runtimeType}');
                               if (response.runtimeType ==
                                   LCUser /*response != null*/) {
-                                _user.sessionToken = response['sessionToken'];
+                                _user.sessionToken = response.sessionToken;
                                 _user.idNumber = response['identityNo'];
-                                _user.name = response['username'];
+                                _user.name = response.username;
                                 _user.company = response['company'];
                                 _user.phoneNumber =
                                     response['mobilePhoneNumber'];
@@ -349,6 +352,9 @@ class _LoginPageState extends State<LoginPage> {
                                   Fluttertoast.showToast(
                                       msg: '登录成功',
                                       toastLength: Toast.LENGTH_SHORT);
+                                  print('登录--号码=${_user.phoneNumber}');
+                                  print('登录--token=${_user.sessionToken}');
+                                  print('登录--密码=${_user.password}');
                                   var refreshToken = await Server()
                                       .refreshToken(
                                           _user.sessionToken, _user.objectId);

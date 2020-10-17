@@ -27,7 +27,7 @@ class Server {
     var result;
     var error;
     User user = await User().getUser();
-    print('token--${user.sessionToken}');
+    print('useDio--token--${user.sessionToken}');
     print('useDio--map: $map');
     BaseOptions options = BaseOptions(baseUrl: _baseUrl);
     options.headers['X-LC-Id'] = _appID;
@@ -36,19 +36,22 @@ class Server {
     options.headers['content-type'] = 'application/json';
     options.connectTimeout = 10000;
     options.receiveTimeout = 10000;
-    print('headers--${options.headers}');
+    print('useDio--headers--${options.headers}');
     Dio dio = Dio(options);
     try {
       result = await dio.post(_baseUrl + url, data: map);
     } on DioError catch (e) {
-      print('error=${e.response.data}');
-      print('error=${e.response.headers}');
-      print('error=${e.response.request}');
+      print('useDio--error=${e.response.data}');
+      print('useDio--error=${e.response.headers}');
+      print('useDio--error=${e.response.request}');
       error = e.response.data;
     }
     if (error != null) {
+      print('useDio--error--${error['code']}--message${error['message']}');
       return error['code'];
     } else if (error == null) {
+      print('useDio--${result}');
+      print('useDio--200--${error}');
       if (result.statusCode == 200) {
         return jsonDecode(result.toString());
       }

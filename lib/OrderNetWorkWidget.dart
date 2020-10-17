@@ -28,7 +28,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
   bool showToTopBtn = false;
   double position;
   var bb;
-  bool tokenIsUseful = true;
+  bool tokenIsUseful;
 
   //返回顶部
   void backToTop() {
@@ -97,7 +97,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
       print('currentUser==${currentUser.sessionToken}');
       if (isAuthenticated) {
         // session token 有效
-        print('token有效');
+        print('OrderNetWorkWidget--token有效');
         if (isAuthenticated && tokenIsUseful != true) {
           setState(() {
             tokenIsUseful = true;
@@ -105,7 +105,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
         }
       } else {
         // session token 无效
-        print('token无效');
+        print('OrderNetWorkWidget--token无效');
         if (!isAuthenticated && tokenIsUseful != false) {
           setState(() {
             tokenIsUseful = false;
@@ -120,7 +120,9 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
   @override
   Widget build(BuildContext context) {
     getToken();
-    if (tokenIsUseful == true) {
+    print(
+        '具体值:tokenIsUseful--${tokenIsUseful},类型--${widget.waybill.runtimeType}');
+    if (tokenIsUseful == true && widget.waybill.runtimeType != int) {
       print('position--$position');
       print('OrderNetWorkWidget--build');
       MyNotification(showToTopBtn).dispatch(context);
