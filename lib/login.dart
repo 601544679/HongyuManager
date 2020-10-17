@@ -37,7 +37,8 @@ class _LoginPageState extends State<LoginPage> {
     if ( //checkBoxValue &&
         widget.user?.phoneNumber != '' &&
             widget.user?.password != '' &&
-            widget.user?.phoneNumber != null) {
+            widget.user?.phoneNumber != null &&
+            widget.user?.password != null) {
       var response = await showDialog(
           context: context,
           builder: (_) {
@@ -50,11 +51,11 @@ class _LoginPageState extends State<LoginPage> {
             );
           });
       if (response.runtimeType == LCUser) {
-        print('sessionToken=${response.sessionToken}');
+        /* print('sessionToken=${response.sessionToken}');
         print('user  sessionToken=${response['sessionToken']}');
         print('objectId=${widget.user.objectId}');
         print('phoneNumber=${widget.user.phoneNumber}');
-        print('password=${widget.user.password}');
+        print('password=${widget.user.password}');*/
 
         try {
           refreshToken = await Server()
