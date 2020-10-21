@@ -71,7 +71,7 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
             height: ScreenUtil().setHeight(68),
           ),
           Text(
-            '发布订单',
+            '发布送货单',
             style: TextStyle(
                 fontSize: ScreenUtil().setSp(45, allowFontScalingSelf: true)),
           )

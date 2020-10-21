@@ -20,7 +20,6 @@ final routes = {
 int currentTab = 0;
 String dropDownButtonValue = '0';
 
-
 //releaseOrder
 //发布订单没有车牌号码，司机接单后才添加车牌号码
 List list = [
@@ -111,6 +110,18 @@ List<String> jsonTitle = [
   'ShippingWeight',
   'detailedRemarks',
   'loadingRemarks'
+];
+
+List<String> driverMessage = [
+  'logisticsOrderNo',
+  'waybill_ID',
+  'carNo',
+  'company_ID',
+  'company',
+  'mobilePhoneNumber',
+  'username',
+  'identityNo',
+  'estimatedArrivalTime'
 ];
 
 //finishPage

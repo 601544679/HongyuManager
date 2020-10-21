@@ -1,4 +1,7 @@
-import 'package:mydemo/search_result_entity.dart';
+
+
+import '../../search_result_entity.dart';
+
 
 searchResultEntityFromJson(SearchResultEntity data, Map<String, dynamic> json) {
 	if (json['result'] != null) {

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:leancloud_storage/leancloud.dart';
+import 'package:mydemo/LogUtils.dart';
 import 'package:mydemo/constant.dart';
 import 'sizeConfig.dart';
 import 'package:r_logger/r_logger.dart';
@@ -17,6 +18,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'uploadDialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'constant.dart';
+import 'updateDriver.dart';
 
 //发布送货单
 class ReleaseOrder extends StatefulWidget {
@@ -42,19 +44,7 @@ class _ReleaseOrderState
   double longitude = 0;
   bool tokenIsUseful = true;
   var _controllers = <TextEditingController>[];
-  List driverMessage = [
-    '派车单单号',
-    '送货单号',
-    '车牌号码',
-    '运输公司',
-    '公司名称',
-    '司机电话',
-    '司机姓名',
-    '证件号码',
-    '道路运输证',
-    '从业资格证',
-    '预计到达日'
-  ];
+  List driverList = List();
 
   //判断是司机表还是送货单表
   String firstTitle;
@@ -116,87 +106,134 @@ class _ReleaseOrderState
 //excel格式一定要xlsx
   readExcel(String filePath) async {
     var file = filePath;
-    var bytes = File(file).readAsBytesSync();
-    var excel = Excel.decodeBytes(bytes);
+    var bytes;
+    var excel;
+    String error;
+    try {
+      bytes = File(file).readAsBytesSync();
+    } on FormatException catch (e) {
+      print('bytes错误${e.message}');
+    }
+    try {
+      excel = Excel.decodeBytes(bytes);
+    } on Exception catch (e) {
+      error = e.toString();
+      print('excel错误${e.toString()}');
+    }
     cutList.clear();
     rowToList.clear();
     mapList.clear();
     allMap.clear();
     rowMap.clear();
-
-    //遍历Excel
-    for (var table in excel.tables.keys) {
-      print('table：$table');
-      print('maxCols：${excel.tables[table].maxCols}');
-      print('maxRows：${excel.tables[table].maxRows}');
-      //判断是司机表还是送货单表
-      setState(() {
+    print('error=null? --${error}');
+    if (error != null) {
+      Fluttertoast.showToast(
+          msg: '请选择xlsx格式的文件', toastLength: Toast.LENGTH_SHORT);
+    } else if (error == null) {
+      //遍历Excel
+      for (var table in excel.tables.keys) {
+        print('table：$table');
+        print('maxCols：${excel.tables[table].maxCols}');
+        print('maxRows：${excel.tables[table].maxRows}');
+        //判断是司机表还是送货单表
         firstTitle = excel.tables[table].rows[0][0].toString();
-      });
-      for (var row in excel.tables[table].rows) {
-        for (int i = 0; i < row.length; i++) {
-          if (row[i] == null) {
-            row[i] = '';
+        for (var row in excel.tables[table].rows) {
+          for (int i = 0; i < row.length; i++) {
+            if (row[i] == null) {
+              row[i] = '';
+            }
+            print('$i---${row[i]}');
           }
-          print('$i---${row[i]}');
+          rowToList.add(row);
         }
-        rowToList.add(row);
       }
-    }
-    print('标题----$firstTitle');
-    //裁剪去掉标题
-    //cutList = rowToList.sublist(1, rowToList.length - 1);
-    cutList = rowToList.sublist(1, 12);
-    valueToMap.clear();
-    if (firstTitle == '送货日期') {
-      //格式处理
-      for (var value in cutList) {
-        List allList = List();
-        for (int i = 0; i < value.length; i++) {
-          List valueToList = List();
-          if (i == 0) {
-            value[i] = DateTime.parse(value[i]).millisecondsSinceEpoch;
-            allList.add(value[i]);
-          } else if (i == 3 || i > 14) {
-            valueToList = [value[i]];
-            allList.add(valueToList);
-          } else {
-            allList.add(value[i]);
-          }
-        }
-        valueToMap.add(allList);
-      }
-    } else {
-      //上传司机信息
-      for (var value in cutList) {
-        List allList = List();
-        for (int i = 0; i < value.length; i++) {
-          List valueToList = List();
-          if (i == 0 ||
-              i == 1 ||
-              i == 24 ||
-              i == 25 ||
-              i == 27 ||
-              i == 28 ||
-              i == 29 ||
-              i == 25) {
-            valueToList.add(value[i]);
-          }
-        }
-        valueToMap.add(allList);
-      }
-    }
+      print('标题----$firstTitle');
 
-    //转化为map
-    List aa = List();
-    aa.clear();
-    Fluttertoast.showToast(msg: '开始上传', toastLength: Toast.LENGTH_SHORT);
-    /* showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return uploadDialog(valueToMap, firstTitle == '送货日期' ? true : false);
-        });*/
+      //test
+      //cutList = rowToList.sublist(1, 12);
+      valueToMap.clear();
+      if (firstTitle == '送货日期') {
+        //格式处理
+        //todo 裁剪去掉标题
+        cutList = rowToList.sublist(1, rowToList.length - 1);
+        for (var value in cutList) {
+          List allList = List();
+          for (int i = 0; i < value.length; i++) {
+            List valueToList = List();
+            if (i == 0) {
+              value[i] = DateTime.parse(value[i]).millisecondsSinceEpoch;
+              allList.add(value[i]);
+            } else if (i == 3 || i > 14) {
+              valueToList = [value[i]];
+              allList.add(valueToList);
+            } else {
+              allList.add(value[i]);
+            }
+          }
+          valueToMap.add(allList);
+        }
+      } else if (firstTitle == '派车单单号') {
+        driverList.clear();
+        //上传司机信息
+        //todo 裁剪去掉标题
+        cutList = rowToList.sublist(1, rowToList.length);
+        for (var value in cutList) {
+          print('遍历的value${value}');
+          List allList = List();
+          for (int i = 0; i < value.length; i++) {
+            if (i == 1) {
+              List cut = value[i].toString().split(',');
+              print('cut${cut}');
+              print('cut长度${cut.length}');
+              allList.add(cut);
+              for (int i = 0; i < cut.length; i++) {
+                updateDriver driver = updateDriver();
+                driver.logisticsOrderNo = value[0];
+                driver.waybill_ID = cut[i];
+                driver.carNo = value[24];
+                driver.company_ID = value[25];
+                driver.company = value[26];
+                driver.mobilePhoneNumber = value[27].toString();
+                driver.username = value[28];
+                driver.identityNo = value[29];
+                driver.estimatedArrivalTime =
+                    DateTime.parse(value[33]).millisecondsSinceEpoch;
+                List aa = List();
+                //因为重写了toString方法，返回的driver是string类型
+                aa.add(driver.logisticsOrderNo);
+                aa.add(driver.waybill_ID);
+                aa.add(driver.carNo);
+                aa.add(driver.company_ID);
+                aa.add(driver.company);
+                aa.add(driver.mobilePhoneNumber);
+                aa.add(driver.username);
+                aa.add(driver.identityNo);
+                aa.add(driver.estimatedArrivalTime);
+                driverList.add(aa);
+              }
+            }
+          }
+          print('长度--${driverList.length}');
+          print('updateDriver--${driverList}');
+          //valueToMap.add(allList);
+          //LogUtils.d('上传司机', valueToMap.toString());
+        }
+      } else {
+        Fluttertoast.showToast(
+            msg: '非7933,7927', toastLength: Toast.LENGTH_SHORT);
+      }
+      //转化为map
+      List aa = List();
+      aa.clear();
+      Fluttertoast.showToast(msg: '开始上传', toastLength: Toast.LENGTH_SHORT);
+      showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (context) {
+            return uploadDialog(firstTitle == '送货日期' ? valueToMap : driverList,
+                firstTitle == '送货日期' ? true : false);
+          });
+    }
   }
 
   @override

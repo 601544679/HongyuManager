@@ -40,10 +40,11 @@ class Server {
     Dio dio = Dio(options);
     try {
       result = await dio.post(_baseUrl + url, data: map);
+      print('网址--${_baseUrl + url}');
     } on DioError catch (e) {
       print('useDio--error=${e.response.data}');
       print('useDio--error=${e.response.headers}');
-      print('useDio--error=${e.response.request}');
+      print('useDio--error=${e.response.request.data}');
       error = e.response.data;
     }
     if (error != null) {
@@ -181,7 +182,7 @@ class Server {
   }
 
   //todo
-  //根据订单号查询订单信息，要做分页查询
+  //根据订单号查询订单信息
   getWaybillAdmin(String waybillid) async {
     var responseBody;
     responseBody = await useDio(
@@ -266,6 +267,18 @@ class Server {
   releaseByExcel(Map map) async {
     var responseBody;
     responseBody = await useDio('/1.1/functions/releaseByExcel', map);
+    return responseBody;
+
+    /*  var responseBody;
+    responseBody = _post('/1.1/functions/releaseByExcel/', map);
+    return responseBody;*/
+  }
+
+  //todo 更新司机信息
+  updateDriverMessage(Map map) async {
+    var responseBody;
+    responseBody = await useDio('/1.1/functions/updateDriverMessage', map);
+    print('updateDriverMessage--${responseBody}');
     return responseBody;
 
     /*  var responseBody;
