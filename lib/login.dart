@@ -34,6 +34,7 @@ class _LoginPageState extends State<LoginPage> {
   autoLogin(context) async {
     var refreshToken;
     User _user = User();
+    print('哪来的密码--${widget.user?.password}');
     if ( //checkBoxValue &&
         widget.user?.phoneNumber != '' &&
             widget.user?.password != '' &&
@@ -44,9 +45,9 @@ class _LoginPageState extends State<LoginPage> {
           builder: (_) {
             return loginDialog(
               outsideDismiss: false,
-              requestCallBack: LCUser.loginByMobilePhoneNumber(
-                widget.user?.phoneNumber ?? null,
-                widget.user?.password ?? null,
+              requestCallBack: LCUser.login(
+                widget.user.name,
+                widget.user.password,
               ),
             );
           });
@@ -56,18 +57,18 @@ class _LoginPageState extends State<LoginPage> {
         print('objectId=${widget.user.objectId}');
         print('phoneNumber=${widget.user.phoneNumber}');
         print('password=${widget.user.password}');*/
-
         try {
           refreshToken = await Server()
               .refreshToken(response.sessionToken, response.objectId);
           //更新缓存的token
-          LCUser.loginByMobilePhoneNumber(
-              widget.user.phoneNumber, widget.user.password);
+          LCUser.login(widget.user.name, widget.user.password);
           print('自动登录refreshToken--${refreshToken}');
           _user.sessionToken = refreshToken['sessionToken'];
           print('自动登录更新--${_user.sessionToken}');
-          await _user.saveUser(_user);
-          Fluttertoast.showToast(msg: '自动登录成功');
+          _user.saveUser(_user);
+          print('保存后token=${_user.sessionToken}');
+          Fluttertoast.showToast(
+              msg: '自动登录成功', toastLength: Toast.LENGTH_SHORT);
         } on DioError catch (e) {
           print('error=${e.response.data}');
         }
@@ -75,6 +76,10 @@ class _LoginPageState extends State<LoginPage> {
             context, "/homePage", (route) => route == null);
       } else if (response.runtimeType == LCException) {
         print('autoLogin--error${response.code}');
+        if (response.code == 211) {
+          Fluttertoast.showToast(
+              msg: '该用户不存在', toastLength: Toast.LENGTH_SHORT);
+        }
       }
     }
   }
@@ -187,35 +192,34 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             TextFormField(
                               focusNode: focusNodeNum,
-                              initialValue: _user.phoneNumber,
+                              initialValue: _user.name,
                               validator: (value) {
                                 if (value.trim().isEmpty) {
-                                  return '手机号不能为空';
+                                  return '用户名不能为空';
                                 }
-                                if (isChinaPhoneLegal(value) == false) {
+                                /*if (isChinaPhoneLegal(value) == false) {
                                   //print('手机号码格式错误');
                                   return '手机号码格式错误';
-                                }
+                                }*/
                                 return null;
                               },
                               //保存输入手机到 userclass
-                              onSaved: (input) => _user.phoneNumber = input,
-                              inputFormatters: [
+                              onSaved: (input) => _user.name = input.trim(),
+                              /* inputFormatters: [
                                 FilteringTextInputFormatter.allow(
                                     RegExp("[0-9]"))
-                              ],
+                              ]*/
                               style: TextStyle(
                                   fontSize: ScreenUtil()
                                       .setSp(50, allowFontScalingSelf: true)),
-                              keyboardType: TextInputType.phone,
                               decoration: InputDecoration(
-                                  hintText: '输入手机号码',
+                                  hintText: '输入用户名',
                                   icon: Icon(
-                                    Icons.phone_android,
+                                    Icons.person_pin,
                                     size: ScreenUtil()
                                         .setSp(80, allowFontScalingSelf: true),
                                   ),
-                                  labelText: '输入手机号码'),
+                                  labelText: '输入用户名'),
                             ),
                             SizedBox(
                               height: ScreenUtil().setHeight(50),
@@ -236,7 +240,7 @@ class _LoginPageState extends State<LoginPage> {
                                 }
                                 return null;
                               },
-                              onSaved: (input) => _user.password = input,
+                              onSaved: (input) => _user.password = input.trim(),
                               decoration: InputDecoration(
                                   hintText: '输入密码',
                                   icon: Icon(
@@ -280,9 +284,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         onTap: () {
                           setState(() {
-                            print('bool$checkBoxValue');
                             checkBoxValue = !checkBoxValue;
-                            print('!bool$checkBoxValue');
                           });
                         },
                       ),
@@ -292,6 +294,7 @@ class _LoginPageState extends State<LoginPage> {
                       InkWell(
                         onTap: () {
                           // TODO :跳转到找回密码
+                          Navigator.pushNamed(context, '/resetPassword');
                         },
                         child: Text(
                           '忘记密码?',
@@ -318,7 +321,6 @@ class _LoginPageState extends State<LoginPage> {
                         child: FlatButton(
                           onPressed: () async {
                             // todo 登录事件，跳转路由，
-                            // Navigator.pushAndRemoveUntil(context, newRoute, (route) => false)
                             if (_loginformKey.currentState.validate()) {
                               _loginformKey.currentState.save();
                               //"13802621111", "123456"
@@ -329,10 +331,8 @@ class _LoginPageState extends State<LoginPage> {
                                   builder: (_) {
                                     return loginDialog(
                                         outsideDismiss: false,
-                                        requestCallBack:
-                                            LCUser.loginByMobilePhoneNumber(
-                                                _user.phoneNumber,
-                                                _user.password));
+                                        requestCallBack: LCUser.login(
+                                            _user.name, _user.password));
                                   });
                               print('输出=${response.runtimeType}');
                               if (response.runtimeType ==
@@ -353,16 +353,12 @@ class _LoginPageState extends State<LoginPage> {
                                   Fluttertoast.showToast(
                                       msg: '登录成功',
                                       toastLength: Toast.LENGTH_SHORT);
-                                  print('登录--号码=${_user.phoneNumber}');
-                                  print('登录--token=${_user.sessionToken}');
-                                  print('登录--密码=${_user.password}');
                                   var refreshToken = await Server()
                                       .refreshToken(
                                           _user.sessionToken, _user.objectId);
                                   print('refreshToken--${refreshToken}');
                                   //更新缓存的token
-                                  LCUser.loginByMobilePhoneNumber(
-                                      _user.phoneNumber, _user.password);
+                                  LCUser.login(_user.name, _user.password);
                                   _user.sessionToken =
                                       refreshToken['sessionToken'];
                                   print('更新--${_user.sessionToken}');

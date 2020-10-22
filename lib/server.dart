@@ -23,9 +23,10 @@ class Server {
   final String _updateWaybillFile = '/1.1/functions/updateWaybillFile';
 
   //用dio代替,dio网址后面不能有/
-  useDio(String url, Map map) async {
+  useDio(String url, Map map, String who) async {
     var result;
     var error;
+    print('who is==${who}');
     User user = await User().getUser();
     print('useDio--token--${user.sessionToken}');
     print('useDio--map: $map');
@@ -177,7 +178,7 @@ class Server {
 
   getCurrentWaybill() async {
     var responseBody;
-    responseBody = await useDio('/1.1/functions/getCurrentWaybill', {});
+    responseBody = await useDio('/1.1/functions/getCurrentWaybill', {},'getCurrentWaybill');
     return responseBody;
   }
 
@@ -186,7 +187,7 @@ class Server {
   getWaybillAdmin(String waybillid) async {
     var responseBody;
     responseBody = await useDio(
-        '/1.1/functions/getWaybillAdmin', {'waybillid': waybillid});
+        '/1.1/functions/getWaybillAdmin', {'waybillid': waybillid},'getWaybillAdmin');
     print('getWaybillAdmin--${responseBody.runtimeType}');
     return responseBody;
   }
@@ -223,7 +224,7 @@ class Server {
   getWaybillByValue(String value) async {
     var responseBody;
     responseBody =
-        await useDio('/1.1/functions/getWaybillByValue', {'value': value});
+        await useDio('/1.1/functions/getWaybillByValue', {'value': value},'getWaybillByValue');
     print('getWaybillByValue--${responseBody}');
     return responseBody;
     /* User user = await User().getUser();
@@ -256,7 +257,7 @@ class Server {
   //todo 发布订单
   releaseWaybill(Map map) async {
     var responseBody;
-    responseBody = await useDio('/1.1/functions/releaseWaybill', map);
+    responseBody = await useDio('/1.1/functions/releaseWaybill', map,'releaseWaybill');
     return responseBody;
     /*var responseBody;
     responseBody = _post('/1.1/functions/releaseWaybill/', map);
@@ -266,7 +267,7 @@ class Server {
 //todo 根据Excel发布订单
   releaseByExcel(Map map) async {
     var responseBody;
-    responseBody = await useDio('/1.1/functions/releaseByExcel', map);
+    responseBody = await useDio('/1.1/functions/releaseByExcel', map,'releaseByExcel');
     return responseBody;
 
     /*  var responseBody;
@@ -277,7 +278,7 @@ class Server {
   //todo 更新司机信息
   updateDriverMessage(Map map) async {
     var responseBody;
-    responseBody = await useDio('/1.1/functions/updateDriverMessage', map);
+    responseBody = await useDio('/1.1/functions/updateDriverMessage', map,'updateDriverMessage');
     print('updateDriverMessage--${responseBody}');
     return responseBody;
 
@@ -291,7 +292,7 @@ class Server {
     var responseBody;
     print('getFinishImage--单号--${orderNumber}');
     responseBody = await useDio(
-        '/1.1/functions/getFinishImage', {'waybillid': orderNumber});
+        '/1.1/functions/getFinishImage', {'waybillid': orderNumber},'getFinishImage');
     print('getFinishImage---${responseBody.runtimeType}');
     return responseBody;
   }
@@ -300,7 +301,7 @@ class Server {
   searchWaybill(String waybillId) async {
     var responseBody;
     responseBody =
-        await useDio('/1.1/functions/searchWaybill', {'waybillid': waybillId});
+        await useDio('/1.1/functions/searchWaybill', {'waybillid': waybillId},'searchWaybill');
     return responseBody;
     /*var responseBody;
     responseBody =
@@ -312,7 +313,7 @@ class Server {
   searchSuggestion(String text) async {
     var responseBody;
     responseBody =
-        await useDio('/1.1/functions/suggestion', {'waybillid': text});
+        await useDio('/1.1/functions/suggestion', {'waybillid': text},'searchSuggestion');
     return responseBody;
     /* var responseBody;
     responseBody = _post('/1.1/functions/suggestion/', {'waybillid': text});

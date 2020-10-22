@@ -1,8 +1,6 @@
 import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:date_format/date_format.dart';
-import 'package:flutter/material.dart';
-import 'package:leancloud_storage/leancloud.dart';
-import 'package:mydemo/userClass.dart';
+import 'resetpassword.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login.dart';
 import 'mainPage.dart';
@@ -16,6 +14,7 @@ final routes = {
   "/homePage": (context) => Home(),
   "/loginPage": (context) => LoginPage(),
   "/releaseOrder": (context) => ReleaseOrder(),
+  "/resetPassword": (context) => ResetPassword(),
 };
 int currentTab = 0;
 String dropDownButtonValue = '0';

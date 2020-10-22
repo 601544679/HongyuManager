@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/screenutil.dart';
 import 'package:mydemo/search_result_entity.dart';
 import 'finishPage.dart';
 import 'mapPage.dart';
@@ -53,6 +54,7 @@ class _resultViewState extends State<resultView> {
     super.dispose();
     print('resultView--dispose');
   }
+
   getDataFuture() async {
     print('传入单号:${widget.query}');
     response = await Server().searchWaybill(widget.query);
@@ -212,7 +214,11 @@ class _ResultBuilderState extends State<ResultBuilder> {
                         flex: 2,
                       ),
                       Expanded(
-                        child: goodStatus(result.result[index].state),
+                        child: goodStatus(
+                            result.result[index].state,
+                            result.result[index].driverName == null
+                                ? ''
+                                : result.result[index].driverName.username),
                         flex: 1,
                       ),
                       Expanded(
@@ -299,48 +305,35 @@ class _ResultBuilderState extends State<ResultBuilder> {
   }
 
   //判断运输状态
-  Widget goodStatus(String status) {
-    switch (status) {
-      case 'inProgress':
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            textStyle('运输中', fontSize, color: Colors.red),
-            Image.asset('images/arrow.png',
-                width: SizeConfig.widthMultiplier * 10,
-                height: SizeConfig.heightMultiplier * 4,
-                fit: BoxFit.cover,
-                color: Colors.red),
-          ],
-        );
-        break;
-      case 'Finished':
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            textStyle('已完成', fontSize, color: Colors.green),
-            Image.asset('images/arrow.png',
-                width: SizeConfig.widthMultiplier * 10,
-                height: SizeConfig.heightMultiplier * 4,
-                fit: BoxFit.cover,
-                color: Colors.green),
-          ],
-        );
-        break;
-      default:
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            textStyle('待分配', fontSize, color: Colors.lime),
-            Image.asset('images/arrow.png',
-                width: SizeConfig.widthMultiplier * 10,
-                height: SizeConfig.heightMultiplier * 4,
-                fit: BoxFit.cover,
-                color: Colors.lime),
-          ],
-        );
-        break;
+  Widget goodStatus(String status, String driverName) {
+    String text;
+    Color color;
+    if (driverName == '') {
+      text = '待分配';
+      color = Colors.lime;
+    } else {
+      if (status == 'inProgress') {
+        text = '运输中';
+        color = Colors.red;
+      } else if (status == 'Finished') {
+        text = '已完成';
+        color = Colors.green;
+      } else {
+        text = '待运输';
+        color = Colors.blue;
+      }
     }
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        textStyle(text, fontSize, color: color),
+        Image.asset('images/arrow.png',
+            width: ScreenUtil().setWidth(108),
+            height: ScreenUtil().setHeight(90),
+            fit: BoxFit.cover,
+            color: color),
+      ],
+    );
   }
 
   //样式
