@@ -128,7 +128,7 @@ class ResultBuilder extends StatefulWidget {
 class _ResultBuilderState extends State<ResultBuilder> {
   var fontSize = SizeConfig.heightMultiplier * 2;
   var sizedBoxHeight = SizeConfig.heightMultiplier;
-  List titleList = ['序号', '色号', '规格', '数量', '发货数量', '开单单位', '送货单价', '明细备注'];
+  List titleList = ['序号', '色号', '规格', '数量', '发货数量', '开单单位', '明细备注'];
 
   @override
   Widget build(BuildContext context) {
@@ -404,12 +404,15 @@ class _GoodsDetailState extends State<GoodsDetail> {
     for (int i = 0; i < widget.totalList.xkNo.length; i++) {
       List cutList = List();
       cutList.add(i + 1);
-      cutList.add(widget.totalList.billingColor[i]);
+      cutList.add(widget.totalList.billingColor[i].contains('(') == true
+          ? widget.totalList.billingColor[i]
+              .substring(0, widget.totalList.billingColor[i].indexOf('('))
+          : '');
       cutList.add(widget.totalList.size[i]);
       cutList.add(widget.totalList.quantity[i]);
       cutList.add(widget.totalList.sendQuantity[i]);
       cutList.add(widget.totalList.billingUnit[i]);
-      cutList.add(widget.totalList.unitPrice[i]);
+      //cutList.add(widget.totalList.unitPrice[i]);
       cutList.add(widget.totalList.detailedRemarks[i]);
       allList.add(cutList);
     }

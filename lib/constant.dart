@@ -174,7 +174,7 @@ List arrayTitleList = [
   //quantity            number       28
   '跟单通知发货|M2',
   //M2                                    7.56
-  '自定义打印|送货单价(块) ',
+ // '自定义打印|送货单价(块) ',
   //unitPrice          number        12.7683
   '托板总数',
   //palletsNumber       number

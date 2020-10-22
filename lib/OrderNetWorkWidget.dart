@@ -23,7 +23,7 @@ class OrderNetWorkWidget extends StatefulWidget {
 class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
   var fontSize = ScreenUtil().setSp(43, allowFontScalingSelf: true);
   var sizedBoxHeight = ScreenUtil().setHeight(23);
-  List titleList = ['序号', '色号', '规格', '数量', '发货数量', '开单单位', '送货单价', '明细备注'];
+  List titleList = ['序号', '色号', '规格', '数量', '发货数量', '开单单位', '明细备注'];
   ScrollController controller = ScrollController();
   bool showToTopBtn = false;
   double position;
@@ -418,7 +418,7 @@ class _GoodsDetailState extends State<GoodsDetail> {
       cutList.add(widget.totalList.sendQuantity[i]);
       cutList.add(widget.totalList.billingUnit[i]);
       //cutList.add(widget.totalList.unitPrice[i]);
-      cutList.add('');
+      //cutList.add('');
       cutList.add(widget.totalList.detailedRemarks[i]);
       allList.add(cutList);
     }

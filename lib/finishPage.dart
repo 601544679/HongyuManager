@@ -223,7 +223,7 @@ class _tabBuilderState extends State<tabBuilder>
         detailList.add(allData.result.allMessage.quantity[i]);
         detailList.add(allData.result.allMessage.m2[i]);
         //detailList.add(allData.result.allMessage.unitPrice[i]);
-        detailList.add('');
+        //detailList.add('');
         detailList.add(allData.result.allMessage.palletsNumber[i]);
         detailList.add(allData.result.allMessage.shippingWeight[i]);
         detailList.add(allData.result.allMessage.detailedRemarks[i]);
