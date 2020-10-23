@@ -1,5 +1,7 @@
 import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:date_format/date_format.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/screenutil.dart';
 import 'resetpassword.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login.dart';
@@ -174,7 +176,7 @@ List arrayTitleList = [
   //quantity            number       28
   '跟单通知发货|M2',
   //M2                                    7.56
- // '自定义打印|送货单价(块) ',
+  // '自定义打印|送货单价(块) ',
   //unitPrice          number        12.7683
   '托板总数',
   //palletsNumber       number
@@ -253,4 +255,40 @@ putHistory(String historyItem) async {
     history.add(historyItem);
   }
   await preferences.setStringList('historyList', history);
+}
+
+//SnackBar提示
+SnackBar showSnackBar(String text) {
+  return SnackBar(
+    content: Padding(
+      padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(170)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Color(0xFFF5F5F5)),
+            child: Padding(
+              padding: EdgeInsets.all(ScreenUtil().setWidth(40)),
+              child: Text(
+                text,
+                style: TextStyle(
+                    color: Colors.black87,
+                    fontSize:
+                        ScreenUtil().setSp(40, allowFontScalingSelf: true)),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+    elevation: 0.0,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(30),
+    ),
+    behavior: SnackBarBehavior.floating,
+    backgroundColor: Colors.transparent,
+    duration: Duration(milliseconds: 2000),
+  );
 }

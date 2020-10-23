@@ -193,7 +193,7 @@ class Server {
   }
 
 //todo 遍历
-  getAll(String tableName, String waybillId, bool hasCursor,
+  getAll(String tableName, String mapKey,String mapValue, bool hasCursor,
       {String cursor}) async {
     var responseBody;
     final String _appKey = 'U6rS9PAaDubYYkd8ejK3Eoho,master';
@@ -206,13 +206,13 @@ class Server {
     //{"waybill_ID":"GCZC00021375"}
     //一定要加双引号完全按照api测试工具的形式，传入map缺少双引号，会返回400
     print(
-        '网址=${_baseUrl + '/1.1/scan/classes/$tableName?where={"waybill_ID":"$waybillId"}'}');
+        '网址=${_baseUrl + '/1.1/scan/classes/$tableName?where={"$mapKey":"$mapValue"}'}');
     hasCursor == true
         ? responseBody = await dio.get(_baseUrl +
-            '/1.1/scan/classes/$tableName?where={"waybill_ID":"$waybillId"}&cursor=$cursor')
+            '/1.1/scan/classes/$tableName?where={"$mapKey":"$mapValue"}&cursor=$cursor')
         // &order=createdAt  createdAt从新到旧，-createdAt从旧到新
         : responseBody = await dio.get(_baseUrl +
-            '/1.1/scan/classes/$tableName?where={"waybill_ID":"$waybillId"}');
+            '/1.1/scan/classes/$tableName?where={"$mapKey":"$mapValue"}');
     print('获取所有--${jsonDecode(responseBody.toString())['cursor']}');
     return jsonDecode(responseBody.toString());
   }
@@ -332,7 +332,7 @@ class Server {
     Dio dio = Dio(options);
     responseBody = await dio
         .put(_baseUrl + '/1.1/users/' + objectId + '/refreshSessionToken');
-    print('Server--refreshToken--${refreshToken}');
+    print('Server--refreshToken--$refreshToken');
     return jsonDecode(responseBody.toString());
   }
 

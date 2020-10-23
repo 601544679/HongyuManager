@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:leancloud_storage/leancloud.dart';
 import 'package:mydemo/OrderNetWorkWidget.dart';
+import 'LogUtils.dart';
 import 'constant.dart';
 import 'sizeConfig.dart';
 import 'userclass.dart';
@@ -23,6 +25,7 @@ class _getOrderDataState extends State<getOrderData> {
   var waybillRecord;
   var saveFutureBuilder;
   Future getData;
+
 
   //被父组件调用的方法
   chidFunction() {
@@ -128,4 +131,5 @@ class _getOrderDataState extends State<getOrderData> {
     print('返回的类型---${waybillRecord.runtimeType}');
     return waybillRecord;
   }
+
 }

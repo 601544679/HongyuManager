@@ -480,49 +480,50 @@ class _signForPictureState extends State<signForPicture>
   Widget build(BuildContext context) {
     print('signForPicture--build');
     return Container(
-        child: ListView.builder(
-      itemBuilder: (context, index) {
-        return Container(
-          //color: Colors.red,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                s[index],
-                style: TextStyle(fontSize: ScreenUtil().setHeight(68)),
-              ),
-              SizedBox(
-                height: ScreenUtil().setHeight(23),
-              ),
-              InkWell(
-                child: AspectRatio(
-                  aspectRatio: 16 / 10,
-                  child: Image.network(
-                    widget.allData.result.imageUrl[index],
-                    fit: BoxFit.cover,
-                  ),
+      child: ListView.builder(
+        itemBuilder: (context, index) {
+          return Container(
+            //color: Colors.red,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  s[index],
+                  style: TextStyle(fontSize: ScreenUtil().setHeight(68)),
                 ),
-                onTap: () {
-                  Fluttertoast.showToast(
-                      msg: '${s[index]}', toastLength: Toast.LENGTH_SHORT);
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (context) {
-                        return dialogImageBuilder(
-                            widget.allData.result.imageUrl, index);
-                      });
-                },
-              ),
-              SizedBox(
-                height: ScreenUtil().setHeight(23),
-              )
-            ],
-          ),
-        );
-      },
-      itemCount: widget.allData.result.imageUrl.length,
-    ));
+                SizedBox(
+                  height: ScreenUtil().setHeight(23),
+                ),
+                InkWell(
+                  child: AspectRatio(
+                    aspectRatio: 16 / 10,
+                    child: Image.network(
+                      widget.allData.result.imageUrl[index],
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  onTap: () {
+                    Fluttertoast.showToast(
+                        msg: '${s[index]}', toastLength: Toast.LENGTH_SHORT);
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          return dialogImageBuilder(
+                              widget.allData.result.imageUrl, index);
+                        });
+                  },
+                ),
+                SizedBox(
+                  height: ScreenUtil().setHeight(23),
+                )
+              ],
+            ),
+          );
+        },
+        itemCount: widget.allData.result.imageUrl.length,
+      ),
+    );
   }
 
   @override
@@ -600,8 +601,8 @@ class _finishMapPageState extends State<finishMapPage>
       this.count = count;
       print('总数1=$count');
     });
-    var result =
-        await Server().getAll('positionInfo', widget.orderNumber, false);
+    var result = await Server()
+        .getAll('positionInfo', 'waybill_ID', widget.orderNumber, false);
     setState(() {
       cursor = result["cursor"];
       print('类型=${result.runtimeType}');
@@ -615,8 +616,9 @@ class _finishMapPageState extends State<finishMapPage>
       return resultList;
     } else {
       for (int i = 0; i < frequency; i++) {
-        var result = await Server()
-            .getAll('positionInfo', widget.orderNumber, true, cursor: cursor);
+        var result = await Server().getAll(
+            'positionInfo', 'waybill_ID', widget.orderNumber, true,
+            cursor: cursor);
         print('result.length=${result["results"].length}');
         setState(() {
           resultList.addAll(result["results"]);

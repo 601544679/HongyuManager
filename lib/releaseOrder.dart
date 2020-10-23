@@ -147,15 +147,12 @@ class _ReleaseOrderState
           rowToList.add(row);
         }
       }
-      print('标题----$firstTitle');
-
-      //test
+      //print('标题----$firstTitle');
+      cutList = rowToList.sublist(1, rowToList.length - 1);
       //cutList = rowToList.sublist(1, 12);
       valueToMap.clear();
       if (firstTitle == '送货日期') {
         //格式处理
-        //todo 裁剪去掉标题
-        cutList = rowToList.sublist(1, rowToList.length - 1);
         for (var value in cutList) {
           List allList = List();
           for (int i = 0; i < value.length; i++) {
@@ -175,8 +172,6 @@ class _ReleaseOrderState
       } else if (firstTitle == '派车单单号') {
         driverList.clear();
         //上传司机信息
-        //todo 裁剪去掉标题
-        cutList = rowToList.sublist(1, rowToList.length);
         for (var value in cutList) {
           print('遍历的value${value}');
           List allList = List();

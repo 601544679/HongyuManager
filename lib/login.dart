@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:date_format/date_format.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,11 +31,11 @@ class _LoginPageState extends State<LoginPage> {
   final _loginformKey = GlobalKey<FormState>();
   FocusNode focusNodeNum = FocusNode(); //控制手机号码焦点
   FocusNode focusNodePas = FocusNode(); //控制密码焦点
+  var scaffoldKey = GlobalKey<ScaffoldState>();
 
   autoLogin(context) async {
     var refreshToken;
     User _user = User();
-    print('哪来的密码--${widget.user?.password}');
     if ( //checkBoxValue &&
         widget.user?.phoneNumber != '' &&
             widget.user?.password != '' &&
@@ -67,8 +68,7 @@ class _LoginPageState extends State<LoginPage> {
           print('自动登录更新--${_user.sessionToken}');
           _user.saveUser(_user);
           print('保存后token=${_user.sessionToken}');
-          Fluttertoast.showToast(
-              msg: '自动登录成功', toastLength: Toast.LENGTH_SHORT);
+          scaffoldKey.currentState.showSnackBar(showSnackBar('自动登录成功'));
         } on DioError catch (e) {
           print('error=${e.response.data}');
         }
@@ -154,6 +154,7 @@ class _LoginPageState extends State<LoginPage> {
       _passwordControl.text = _user.password;
     }
     return Scaffold(
+      key: scaffoldKey,
       resizeToAvoidBottomPadding: false,
       body: Container(
         color: Colors.white,
@@ -350,9 +351,8 @@ class _LoginPageState extends State<LoginPage> {
                                 _user.saveUser(_user);
                                 //进行身份验证，管理者才能登录管理者端
                                 if (response['role'] == 'Manager') {
-                                  Fluttertoast.showToast(
-                                      msg: '登录成功',
-                                      toastLength: Toast.LENGTH_SHORT);
+                                  scaffoldKey.currentState
+                                      .showSnackBar(showSnackBar('登录成功'));
                                   var refreshToken = await Server()
                                       .refreshToken(
                                           _user.sessionToken, _user.objectId);
@@ -366,28 +366,25 @@ class _LoginPageState extends State<LoginPage> {
                                   Navigator.pushNamedAndRemoveUntil(context,
                                       "/homePage", (route) => route == null);
                                 } else {
-                                  Fluttertoast.showToast(msg: '非管理者用户');
+                                  scaffoldKey.currentState
+                                      .showSnackBar(showSnackBar('非管理者用户'));
                                 }
                               } else if (response.runtimeType == LCException) {
                                 if (response.code == 210) {
-                                  Fluttertoast.showToast(
-                                      msg: '账号或密码错误',
-                                      toastLength: Toast.LENGTH_SHORT);
+                                  scaffoldKey.currentState
+                                      .showSnackBar(showSnackBar('账号或密码错误'));
                                 } else if (response.code == 219) {
-                                  Fluttertoast.showToast(
-                                      msg: response.message,
-                                      toastLength: Toast.LENGTH_LONG);
+                                  scaffoldKey.currentState.showSnackBar(
+                                      showSnackBar(response.message));
                                 } else if (response.code == 211) {
-                                  Fluttertoast.showToast(
-                                      msg: '不存在此用户',
-                                      toastLength: Toast.LENGTH_LONG);
+                                  scaffoldKey.currentState
+                                      .showSnackBar(showSnackBar('不存在此用户'));
                                 }
                               } else if (response.runtimeType == DioError) {
                                 //print('网络错误${response.data}');
                                 print('网络错误error--${response.error}');
-                                Fluttertoast.showToast(
-                                    msg: '网络连接超时',
-                                    toastLength: Toast.LENGTH_LONG);
+                                scaffoldKey.currentState
+                                    .showSnackBar(showSnackBar('断网了'));
                               }
                             }
                           },

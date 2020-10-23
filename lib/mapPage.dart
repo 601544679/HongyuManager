@@ -73,8 +73,8 @@ class _MapPageState extends State<MapPage> {
       this.count = count;
       print('总数1=$count');
     });
-    var result =
-        await Server().getAll('positionInfo', widget.orderNumber, false);
+    var result = await Server()
+        .getAll('positionInfo', 'waybill_ID', widget.orderNumber, false);
     setState(() {
       cursor = result["cursor"];
       print('类型=${result.runtimeType}');
@@ -88,8 +88,9 @@ class _MapPageState extends State<MapPage> {
       return resultList;
     } else {
       for (int i = 0; i < frequency; i++) {
-        var result = await Server()
-            .getAll('positionInfo', widget.orderNumber, true, cursor: cursor);
+        var result = await Server().getAll(
+            'positionInfo', 'waybill_ID', widget.orderNumber, true,
+            cursor: cursor);
         print('result.length=${result["results"].length}');
         setState(() {
           resultList.addAll(result["results"]);
@@ -283,8 +284,10 @@ class _MapScreenState extends State<MapScreen> {
                   zoomLevel: 15,
                   maskDelay: Duration(milliseconds: 500),
                   centerCoordinate: LatLng(
-                      widget.latLngList[0]['position']['latitude'],
-                      widget.latLngList[0]['position']['longitude']),
+                      widget.latLngList[widget.latLngList.length - 1]
+                          ['position']['latitude'],
+                      widget.latLngList[widget.latLngList.length - 1]
+                          ['position']['longitude']),
                   markers: makeOptions(),
                   onMapCreated: (controller) async {
                     await controller?.showMyLocation(MyLocationOption(
