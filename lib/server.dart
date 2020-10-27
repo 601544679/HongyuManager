@@ -12,7 +12,7 @@ import 'main.dart';
 class Server {
   static GlobalKey<NavigatorState> navigatorState;
 
-  final String _baseUrl = 'https://24pjdwah.lc-cn-n1-shared.com';
+  final String _baseUrl = 'https://gcapp.hy100.com.cn';
   final String _appID = '24PJDWahD7Pww2cDice6F6Er-gzGzoHsz';
   final String _appKey = 'mrcuLNzhXH6uJ3gTtGi0Ttg7';
 
@@ -178,7 +178,8 @@ class Server {
 
   getCurrentWaybill() async {
     var responseBody;
-    responseBody = await useDio('/1.1/functions/getCurrentWaybill', {},'getCurrentWaybill');
+    responseBody = await useDio(
+        '/1.1/functions/getCurrentWaybill', {}, 'getCurrentWaybill');
     return responseBody;
   }
 
@@ -186,14 +187,14 @@ class Server {
   //根据订单号查询订单信息
   getWaybillAdmin(String waybillid) async {
     var responseBody;
-    responseBody = await useDio(
-        '/1.1/functions/getWaybillAdmin', {'waybillid': waybillid},'getWaybillAdmin');
+    responseBody = await useDio('/1.1/functions/getWaybillAdmin',
+        {'waybillid': waybillid}, 'getWaybillAdmin');
     print('getWaybillAdmin--${responseBody.runtimeType}');
     return responseBody;
   }
 
 //todo 遍历
-  getAll(String tableName, String mapKey,String mapValue, bool hasCursor,
+  getAll(String tableName, String mapKey, String mapValue, bool hasCursor,
       {String cursor}) async {
     var responseBody;
     final String _appKey = 'U6rS9PAaDubYYkd8ejK3Eoho,master';
@@ -223,8 +224,8 @@ class Server {
   //value=2 返回已完成订单
   getWaybillByValue(String value) async {
     var responseBody;
-    responseBody =
-        await useDio('/1.1/functions/getWaybillByValue', {'value': value},'getWaybillByValue');
+    responseBody = await useDio('/1.1/functions/getWaybillByValue',
+        {'value': value}, 'getWaybillByValue');
     print('getWaybillByValue--${responseBody}');
     return responseBody;
     /* User user = await User().getUser();
@@ -257,7 +258,8 @@ class Server {
   //todo 发布订单
   releaseWaybill(Map map) async {
     var responseBody;
-    responseBody = await useDio('/1.1/functions/releaseWaybill', map,'releaseWaybill');
+    responseBody =
+        await useDio('/1.1/functions/releaseWaybill', map, 'releaseWaybill');
     return responseBody;
     /*var responseBody;
     responseBody = _post('/1.1/functions/releaseWaybill/', map);
@@ -267,7 +269,8 @@ class Server {
 //todo 根据Excel发布订单
   releaseByExcel(Map map) async {
     var responseBody;
-    responseBody = await useDio('/1.1/functions/releaseByExcel', map,'releaseByExcel');
+    responseBody =
+        await useDio('/1.1/functions/releaseByExcel', map, 'releaseByExcel');
     return responseBody;
 
     /*  var responseBody;
@@ -278,7 +281,8 @@ class Server {
   //todo 更新司机信息
   updateDriverMessage(Map map) async {
     var responseBody;
-    responseBody = await useDio('/1.1/functions/updateDriverMessage', map,'updateDriverMessage');
+    responseBody = await useDio(
+        '/1.1/functions/updateDriverMessage', map, 'updateDriverMessage');
     print('updateDriverMessage--${responseBody}');
     return responseBody;
 
@@ -291,8 +295,8 @@ class Server {
   getFinishImage(String orderNumber) async {
     var responseBody;
     print('getFinishImage--单号--${orderNumber}');
-    responseBody = await useDio(
-        '/1.1/functions/getFinishImage', {'waybillid': orderNumber},'getFinishImage');
+    responseBody = await useDio('/1.1/functions/getFinishImage',
+        {'waybillid': orderNumber}, 'getFinishImage');
     print('getFinishImage---${responseBody.runtimeType}');
     return responseBody;
   }
@@ -300,8 +304,8 @@ class Server {
   //todo搜索单张订单
   searchWaybill(String waybillId) async {
     var responseBody;
-    responseBody =
-        await useDio('/1.1/functions/searchWaybill', {'waybillid': waybillId},'searchWaybill');
+    responseBody = await useDio('/1.1/functions/searchWaybill',
+        {'waybillid': waybillId}, 'searchWaybill');
     return responseBody;
     /*var responseBody;
     responseBody =
@@ -312,8 +316,8 @@ class Server {
   //todo 搜索
   searchSuggestion(String text) async {
     var responseBody;
-    responseBody =
-        await useDio('/1.1/functions/suggestion', {'waybillid': text},'searchSuggestion');
+    responseBody = await useDio(
+        '/1.1/functions/suggestion', {'waybillid': text}, 'searchSuggestion');
     return responseBody;
     /* var responseBody;
     responseBody = _post('/1.1/functions/suggestion/', {'waybillid': text});

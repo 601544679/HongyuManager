@@ -406,6 +406,8 @@ class _MapScreenState extends State<MapScreen> {
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
+                      fontSize:
+                          ScreenUtil().setSp(40, allowFontScalingSelf: true),
                       fontFamily: 'Montserrat'),
                 ),
               ),
@@ -460,6 +462,7 @@ class _MapScreenState extends State<MapScreen> {
         style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
+            fontSize: ScreenUtil().setSp(40, allowFontScalingSelf: true),
             fontFamily: 'Montserrat'));
   }
 }
