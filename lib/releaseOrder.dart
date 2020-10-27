@@ -93,6 +93,7 @@ class _ReleaseOrderState
 
   checkPermission() async {
     bool status = await Permission.storage.isGranted;
+    print('qqqqqq=$status');
     if (status) {
       FilePickerResult result = await FilePicker.platform.pickFiles();
       if (result != null) {

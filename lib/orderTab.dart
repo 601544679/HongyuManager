@@ -17,7 +17,8 @@ class OrderTab extends StatefulWidget {
   _OrderTabState createState() => _OrderTabState();
 }
 
-class _OrderTabState extends State<OrderTab> with AutomaticKeepAliveClientMixin{
+class _OrderTabState extends State<OrderTab>
+    with AutomaticKeepAliveClientMixin {
   List result;
   bool showToTopBtn = false;
 
@@ -74,11 +75,13 @@ class _OrderTabState extends State<OrderTab> with AutomaticKeepAliveClientMixin{
     List<DropdownMenuItem> dropdownMenuItem() {
       for (int i = 0; i < title.length; i++) {
         dropdownMenuItemList.add(DropdownMenuItem(
-          child: Text(
-            title[i],
-            style: TextStyle(
-                color: Colors.indigo[colorNum],
-                fontSize: ScreenUtil().setSp(55, allowFontScalingSelf: true)),
+          child: Container(
+            child: Text(
+              title[i],
+              style: TextStyle(
+                  color: Colors.indigo[colorNum],
+                  fontSize: ScreenUtil().setSp(55, allowFontScalingSelf: true)),
+            ),
           ),
           value: value[i],
         ));
@@ -95,23 +98,25 @@ class _OrderTabState extends State<OrderTab> with AutomaticKeepAliveClientMixin{
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             DropdownButtonHideUnderline(
-                child: DropdownButton(
-              style: TextStyle(
-                  fontSize: ScreenUtil().setSp(45, allowFontScalingSelf: true)),
-              value: dropDownButtonValue,
-              items: dropdownMenuItem(),
-              onChanged: (value) {
-                print(value);
-                setState(() {
-                  dropDownButtonValue = value;
-                });
-              },
-              icon: Icon(
-                Icons.arrow_drop_down,
-                color: Colors.indigo[colorNum],
-                size: ScreenUtil().setHeight(90),
+              child: DropdownButton(
+                style: TextStyle(
+                    fontSize:
+                        ScreenUtil().setSp(45, allowFontScalingSelf: true)),
+                value: dropDownButtonValue,
+                items: dropdownMenuItem(),
+                onChanged: (value) {
+                  print(value);
+                  setState(() {
+                    dropDownButtonValue = value;
+                  });
+                },
+                icon: Icon(
+                  Icons.arrow_drop_down,
+                  color: Colors.indigo[colorNum],
+                  size: ScreenUtil().setHeight(90),
+                ),
               ),
-            ))
+            ),
           ],
         ),
         Expanded(
