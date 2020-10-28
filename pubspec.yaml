@@ -28,27 +28,27 @@ dependencies:
   amap_search_fluttify: ^0.14.0
   amap_location_fluttify: ^0.18.0
   amap_map_fluttify: ^0.29.0
-  camera_camera: ^1.0.34+1
-  camera: ^0.5.8+5
-  flutter_tencent_ocr: ^0.1.2
+  #camera_camera: ^1.0.34+1
+  #camera: ^0.5.8+11
+  #flutter_tencent_ocr: ^0.1.2
   leancloud_storage: ^0.5.0
-  device_info: ^0.4.2+8
+  device_info: ^0.4.2+9
 
   easy_alert: ^0.0.8
-  image_picker: ^0.6.3+4
+  image_picker: ^0.6.7+12
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
+  cupertino_icons: ^1.0.0
   dio: ^3.0.10
-  shared_preferences: ^0.5.10
+  shared_preferences: ^0.5.12+2
   event_bus: ^1.1.1
-  flutter_screenutil: ^3.1.1
-  provider: ^4.0.4
-  fluttertoast: ^3.1.3
+  flutter_screenutil: ^3.2.0
+  provider: ^4.3.2+2
+  fluttertoast: ^7.1.1
   excel: ^1.1.5
   permission_handler: ^5.0.1+1
   flutter_secure_storage: ^3.3.3
-  date_format: ^1.0.8
+  date_format: ^1.0.9
   file_picker: ^2.0.11
   flutter_drag_scale:
     git: https://github.com/LiuC520/flutter_drag_scale.git

@@ -80,7 +80,7 @@ class _OrderTabState extends State<OrderTab>
               title[i],
               style: TextStyle(
                   color: Colors.indigo[colorNum],
-                  fontSize: ScreenUtil().setSp(40, allowFontScalingSelf: true)),
+                  fontSize: ScreenUtil().setSp(50, allowFontScalingSelf: true)),
             ),
           ),
           value: value[i],

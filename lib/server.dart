@@ -142,7 +142,7 @@ class Server {
             msg: "自动登录失败",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
-            timeInSecForIos: 2,
+            timeInSecForIosWeb: 2,
           );
           MyApp.navigatorState.currentState.pushAndRemoveUntil(
               MaterialPageRoute(
@@ -154,7 +154,7 @@ class Server {
             msg: "自动登录成功",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
-            timeInSecForIos: 2,
+            timeInSecForIosWeb: 2,
           );
           user.sessionToken = responseBody['sessionToken'];
           user.saveUser(user);

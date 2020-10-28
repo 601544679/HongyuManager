@@ -144,7 +144,7 @@ class _HomeState extends State<Home> {
                         '退出',
                         style: TextStyle(
                             fontSize: ScreenUtil()
-                                .setSp(28, allowFontScalingSelf: true)),
+                                .setSp(38, allowFontScalingSelf: true)),
                       )
                     ],
                   ),
@@ -197,7 +197,7 @@ class _HomeState extends State<Home> {
               title: Text(tabName[currentTab],
                   style: TextStyle(
                       fontSize:
-                          ScreenUtil().setSp(40, allowFontScalingSelf: true))),
+                          ScreenUtil().setSp(60, allowFontScalingSelf: true))),
               actions: [action(currentTab)],
             ),
             body: IndexedStack(

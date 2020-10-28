@@ -310,7 +310,7 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                     SizedBox(
-                      height: ScreenUtil().setHeight(200),
+                      height: ScreenUtil().setHeight(150),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

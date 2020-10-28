@@ -383,7 +383,7 @@ List<DataColumn> dataColumn(List titleList) {
           style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
-              fontSize: ScreenUtil().setSp(25, allowFontScalingSelf: true)),
+              fontSize: ScreenUtil().setSp(35, allowFontScalingSelf: true)),
         )
       ],
       mainAxisAlignment: MainAxisAlignment.center,
@@ -400,7 +400,7 @@ List<DataRow> dataRow(List contentList) {
       cellList.add(DataCell(Text(
         value[i].toString(),
         style: TextStyle(
-            fontSize: ScreenUtil().setSp(30, allowFontScalingSelf: true)),
+            fontSize: ScreenUtil().setSp(33, allowFontScalingSelf: true)),
       )));
     }
     rowList.add(DataRow(cells: cellList));
