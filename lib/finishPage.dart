@@ -359,7 +359,9 @@ List<DataRow> dataRow(List arrayContentList) {
     for (int i = 0; i < value.length; i++) {
       cellList.add(DataCell(Text(
         value[i].toString(),
-        style: TextStyle(color: Colors.black),
+        style: TextStyle(
+            color: Colors.black,
+            fontSize: ScreenUtil().setSp(35, allowFontScalingSelf: true)),
       )));
     }
     rowList.add(DataRow(cells: cellList));
@@ -427,7 +429,7 @@ class _waybillDetailTabState extends State<waybillDetailTab>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          textStyle(widget.titleList[index], fontSize),
+                          textStyle(widget.titleList[index] + ':', fontSize),
                         ],
                       ),
                       Container(
@@ -771,6 +773,8 @@ class _MapScreenState extends State<MapScreen>
                 child: Text(
                   dateChange(widget.waybill['arrivalTime']),
                   style: TextStyle(
+                      fontSize:
+                          ScreenUtil().setSp(40, allowFontScalingSelf: true),
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Montserrat'),
@@ -837,6 +841,7 @@ class _MapScreenState extends State<MapScreen>
         style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
+            fontSize: ScreenUtil().setSp(40, allowFontScalingSelf: true),
             fontFamily: 'Montserrat'));
   }
 

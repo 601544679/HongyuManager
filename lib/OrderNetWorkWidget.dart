@@ -118,7 +118,6 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
     //return isAuthenticated;
   }
 
-
   @override
   Widget build(BuildContext context) {
     getToken();
@@ -381,7 +380,10 @@ List<DataColumn> dataColumn(List titleList) {
       children: [
         Text(
           titleList[i],
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: ScreenUtil().setSp(25, allowFontScalingSelf: true)),
         )
       ],
       mainAxisAlignment: MainAxisAlignment.center,
@@ -395,7 +397,11 @@ List<DataRow> dataRow(List contentList) {
   for (var value in contentList) {
     List<DataCell> cellList = List();
     for (int i = 0; i < value.length; i++) {
-      cellList.add(DataCell(Text(value[i].toString())));
+      cellList.add(DataCell(Text(
+        value[i].toString(),
+        style: TextStyle(
+            fontSize: ScreenUtil().setSp(30, allowFontScalingSelf: true)),
+      )));
     }
     rowList.add(DataRow(cells: cellList));
   }

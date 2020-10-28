@@ -80,7 +80,7 @@ class _OrderTabState extends State<OrderTab>
               title[i],
               style: TextStyle(
                   color: Colors.indigo[colorNum],
-                  fontSize: ScreenUtil().setSp(55, allowFontScalingSelf: true)),
+                  fontSize: ScreenUtil().setSp(40, allowFontScalingSelf: true)),
             ),
           ),
           value: value[i],
@@ -101,7 +101,7 @@ class _OrderTabState extends State<OrderTab>
               child: DropdownButton(
                 style: TextStyle(
                     fontSize:
-                        ScreenUtil().setSp(45, allowFontScalingSelf: true)),
+                        ScreenUtil().setSp(40, allowFontScalingSelf: true)),
                 value: dropDownButtonValue,
                 items: dropdownMenuItem(),
                 onChanged: (value) {

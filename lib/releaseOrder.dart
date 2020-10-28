@@ -93,7 +93,6 @@ class _ReleaseOrderState
 
   checkPermission() async {
     bool status = await Permission.storage.isGranted;
-    print('qqqqqq=$status');
     if (status) {
       FilePickerResult result = await FilePicker.platform.pickFiles();
       if (result != null) {
@@ -341,7 +340,12 @@ class _ReleaseOrderState
           )
         : Scaffold(
             appBar: AppBar(
-              title: Text('发布送货单'),
+              title: Text(
+                '发布送货单',
+                style: TextStyle(
+                    fontSize:
+                        ScreenUtil().setSp(40, allowFontScalingSelf: true)),
+              ),
               actions: [
                 MaterialButton(
                   onPressed: () {
@@ -349,7 +353,10 @@ class _ReleaseOrderState
                   },
                   child: Text(
                     '从Excel导入',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize:
+                            ScreenUtil().setSp(40, allowFontScalingSelf: true)),
                   ),
                 )
               ],
@@ -368,7 +375,7 @@ class _ReleaseOrderState
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text('订单内容',
+                        Text('送货单内容',
                             style: TextStyle(
                                 fontSize: ScreenUtil()
                                     .setSp(47, allowFontScalingSelf: true),
@@ -561,8 +568,8 @@ class _ReleaseOrderState
                   Visibility(
                       visible: showToTopBtn,
                       child: Container(
-                        height: ScreenUtil().setHeight(100),
-                        width: ScreenUtil().setHeight(100),
+                        height: ScreenUtil().setHeight(150),
+                        width: ScreenUtil().setHeight(150),
                         child: FloatingActionButton(
                           elevation: 0,
                           onPressed: () {
@@ -570,7 +577,8 @@ class _ReleaseOrderState
                                 duration: Duration(seconds: 1),
                                 curve: Curves.ease);
                           },
-                          child: Icon(Icons.arrow_upward),
+                          child: Icon(Icons.arrow_upward,
+                              size: ScreenUtil().setHeight(100)),
                         ),
                       )),
                   SizedBox(

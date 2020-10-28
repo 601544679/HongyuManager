@@ -108,28 +108,45 @@ class _HomeState extends State<Home> {
     if (currentTab == 0) {
       return Text('');
     } else if (currentTab == 1) {
-      return IconButton(
-          icon: Icon(
-            Icons.search,
-            color: Colors.white,
-          ),
-          onPressed: () async {
-            /* var response = await Server().searchSuggestion();
+      return Padding(
+        padding: EdgeInsets.only(right: ScreenUtil().setWidth(54)),
+        child: IconButton(
+            icon: Icon(
+              Icons.search,
+              color: Colors.white,
+              size: ScreenUtil().setHeight(60),
+            ),
+            onPressed: () async {
+              /* var response = await Server().searchSuggestion();
                 result = response['result'];*/
-            Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-            final SharedPreferences preferences = await _prefs;
-            final history = preferences.getStringList('historyList');
-            print('历史$history');
-            showSearch(context: context, delegate: searchbar(result, history));
-            //print('$result');
-          });
+              Future<SharedPreferences> _prefs =
+                  SharedPreferences.getInstance();
+              final SharedPreferences preferences = await _prefs;
+              final history = preferences.getStringList('historyList');
+              print('历史$history');
+              showSearch(
+                  context: context, delegate: searchbar(result, history));
+              //print('$result');
+            }),
+      );
     } else if (currentTab == 2) {
       return UnconstrainedBox(
           child: Padding(
               padding: EdgeInsets.only(right: ScreenUtil().setWidth(54)),
               child: InkWell(
-                  child: Wrap(
-                    children: [Icon(Icons.exit_to_app), Text('退出')],
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.exit_to_app,
+                        size: ScreenUtil().setHeight(50),
+                      ),
+                      Text(
+                        '退出',
+                        style: TextStyle(
+                            fontSize: ScreenUtil()
+                                .setSp(28, allowFontScalingSelf: true)),
+                      )
+                    ],
                   ),
                   onTap: () async {
                     SharedPreferences prefs =
@@ -177,7 +194,10 @@ class _HomeState extends State<Home> {
         : Scaffold(
             appBar: AppBar(
               centerTitle: true,
-              title: Text(tabName[currentTab]),
+              title: Text(tabName[currentTab],
+                  style: TextStyle(
+                      fontSize:
+                          ScreenUtil().setSp(40, allowFontScalingSelf: true))),
               actions: [action(currentTab)],
             ),
             body: IndexedStack(
