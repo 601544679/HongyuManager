@@ -282,6 +282,9 @@ class _MapScreenState extends State<MapScreen> {
                 child: AmapView(
                   mapType: MapType.Standard,
                   zoomLevel: 15,
+                  showCompass: true,
+                  showScaleControl: true,
+                  showZoomControl: true,
                   maskDelay: Duration(milliseconds: 500),
                   centerCoordinate: LatLng(
                       widget.latLngList[widget.latLngList.length - 1]
@@ -424,8 +427,8 @@ class _MapScreenState extends State<MapScreen> {
       height = ScreenUtil().setWidth(65);
       width = ScreenUtil().setWidth(195);
     } else if (i == 0) {
-      height = ScreenUtil().setWidth(150);
-      width = ScreenUtil().setWidth(432);
+      height = ScreenUtil().setWidth(189);
+      width = ScreenUtil().setWidth(290);
     } else {
       height = ScreenUtil().setWidth(33);
       width = ScreenUtil().setWidth(33);
@@ -434,7 +437,7 @@ class _MapScreenState extends State<MapScreen> {
       height: height,
       width: width,
       child: Material(
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(15),
         shadowColor: Colors.transparent,
         color: Colors.indigo[colorNum],
         child: Center(

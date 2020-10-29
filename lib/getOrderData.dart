@@ -26,7 +26,6 @@ class _getOrderDataState extends State<getOrderData> {
   var saveFutureBuilder;
   Future getData;
 
-
   //被父组件调用的方法
   chidFunction() {
     print('我被父组件调用了');
@@ -125,11 +124,8 @@ class _getOrderDataState extends State<getOrderData> {
 
   //todo 根据选择下拉菜单的值请求订单数据
   Future _getData(String state) async {
-    var responseBody;
     waybillRecord = await Server().getWaybillByValue(state);
-    //waybills = waybillRecord['result'];
-    print('返回的类型---${waybillRecord.runtimeType}');
+    print('返回的类型---${waybillRecord}');
     return waybillRecord;
   }
-
 }

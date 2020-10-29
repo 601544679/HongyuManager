@@ -344,7 +344,7 @@ class _ReleaseOrderState
                 '发布送货单',
                 style: TextStyle(
                     fontSize:
-                        ScreenUtil().setSp(40, allowFontScalingSelf: true)),
+                        ScreenUtil().setSp(50, allowFontScalingSelf: true)),
               ),
               actions: [
                 MaterialButton(
@@ -568,8 +568,8 @@ class _ReleaseOrderState
                   Visibility(
                       visible: showToTopBtn,
                       child: Container(
-                        height: ScreenUtil().setHeight(150),
-                        width: ScreenUtil().setHeight(150),
+                        height: ScreenUtil().setHeight(120),
+                        width: ScreenUtil().setHeight(120),
                         child: FloatingActionButton(
                           elevation: 0,
                           onPressed: () {

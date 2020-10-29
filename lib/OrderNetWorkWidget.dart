@@ -28,7 +28,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
   bool showToTopBtn = false;
   double position;
   var bb;
-  bool tokenIsUseful;
+  bool tokenIsUseful = true;
 
   //返回顶部
   void backToTop() {
