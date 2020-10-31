@@ -19,9 +19,9 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:icon="@mipmap/ic_launcher"
-        android:requestLegacyExternalStorage="true"
-        android:label="mydemo">
+        android:icon="@drawable/manager"
+        android:label="mydemo"
+        android:requestLegacyExternalStorage="true">
         <!--android:value="a2b6cdd5acc8303ac63a08a0289ff881" -->
 
         <meta-data
