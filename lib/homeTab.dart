@@ -60,20 +60,21 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(15),
                 border: Border.all(width: 1, color: Colors.grey)),
-            height: ScreenUtil().setWidth(562),
-            width: ScreenUtil().setWidth(562),
+            height: ScreenUtil().setWidth(390),
+            width: ScreenUtil().setWidth(390),
             child: Icon(
               Icons.add,
-              size: ScreenUtil().setWidth(108),
+              size: ScreenUtil().setWidth(75),
             ),
           ),
           SizedBox(
-            height: ScreenUtil().setHeight(68),
+            height: ScreenUtil().setHeight(40),
           ),
           Text(
             '发布送货单',
             style: TextStyle(
-                fontSize: ScreenUtil().setSp(45, allowFontScalingSelf: true)),
+                color: Colors.black,
+                fontSize: ScreenUtil().setSp(40, allowFontScalingSelf: true)),
           )
         ],
       )),

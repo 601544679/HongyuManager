@@ -100,14 +100,14 @@ class _getOrderDataState extends State<getOrderData> {
             return Column(
               children: [
                 SizedBox(
-                  height: SizeConfig.heightMultiplier,
+                  height: ScreenUtil().setHeight(7),
                 ),
                 CircularProgressIndicator(
                   valueColor:
                       AlwaysStoppedAnimation<Color>(Colors.indigo[colorNum]),
                 ),
                 SizedBox(
-                  height: SizeConfig.heightMultiplier,
+                  height: ScreenUtil().setHeight(7),
                 ),
                 Text('正在加载...')
               ],

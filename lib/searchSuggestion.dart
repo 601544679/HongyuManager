@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mydemo/server.dart';
-import 'package:mydemo/sizeConfig.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'sizeConfig.dart';
 import 'constant.dart';
 
 class searchSuggestion extends StatefulWidget {
@@ -64,7 +63,7 @@ class _searchSuggestionState extends State<searchSuggestion> {
     super.dispose();
     print('searchSuggestion--dispose');
   }
-  
+
 //展示历史记录
   List<Widget> showHistory(BuildContext context, List historyList) {
     List<Widget> history = List();
@@ -79,7 +78,8 @@ class _searchSuggestionState extends State<searchSuggestion> {
                 '${historyList[i]}',
                 style: TextStyle(
                     color: Colors.black,
-                    fontSize: SizeConfig.heightMultiplier * 2),
+                    fontSize:
+                        ScreenUtil().setSp(20, allowFontScalingSelf: true)),
               ),
             ),
           ),
@@ -109,16 +109,18 @@ class _searchSuggestionState extends State<searchSuggestion> {
     return widget.query.isEmpty
         ? Padding(
             padding: EdgeInsets.fromLTRB(
-                SizeConfig.widthMultiplier * 2,
-                SizeConfig.heightMultiplier * 2,
-                SizeConfig.widthMultiplier * 2,
-                SizeConfig.heightMultiplier * 2),
+              ScreenUtil().setWidth(20),
+              ScreenUtil().setWidth(10),
+              ScreenUtil().setWidth(20),
+              ScreenUtil().setWidth(0),
+            ),
             child: widget.history == null
                 ? Center(
                     child: Text(
                       '无历史记录',
                       style: TextStyle(
-                          fontSize: SizeConfig.heightMultiplier * 3.5),
+                          fontSize: ScreenUtil()
+                              .setSp(50, allowFontScalingSelf: true)),
                     ),
                   )
                 : Column(
@@ -165,11 +167,11 @@ class _searchSuggestionState extends State<searchSuggestion> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(
-                            height: SizeConfig.heightMultiplier,
+                            height: ScreenUtil().setHeight(10),
                           ),
                           CircularProgressIndicator(),
                           SizedBox(
-                            height: SizeConfig.heightMultiplier,
+                            height: ScreenUtil().setHeight(30),
                           ),
                           Text('正在加载...')
                         ],
@@ -195,7 +197,8 @@ TextSpan fontBold(String title, String query) {
     return TextSpan(
       text: title,
       style: TextStyle(
-          color: Colors.black, fontSize: SizeConfig.heightMultiplier * 2),
+          color: Colors.black,
+          fontSize: ScreenUtil().setSp(30, allowFontScalingSelf: true)),
       children: null,
     );
   } else {
@@ -206,14 +209,15 @@ TextSpan fontBold(String title, String query) {
     return TextSpan(
       text: '',
       style: TextStyle(
-          color: Colors.black, fontSize: SizeConfig.heightMultiplier * 2),
+          color: Colors.black,
+          fontSize: ScreenUtil().setSp(30, allowFontScalingSelf: true)),
       //高亮，加粗设置在children
       children: <TextSpan>[
         TextSpan(text: before),
         TextSpan(
             text: hit,
             style: TextStyle(
-                fontSize: SizeConfig.heightMultiplier * 2.5,
+                fontSize: ScreenUtil().setSp(35, allowFontScalingSelf: true),
                 fontWeight: FontWeight.bold)),
         TextSpan(text: after),
       ],
@@ -242,7 +246,8 @@ class _suggesBuilderState extends State<suggesBuilder> {
         ? Center(
             child: Text(
               '无此送货单',
-              style: TextStyle(fontSize: SizeConfig.heightMultiplier * 2.5),
+              style: TextStyle(
+                  fontSize: ScreenUtil().setSp(35, allowFontScalingSelf: true)),
             ),
           )
         : ListView.builder(
@@ -260,5 +265,4 @@ class _suggesBuilderState extends State<suggesBuilder> {
             itemCount: widget.data['result'].length,
           );
   }
-
 }

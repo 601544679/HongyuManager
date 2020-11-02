@@ -59,7 +59,7 @@ class _ResetPasswordState extends State<ResetPassword> {
             title: Text(
               '修改密码',
               style: TextStyle(
-                fontSize: ScreenUtil().setSp(55, allowFontScalingSelf: true),
+                fontSize: ScreenUtil().setSp(40, allowFontScalingSelf: true),
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Monsterrat',
               ),
@@ -78,25 +78,25 @@ class _ResetPasswordState extends State<ResetPassword> {
                 Row(
                   children: <Widget>[
                     SizedBox(
-                      width: sizeBoxWidth,
+                      width: ScreenUtil().setWidth(56),
                     ),
                     Text(
                       '手机号码:',
                       style: TextStyle(
                         fontSize:
-                            ScreenUtil().setSp(40, allowFontScalingSelf: true),
+                            ScreenUtil().setSp(35, allowFontScalingSelf: true),
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Monsterrat',
                       ),
                     ),
                     SizedBox(
-                      width: sizeBoxW,
+                      width: ScreenUtil().setWidth(19),
                     ),
                     Container(
                       //padding: EdgeInsets.only(top: topIndent, left: leftIndent,right: rightIndent),
-                      height: containerHeight,
-                      width: containerWidth,
+                      height: ScreenUtil().setHeight(80),
+                      width: ScreenUtil().setWidth(435),
                       child: Row(
                         children: <Widget>[
                           Flexible(
@@ -105,7 +105,8 @@ class _ResetPasswordState extends State<ResetPassword> {
                               decoration: InputDecoration(
                                   hintText: ' 请输入您的手机号码',
                                   hintStyle: TextStyle(
-                                      fontSize: fontSize,
+                                      fontSize: ScreenUtil().setSp(30,
+                                          allowFontScalingSelf: true),
                                       fontFamily: 'Montserrat',
                                       fontWeight: FontWeight.bold,
                                       color: Colors.grey),
@@ -133,8 +134,8 @@ class _ResetPasswordState extends State<ResetPassword> {
                           ),
                           //获取手机验证码按键----------------------
                           Container(
-                            width: ScreenUtil().setWidth(250),
-                            height: ScreenUtil().setHeight(102),
+                            width: ScreenUtil().setWidth(174),
+                            height: ScreenUtil().setHeight(61),
                             //padding: EdgeInsets.only(right: 5),
                             child: RaisedButton(
                               onPressed: buttonDisable == false
@@ -193,7 +194,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                                       BorderRadius.all(Radius.circular(5.0))),
                               child: Text(text,
                                   style: TextStyle(
-                                      fontSize: ScreenUtil().setSp(31,
+                                      fontSize: ScreenUtil().setSp(21.5,
                                           allowFontScalingSelf: true),
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Montserrat')),
@@ -206,36 +207,37 @@ class _ResetPasswordState extends State<ResetPassword> {
                 ),
 
                 SizedBox(
-                  height: ScreenUtil().setHeight(34),
+                  height: ScreenUtil().setHeight(40),
                 ),
                 //验证码---------------------------
                 Row(
                   children: <Widget>[
                     SizedBox(
-                      width: sizeBoxWidth,
+                      width: ScreenUtil().setWidth(56),
                     ),
                     Text(
                       '验证号码:',
                       style: TextStyle(
                         fontSize:
-                            ScreenUtil().setSp(40, allowFontScalingSelf: true),
+                            ScreenUtil().setSp(35, allowFontScalingSelf: true),
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Monsterrat',
                       ),
                     ),
                     SizedBox(
-                      width: sizeBoxW,
+                      width: ScreenUtil().setWidth(19),
                     ),
                     Container(
                       //padding: EdgeInsets.only(top: topIndent, left: leftIndent,right: rightIndent),
-                      height: containerHeight,
-                      width: containerWidth,
+                      height: ScreenUtil().setHeight(80),
+                      width: ScreenUtil().setWidth(435),
                       child: TextFormField(
                         decoration: InputDecoration(
                             hintText: ' 请输入收到的验证码',
                             hintStyle: TextStyle(
-                                fontSize: fontSize,
+                                fontSize: ScreenUtil()
+                                    .setSp(30, allowFontScalingSelf: true),
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.bold,
                                 color: Colors.grey),
@@ -262,30 +264,31 @@ class _ResetPasswordState extends State<ResetPassword> {
                 Row(
                   children: <Widget>[
                     SizedBox(
-                      width: sizeBoxWidth,
+                      width: ScreenUtil().setWidth(56),
                     ),
                     Text(
                       '登录密码:',
                       style: TextStyle(
                         fontSize:
-                            ScreenUtil().setSp(40, allowFontScalingSelf: true),
+                            ScreenUtil().setSp(35, allowFontScalingSelf: true),
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Monsterrat',
                       ),
                     ),
                     SizedBox(
-                      width: sizeBoxW,
+                      width: ScreenUtil().setWidth(19),
                     ),
                     Container(
                       //padding: EdgeInsets.only(top: topIndent, left: leftIndent,right: rightIndent),
-                      height: containerHeight,
-                      width: containerWidth,
+                      height: ScreenUtil().setHeight(80),
+                      width: ScreenUtil().setWidth(435),
                       child: TextFormField(
                         decoration: InputDecoration(
                             hintText: ' 6～18位数字或字母组合',
                             hintStyle: TextStyle(
-                                fontSize: fontSize,
+                                fontSize: ScreenUtil()
+                                    .setSp(30, allowFontScalingSelf: true),
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.bold,
                                 color: Colors.grey),
@@ -311,36 +314,37 @@ class _ResetPasswordState extends State<ResetPassword> {
                 ),
 
                 SizedBox(
-                  height: ScreenUtil().setHeight(34),
+                  height: ScreenUtil().setHeight(40),
                 ),
                 //确认密码---------------------------------------
                 Row(
                   children: <Widget>[
                     SizedBox(
-                      width: sizeBoxWidth,
+                      width: ScreenUtil().setWidth(56),
                     ),
                     Text(
                       '确认密码:',
                       style: TextStyle(
                         fontSize:
-                            ScreenUtil().setSp(40, allowFontScalingSelf: true),
+                            ScreenUtil().setSp(35, allowFontScalingSelf: true),
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Monsterrat',
                       ),
                     ),
                     SizedBox(
-                      width: sizeBoxW,
+                      width: ScreenUtil().setWidth(19),
                     ),
                     Container(
                       //padding: EdgeInsets.only(top: topIndent, left: leftIndent,right: rightIndent),
-                      height: containerHeight,
-                      width: containerWidth,
+                      height: ScreenUtil().setHeight(80),
+                      width: ScreenUtil().setWidth(435),
                       child: TextFormField(
                         decoration: InputDecoration(
                             hintText: ' 6～18位数字或字母组合',
                             hintStyle: TextStyle(
-                                fontSize: fontSize,
+                                fontSize: ScreenUtil()
+                                    .setSp(30, allowFontScalingSelf: true),
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.bold,
                                 color: Colors.grey),
@@ -371,8 +375,8 @@ class _ResetPasswordState extends State<ResetPassword> {
                 //提交按键-----------------------------------------
                 Container(
                   //padding: EdgeInsets.only(top: topIndent, left: ,right: rightIndent),
-                  height: containerHeight,
-                  width: containerWidth,
+                  height: ScreenUtil().setHeight(80),
+                  width: ScreenUtil().setWidth(435),
                   child: Material(
                     borderRadius: BorderRadius.circular(20.0),
                     shadowColor: Colors.indigo[colorNum],

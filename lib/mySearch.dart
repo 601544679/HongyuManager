@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mydemo/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'searchSuggestion.dart';
@@ -54,12 +55,15 @@ class searchbar extends SearchDelegate<String> {
         },
         child: Text(
           '搜索',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+              color: Colors.white,
+              fontSize: ScreenUtil().setSp(30, allowFontScalingSelf: true)),
         ),
       ),
       IconButton(
           icon: Icon(
             Icons.clear,
+            size: ScreenUtil().setHeight(40),
           ),
           onPressed: () async {
             history = await getHistory().then((value) {

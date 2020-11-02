@@ -137,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     print('LoginPage--build');
     ScreenUtil.init(context,
-        designSize: Size(1080, 2248), allowFontScaling: false);
+        designSize: Size(750, 1334), allowFontScaling: false);
     print('像素密度--${ScreenUtil().pixelRatio}');
     print('像素宽度--${ScreenUtil().screenWidthPx}');
     print('像素高度--${ScreenUtil().screenHeightPx}');
@@ -161,24 +161,24 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           children: [
             SizedBox(
-              height: ScreenUtil().setHeight(276),
+              height: ScreenUtil().setHeight(150),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
                   'images/hongyu.png',
-                  width: ScreenUtil().setWidth(756),
+                  width: ScreenUtil().setWidth(525),
                   fit: BoxFit.cover,
                 )
               ],
             ),
             SizedBox(
-              height: ScreenUtil().setHeight(50),
+              height: ScreenUtil().setHeight(30),
             ),
             Container(
               //只能存在一个key
-              height: ScreenUtil().setHeight(787),
+              height: ScreenUtil().setHeight(467),
               //color: Colors.green,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -187,8 +187,8 @@ class _LoginPageState extends State<LoginPage> {
                       key: _loginformKey,
                       child: Padding(
                         padding: EdgeInsets.only(
-                            left: ScreenUtil().setWidth(162),
-                            right: ScreenUtil().setWidth(162)),
+                            left: ScreenUtil().setWidth(113),
+                            right: ScreenUtil().setWidth(113)),
                         child: Column(
                           children: [
                             TextFormField(
@@ -212,18 +212,18 @@ class _LoginPageState extends State<LoginPage> {
                               ]*/
                               style: TextStyle(
                                   fontSize: ScreenUtil()
-                                      .setSp(50, allowFontScalingSelf: true)),
+                                      .setSp(35, allowFontScalingSelf: true)),
                               decoration: InputDecoration(
                                   hintText: '输入用户名',
                                   icon: Icon(
                                     Icons.person_pin,
                                     size: ScreenUtil()
-                                        .setSp(80, allowFontScalingSelf: true),
+                                        .setSp(60, allowFontScalingSelf: true),
                                   ),
                                   labelText: '输入用户名'),
                             ),
                             SizedBox(
-                              height: ScreenUtil().setHeight(50),
+                              height: ScreenUtil().setHeight(30),
                             ),
                             TextFormField(
                               //controller: _passwordControl,
@@ -233,7 +233,7 @@ class _LoginPageState extends State<LoginPage> {
                               // ignore: missing_return
                               style: TextStyle(
                                   fontSize: ScreenUtil()
-                                      .setSp(50, allowFontScalingSelf: true)),
+                                      .setSp(35, allowFontScalingSelf: true)),
                               validator: (input) {
                                 //print('输出：${input}');
                                 if (input.trim().isEmpty) {
@@ -247,7 +247,7 @@ class _LoginPageState extends State<LoginPage> {
                                   icon: Icon(
                                     Icons.lock,
                                     size: ScreenUtil()
-                                        .setSp(80, allowFontScalingSelf: true),
+                                        .setSp(60, allowFontScalingSelf: true),
                                   ),
                                   labelText: '输入密码'),
                             )
@@ -281,7 +281,7 @@ class _LoginPageState extends State<LoginPage> {
                               '自动登录',
                               style: TextStyle(
                                   fontSize: ScreenUtil()
-                                      .setSp(45, allowFontScalingSelf: true)),
+                                      .setSp(35, allowFontScalingSelf: true)),
                             ),
                             onTap: () {
                               setState(() {
@@ -302,13 +302,13 @@ class _LoginPageState extends State<LoginPage> {
                               decoration: TextDecoration.underline,
                               color: Colors.indigo[colorNum],
                               fontSize: ScreenUtil()
-                                  .setSp(45, allowFontScalingSelf: true)),
+                                  .setSp(35, allowFontScalingSelf: true)),
                         ),
                       ),
                     ],
                   ),
                   SizedBox(
-                    height: ScreenUtil().setHeight(150),
+                    height: ScreenUtil().setHeight(90),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -316,8 +316,8 @@ class _LoginPageState extends State<LoginPage> {
                       Expanded(
                           child: Padding(
                         padding: EdgeInsets.only(
-                            left: ScreenUtil().setWidth(162),
-                            right: ScreenUtil().setWidth(162)),
+                            left: ScreenUtil().setWidth(113),
+                            right: ScreenUtil().setWidth(113)),
                         child: FlatButton(
                           onPressed: () async {
                             // todo 登录事件，跳转路由，
@@ -393,7 +393,7 @@ class _LoginPageState extends State<LoginPage> {
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: ScreenUtil()
-                                    .setSp(60, allowFontScalingSelf: true)),
+                                    .setSp(40, allowFontScalingSelf: true)),
                           ),
                           color: Colors.indigo[colorNum],
                           shape: RoundedRectangleBorder(
@@ -406,7 +406,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             SizedBox(
-              height: ScreenUtil().setHeight(120),
+              height: ScreenUtil().setHeight(71),
             ),
             Container(
               //color: Colors.red,
@@ -414,13 +414,13 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Divider(
-                    indent: ScreenUtil().setWidth(162),
-                    endIndent: ScreenUtil().setWidth(162),
+                    indent: ScreenUtil().setWidth(113),
+                    endIndent: ScreenUtil().setWidth(113),
                     height: SizeConfig.heightMultiplier,
                     color: Colors.grey,
                   ),
                   SizedBox(
-                    height: ScreenUtil().setHeight(20),
+                    height: ScreenUtil().setHeight(12),
                   ),
                   Column(
                     children: [
@@ -432,19 +432,19 @@ class _LoginPageState extends State<LoginPage> {
                             color: Colors.indigo[colorNum],
                           ),
                           SizedBox(
-                            width: ScreenUtil().setWidth(33),
+                            width: ScreenUtil().setWidth(23),
                           ),
                           Text(
                             '技术支持：',
                             style: TextStyle(
                                 color: Colors.indigo[colorNum],
                                 fontSize: ScreenUtil()
-                                    .setSp(45, allowFontScalingSelf: true)),
+                                    .setSp(35, allowFontScalingSelf: true)),
                           )
                         ],
                       ),
                       SizedBox(
-                        height: ScreenUtil().setHeight(100),
+                        height: ScreenUtil().setHeight(30),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -454,14 +454,14 @@ class _LoginPageState extends State<LoginPage> {
                             color: Colors.indigo[colorNum],
                           ),
                           SizedBox(
-                            width: ScreenUtil().setWidth(33),
+                            width: ScreenUtil().setWidth(23),
                           ),
                           Text(
                             '联系电话：',
                             style: TextStyle(
                                 color: Colors.indigo[colorNum],
                                 fontSize: ScreenUtil()
-                                    .setSp(45, allowFontScalingSelf: true)),
+                                    .setSp(35, allowFontScalingSelf: true)),
                           )
                         ],
                       ),

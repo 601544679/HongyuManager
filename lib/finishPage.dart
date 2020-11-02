@@ -93,14 +93,14 @@ class _FinishPageState extends State<FinishPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: ScreenUtil().setHeight(23),
+                      height: ScreenUtil().setHeight(14),
                     ),
                     CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
                           Colors.indigo[colorNum]),
                     ),
                     SizedBox(
-                      height: ScreenUtil().setHeight(23),
+                      height: ScreenUtil().setHeight(14),
                     ),
                     Text('正在加载...')
                   ],
@@ -240,7 +240,7 @@ class _tabBuilderState extends State<tabBuilder>
               bottom: TabBar(
                   indicatorWeight: 4.0,
                   labelPadding:
-                      EdgeInsets.only(bottom: ScreenUtil().setHeight(23)),
+                      EdgeInsets.only(bottom: ScreenUtil().setHeight(14)),
                   indicatorColor: Colors.white,
                   controller: controller,
                   tabs: [
@@ -248,23 +248,23 @@ class _tabBuilderState extends State<tabBuilder>
                       '送货单信息',
                       style: TextStyle(
                           fontSize: ScreenUtil()
-                              .setSp(45, allowFontScalingSelf: true)),
+                              .setSp(35, allowFontScalingSelf: true)),
                     ),
                     Text(
                       '签收照片',
                       style: TextStyle(
                           fontSize: ScreenUtil()
-                              .setSp(45, allowFontScalingSelf: true)),
+                              .setSp(35, allowFontScalingSelf: true)),
                     ),
                     Text(
                       '途径点',
                       style: TextStyle(
                           fontSize: ScreenUtil()
-                              .setSp(45, allowFontScalingSelf: true)),
+                              .setSp(35, allowFontScalingSelf: true)),
                     ),
                   ]),
             ),
-            preferredSize: Size.fromHeight(ScreenUtil().setHeight(248))),
+            preferredSize: Size.fromHeight(ScreenUtil().setHeight(148))),
         body: TabBarView(controller: controller, children: [
           waybillDetailTab(titleList, contentList, arrayTitleList, cutList),
           signForPicture(allData),
@@ -338,7 +338,7 @@ List<DataColumn> dataColumn(List contentList) {
         Text(
           contentList[i],
           style: TextStyle(
-              fontSize: ScreenUtil().setSp(45, allowFontScalingSelf: true),
+              fontSize: ScreenUtil().setSp(35, allowFontScalingSelf: true),
               color: Colors.black,
               fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
@@ -361,7 +361,7 @@ List<DataRow> dataRow(List arrayContentList) {
         value[i].toString(),
         style: TextStyle(
             color: Colors.black,
-            fontSize: ScreenUtil().setSp(35, allowFontScalingSelf: true)),
+            fontSize: ScreenUtil().setSp(25, allowFontScalingSelf: true)),
       )));
     }
     rowList.add(DataRow(cells: cellList));
@@ -402,21 +402,21 @@ class waybillDetailTab extends StatefulWidget {
 class _waybillDetailTabState extends State<waybillDetailTab>
     with AutomaticKeepAliveClientMixin {
   @override
-  var fontSize = ScreenUtil().setSp(45, allowFontScalingSelf: true);
-  var fontSize1 = ScreenUtil().setSp(50, allowFontScalingSelf: true);
+  var fontSize = ScreenUtil().setSp(35, allowFontScalingSelf: true);
+  var fontSize1 = ScreenUtil().setSp(40, allowFontScalingSelf: true);
   var flex1 = 1;
   var flex2 = 2;
   var textAlign = TextAlign.right;
-  var containerWidth = ScreenUtil().setWidth(1015);
+  var containerWidth = ScreenUtil().setWidth(705);
 
   Widget build(BuildContext context) {
     print('waybillDetailTab--build');
     return Padding(
         padding: EdgeInsets.only(
-            left: ScreenUtil().setWidth(33),
-            top: ScreenUtil().setHeight(23),
-            right: ScreenUtil().setWidth(33),
-            bottom: ScreenUtil().setHeight(23)),
+            left: ScreenUtil().setWidth(23),
+            top: ScreenUtil().setHeight(14),
+            right: ScreenUtil().setWidth(23),
+            bottom: ScreenUtil().setHeight(14)),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -437,7 +437,7 @@ class _waybillDetailTabState extends State<waybillDetailTab>
                           child: textStyle(widget.contentList[index], fontSize1,
                               fontWeight: FontWeight.bold)),
                       SizedBox(
-                        height: ScreenUtil().setHeight(23),
+                        height: ScreenUtil().setHeight(14),
                       ),
                     ],
                   );
@@ -445,12 +445,12 @@ class _waybillDetailTabState extends State<waybillDetailTab>
                 itemCount: widget.titleList.length,
               ),
               SizedBox(
-                height: ScreenUtil().setHeight(23),
+                height: ScreenUtil().setHeight(14),
               ),
               textStyle('货物明细', fontSize),
               Divider(
                 color: Colors.black,
-                height: ScreenUtil().setHeight(23),
+                height: ScreenUtil().setHeight(14),
               ),
               contentHorizontal(widget.arrayTitleList, widget.cutList),
               Divider(color: Colors.black),
@@ -491,10 +491,10 @@ class _signForPictureState extends State<signForPicture>
               children: [
                 Text(
                   s[index],
-                  style: TextStyle(fontSize: ScreenUtil().setHeight(68)),
+                  style: TextStyle(fontSize: ScreenUtil().setHeight(40)),
                 ),
                 SizedBox(
-                  height: ScreenUtil().setHeight(23),
+                  height: ScreenUtil().setHeight(14),
                 ),
                 InkWell(
                   child: AspectRatio(
@@ -517,7 +517,7 @@ class _signForPictureState extends State<signForPicture>
                   },
                 ),
                 SizedBox(
-                  height: ScreenUtil().setHeight(23),
+                  height: ScreenUtil().setHeight(14),
                 )
               ],
             ),
@@ -656,7 +656,7 @@ class _finishMapPageState extends State<finishMapPage>
                       Colors.indigo[colorNum]),
                 ),
                 SizedBox(
-                  height: ScreenUtil().setHeight(45),
+                  height: ScreenUtil().setHeight(27),
                 ),
                 Text(
                   '正在加载中...',
@@ -723,6 +723,11 @@ class _MapScreenState extends State<MapScreen>
               showCompass: true,
               showScaleControl: true,
               showZoomControl: true,
+              rotateGestureEnabled: true,
+              autoRelease: true,
+              scrollGesturesEnabled: true,
+              tiltGestureEnabled: true,
+              zoomGesturesEnabled: true,
               maskDelay: Duration(milliseconds: 500),
               centerCoordinate: LatLng(
                   widget.waybill['destination']['latitude'],
@@ -764,8 +769,8 @@ class _MapScreenState extends State<MapScreen>
                 113.13402564),
         title: widget.waybill['projectAddress'] ?? '',
         widget: Container(
-          height: ScreenUtil().setHeight(180),
-          width: ScreenUtil().setWidth(290),
+          height: ScreenUtil().setHeight(107),
+          width: ScreenUtil().setWidth(201),
           child: Material(
             borderRadius: BorderRadius.circular(15),
             shadowColor: Colors.transparent,
@@ -777,7 +782,7 @@ class _MapScreenState extends State<MapScreen>
                   dateChange(widget.waybill['arrivalTime']),
                   style: TextStyle(
                       fontSize:
-                          ScreenUtil().setSp(40, allowFontScalingSelf: true),
+                          ScreenUtil().setSp(30, allowFontScalingSelf: true),
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Montserrat'),
@@ -803,14 +808,14 @@ class _MapScreenState extends State<MapScreen>
     double height;
     double width;
     if (i == widget.latLngList.length - 1) {
-      height = ScreenUtil().setWidth(65);
-      width = ScreenUtil().setWidth(195);
+      height = ScreenUtil().setWidth(45);
+      width = ScreenUtil().setWidth(135);
     } else if (i == 0) {
-      height = ScreenUtil().setWidth(180);
-      width = ScreenUtil().setWidth(290);
+      height = ScreenUtil().setWidth(125);
+      width = ScreenUtil().setWidth(201);
     } else {
-      height = ScreenUtil().setWidth(33);
-      width = ScreenUtil().setWidth(33);
+      height = ScreenUtil().setWidth(23);
+      width = ScreenUtil().setWidth(23);
     }
     return Container(
       height: height,
@@ -844,7 +849,7 @@ class _MapScreenState extends State<MapScreen>
         style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontSize: ScreenUtil().setSp(40, allowFontScalingSelf: true),
+            fontSize: ScreenUtil().setSp(30, allowFontScalingSelf: true),
             fontFamily: 'Montserrat'));
   }
 

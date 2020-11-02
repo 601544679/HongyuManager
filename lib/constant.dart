@@ -261,7 +261,7 @@ putHistory(String historyItem) async {
 SnackBar showSnackBar(String text) {
   return SnackBar(
     content: Padding(
-      padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(170)),
+      padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(101)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -270,13 +270,13 @@ SnackBar showSnackBar(String text) {
                 borderRadius: BorderRadius.circular(20),
                 color: Color(0xFFF5F5F5)),
             child: Padding(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(40)),
+              padding: EdgeInsets.all(ScreenUtil().setWidth(28)),
               child: Text(
                 text,
                 style: TextStyle(
                     color: Colors.black87,
                     fontSize:
-                        ScreenUtil().setSp(40, allowFontScalingSelf: true)),
+                        ScreenUtil().setSp(30, allowFontScalingSelf: true)),
               ),
             ),
           ),

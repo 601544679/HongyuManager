@@ -109,12 +109,12 @@ class _HomeState extends State<Home> {
       return Text('');
     } else if (currentTab == 1) {
       return Padding(
-        padding: EdgeInsets.only(right: ScreenUtil().setWidth(54)),
+        padding: EdgeInsets.only(right: ScreenUtil().setWidth(38)),
         child: IconButton(
             icon: Icon(
               Icons.search,
               color: Colors.white,
-              size: ScreenUtil().setHeight(60),
+              size: ScreenUtil().setHeight(36),
             ),
             onPressed: () async {
               /* var response = await Server().searchSuggestion();
@@ -132,19 +132,19 @@ class _HomeState extends State<Home> {
     } else if (currentTab == 2) {
       return UnconstrainedBox(
           child: Padding(
-              padding: EdgeInsets.only(right: ScreenUtil().setWidth(54)),
+              padding: EdgeInsets.only(right: ScreenUtil().setWidth(38)),
               child: InkWell(
                   child: Row(
                     children: [
                       Icon(
                         Icons.exit_to_app,
-                        size: ScreenUtil().setHeight(50),
+                        size: ScreenUtil().setHeight(30),
                       ),
                       Text(
                         '退出',
                         style: TextStyle(
                             fontSize: ScreenUtil()
-                                .setSp(38, allowFontScalingSelf: true)),
+                                .setSp(30, allowFontScalingSelf: true)),
                       )
                     ],
                   ),
@@ -197,7 +197,7 @@ class _HomeState extends State<Home> {
               title: Text(tabName[currentTab],
                   style: TextStyle(
                       fontSize:
-                          ScreenUtil().setSp(60, allowFontScalingSelf: true))),
+                          ScreenUtil().setSp(40, allowFontScalingSelf: true))),
               actions: [action(currentTab)],
             ),
             body: IndexedStack(

@@ -89,16 +89,12 @@ class _resultViewState extends State<resultView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      height: SizeConfig.heightMultiplier,
-                    ),
+                    SizedBox(height: ScreenUtil().setHeight(10)),
                     CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
                           Colors.indigo[colorNum]),
                     ),
-                    SizedBox(
-                      height: SizeConfig.heightMultiplier,
-                    ),
+                    SizedBox(height: ScreenUtil().setHeight(30)),
                     Text('正在加载..')
                   ],
                 ),
@@ -126,8 +122,8 @@ class ResultBuilder extends StatefulWidget {
 }
 
 class _ResultBuilderState extends State<ResultBuilder> {
-  var fontSize = SizeConfig.heightMultiplier * 2;
-  var sizedBoxHeight = SizeConfig.heightMultiplier;
+  var fontSize = ScreenUtil().setSp(35, allowFontScalingSelf: true);
+  var sizedBoxHeight = ScreenUtil().setHeight(15);
   List titleList = ['序号', '色号', '规格', '数量', '发货数量', '开单单位', '明细备注'];
 
   @override
@@ -162,10 +158,11 @@ class _ResultBuilderState extends State<ResultBuilder> {
           child: Card(
             child: Padding(
               padding: EdgeInsets.only(
-                  left: SizeConfig.widthMultiplier * 2,
-                  right: SizeConfig.widthMultiplier * 2,
-                  top: SizeConfig.heightMultiplier,
-                  bottom: SizeConfig.heightMultiplier),
+                left: ScreenUtil().setWidth(20),
+                right: ScreenUtil().setWidth(20),
+                top: ScreenUtil().setHeight(20),
+                bottom: ScreenUtil().setHeight(20),
+              ),
               child: Column(
                 children: [
                   Row(
@@ -238,15 +235,17 @@ class _ResultBuilderState extends State<ResultBuilder> {
                           child: Text(
                         '司机：${result.result[index].driverName == null ? '无司机' : result.result[index].driverName.username}',
                         textAlign: TextAlign.center,
-                        style:
-                            TextStyle(fontSize: SizeConfig.widthMultiplier * 4),
+                        style: TextStyle(
+                            fontSize: ScreenUtil()
+                                .setSp(35, allowFontScalingSelf: true)),
                       )),
                       Expanded(
                           child: Text(
                         '业务员：${result.result[index].supplierContactPerson ?? '无业务员'}',
                         textAlign: TextAlign.center,
-                        style:
-                            TextStyle(fontSize: SizeConfig.widthMultiplier * 4),
+                        style: TextStyle(
+                            fontSize: ScreenUtil()
+                                .setSp(35, allowFontScalingSelf: true)),
                       )),
                     ],
                   ),
@@ -271,7 +270,7 @@ class _ResultBuilderState extends State<ResultBuilder> {
                     ],
                   ),
                   Divider(
-                    height: SizeConfig.heightMultiplier,
+                    height: ScreenUtil().setHeight(13),
                     color: Colors.black,
                   ),
                   Row(
@@ -285,7 +284,7 @@ class _ResultBuilderState extends State<ResultBuilder> {
                       Container(
                         color: Colors.grey,
                         width: 1,
-                        height: SizeConfig.heightMultiplier * 4,
+                        height: ScreenUtil().setHeight(45),
                       ),
                       textStyle(
                           '${date(result.result[index].arrivalTime ?? '无到货日期')}',
@@ -422,8 +421,8 @@ class _GoodsDetailState extends State<GoodsDetail> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
-          dataRowHeight: SizeConfig.heightMultiplier * 3,
-          headingRowHeight: SizeConfig.heightMultiplier * 4,
+          dataRowHeight: ScreenUtil().setHeight(45),
+          headingRowHeight: ScreenUtil().setHeight(60),
           columns: dataColumn(widget.titleList),
           rows: dataRow(allList)),
     );

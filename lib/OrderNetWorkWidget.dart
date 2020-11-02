@@ -21,8 +21,8 @@ class OrderNetWorkWidget extends StatefulWidget {
 }
 
 class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
-  var fontSize = ScreenUtil().setSp(43, allowFontScalingSelf: true);
-  var sizedBoxHeight = ScreenUtil().setHeight(23);
+  var fontSize = ScreenUtil().setSp(35, allowFontScalingSelf: true);
+  var sizedBoxHeight = ScreenUtil().setHeight(17);
   List titleList = ['序号', '色号', '规格', '数量', '发货数量', '开单单位', '明细备注'];
   ScrollController controller = ScrollController();
   bool showToTopBtn = false;
@@ -121,18 +121,14 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
   @override
   Widget build(BuildContext context) {
     getToken();
-    print(
-        '具体值:tokenIsUseful--${tokenIsUseful},类型--${widget.waybill.runtimeType}');
+    print('具体值:tokenIsUseful--${tokenIsUseful},类型--${widget.waybill.runtimeType}');
     if (tokenIsUseful == true && widget.waybill.runtimeType != int) {
-      print('position--$position');
       print('OrderNetWorkWidget--build');
       MyNotification(showToTopBtn).dispatch(context);
       WaybillEntity wbill = WaybillEntity().fromJson(widget.waybill);
-      //wbill.result.sort((a, b) => b.departureDate.compareTo(a.departureDate));
       return ListView.builder(
         controller: controller,
         itemBuilder: (context, index) {
-          //print('类型：${wbill.result[index].runtimeType}');
           return InkWell(
             onTap: () {
               print(index);
@@ -157,10 +153,10 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
             child: Card(
               child: Padding(
                 padding: EdgeInsets.only(
-                    left: ScreenUtil().setWidth(22),
-                    right: ScreenUtil().setWidth(22),
-                    top: ScreenUtil().setHeight(23),
-                    bottom: ScreenUtil().setHeight(23)),
+                    left: ScreenUtil().setWidth(15),
+                    right: ScreenUtil().setWidth(15),
+                    top: ScreenUtil().setHeight(14),
+                    bottom: ScreenUtil().setHeight(14)),
                 child: Column(
                   children: [
                     Row(
@@ -233,13 +229,13 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                             child: Text(
                           '司机：${wbill.result[index].driver == null ? '无司机' : wbill.result[index].driver.username}',
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: ScreenUtil().setWidth(44)),
+                          style: TextStyle(fontSize: ScreenUtil().setWidth(31)),
                         )),
                         Expanded(
                             child: Text(
                           '业务员：${wbill.result[index].supplierContactPerson ?? '无业务员'}',
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: ScreenUtil().setWidth(44)),
+                          style: TextStyle(fontSize: ScreenUtil().setWidth(31)),
                         )),
                       ],
                     ),
@@ -264,7 +260,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                       ],
                     ),
                     Divider(
-                      height: ScreenUtil().setHeight(23),
+                      height: ScreenUtil().setHeight(17),
                       color: Colors.black,
                     ),
                     Row(
@@ -278,7 +274,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                         Container(
                           color: Colors.grey,
                           width: 1,
-                          height: ScreenUtil().setHeight(90),
+                          height: ScreenUtil().setHeight(54),
                         ),
                         textStyle(
                             '${wbill.result[index].estimatedArrivalTime == -1 ? '无到货日期' : date(wbill.result[index].estimatedArrivalTime)}',
@@ -336,8 +332,8 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
       children: [
         textStyle(text, fontSize, color: color),
         Image.asset('images/arrow.png',
-            width: ScreenUtil().setWidth(108),
-            height: ScreenUtil().setHeight(90),
+            width: ScreenUtil().setWidth(75),
+            height: ScreenUtil().setHeight(54),
             fit: BoxFit.cover,
             color: color),
       ],
@@ -383,7 +379,7 @@ List<DataColumn> dataColumn(List titleList) {
           style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
-              fontSize: ScreenUtil().setSp(35, allowFontScalingSelf: true)),
+              fontSize: ScreenUtil().setSp(30, allowFontScalingSelf: true)),
         )
       ],
       mainAxisAlignment: MainAxisAlignment.center,
@@ -400,7 +396,7 @@ List<DataRow> dataRow(List contentList) {
       cellList.add(DataCell(Text(
         value[i].toString(),
         style: TextStyle(
-            fontSize: ScreenUtil().setSp(33, allowFontScalingSelf: true)),
+            fontSize: ScreenUtil().setSp(28, allowFontScalingSelf: true)),
       )));
     }
     rowList.add(DataRow(cells: cellList));
@@ -436,8 +432,8 @@ class _GoodsDetailState extends State<GoodsDetail> {
       scrollDirection: Axis.horizontal,
       child: DataTable(
           //columnSpacing: ScreenUtil().setWidth(60),
-          dataRowHeight: ScreenUtil().setHeight(68),
-          headingRowHeight: ScreenUtil().setHeight(90),
+          dataRowHeight: ScreenUtil().setHeight(41),
+          headingRowHeight: ScreenUtil().setHeight(54),
           columns: dataColumn(widget.titleList),
           rows: dataRow(allList)),
     );
