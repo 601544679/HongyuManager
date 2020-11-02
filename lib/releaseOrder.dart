@@ -345,7 +345,7 @@ class _ReleaseOrderState
                 '发布送货单',
                 style: TextStyle(
                     fontSize:
-                        ScreenUtil().setSp(50, allowFontScalingSelf: true)),
+                        ScreenUtil().setSp(40, allowFontScalingSelf: true)),
               ),
               actions: [
                 MaterialButton(
@@ -357,17 +357,17 @@ class _ReleaseOrderState
                     style: TextStyle(
                         color: Colors.white,
                         fontSize:
-                            ScreenUtil().setSp(40, allowFontScalingSelf: true)),
+                            ScreenUtil().setSp(30, allowFontScalingSelf: true)),
                   ),
                 )
               ],
             ),
             body: Padding(
               padding: EdgeInsets.fromLTRB(
-                  ScreenUtil().setWidth(22),
-                  ScreenUtil().setHeight(23),
-                  ScreenUtil().setWidth(22),
-                  ScreenUtil().setHeight(23)),
+                  ScreenUtil().setWidth(15),
+                  ScreenUtil().setHeight(14),
+                  ScreenUtil().setWidth(15),
+                  ScreenUtil().setHeight(14)),
               child: SingleChildScrollView(
                 //todo bug监听滚动不能填充，解决TextFromFiled的controller变量放在build外面
                 controller: scrollController,
@@ -379,12 +379,12 @@ class _ReleaseOrderState
                         Text('送货单内容',
                             style: TextStyle(
                                 fontSize: ScreenUtil()
-                                    .setSp(47, allowFontScalingSelf: true),
+                                    .setSp(37, allowFontScalingSelf: true),
                                 fontWeight: FontWeight.bold))
                       ],
                     ),
                     SizedBox(
-                      height: ScreenUtil().setHeight(23),
+                      height: ScreenUtil().setHeight(14),
                     ),
                     TextField(
                       maxLines: null,
@@ -426,11 +426,11 @@ class _ReleaseOrderState
                           hintText: '请粘贴复制的订单内容',
                           border: OutlineInputBorder(
                               borderSide:
-                                  BorderSide(width: ScreenUtil().setWidth(18)),
+                                  BorderSide(width: ScreenUtil().setWidth(13)),
                               borderRadius: BorderRadius.circular(15))),
                     ),
                     SizedBox(
-                      height: ScreenUtil().setHeight(10),
+                      height: ScreenUtil().setHeight(6),
                     ),
                     Form(
                       key: _releaseFormKey,
@@ -446,14 +446,14 @@ class _ReleaseOrderState
                                   Text(
                                     '${index + 1}:${list[index]}',
                                     style: TextStyle(
-                                        fontSize: ScreenUtil().setSp(47,
+                                        fontSize: ScreenUtil().setSp(37,
                                             allowFontScalingSelf: true),
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
                               SizedBox(
-                                height: ScreenUtil().setHeight(10),
+                                height: ScreenUtil().setHeight(6),
                               ),
                               TextFormField(
                                 // ignore: missing_return
@@ -538,17 +538,17 @@ class _ReleaseOrderState
                                     hintText: '请输入${list[index]}',
                                     border: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                            width: ScreenUtil().setWidth(18),
+                                            width: ScreenUtil().setWidth(13),
                                             color: Colors.grey),
                                         borderRadius:
                                             BorderRadius.circular(15)),
                                     hintStyle: TextStyle(
-                                        fontSize: ScreenUtil().setSp(40,
+                                        fontSize: ScreenUtil().setSp(30,
                                             allowFontScalingSelf: true))),
                                 maxLines: null,
                               ),
                               SizedBox(
-                                height: ScreenUtil().setHeight(23),
+                                height: ScreenUtil().setHeight(14),
                               )
                             ],
                           );
@@ -562,15 +562,15 @@ class _ReleaseOrderState
             ),
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
             floatingActionButton: Container(
-              height: ScreenUtil().setHeight(350),
+              height: ScreenUtil().setHeight(208),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Visibility(
                       visible: showToTopBtn,
                       child: Container(
-                        height: ScreenUtil().setHeight(120),
-                        width: ScreenUtil().setHeight(120),
+                        height: ScreenUtil().setHeight(72),
+                        width: ScreenUtil().setHeight(72),
                         child: FloatingActionButton(
                           elevation: 0,
                           onPressed: () {
@@ -579,11 +579,11 @@ class _ReleaseOrderState
                                 curve: Curves.ease);
                           },
                           child: Icon(Icons.arrow_upward,
-                              size: ScreenUtil().setHeight(100)),
+                              size: ScreenUtil().setHeight(60)),
                         ),
                       )),
                   SizedBox(
-                    height: ScreenUtil().setHeight(50),
+                    height: ScreenUtil().setHeight(30),
                   ),
                   FlatButton(
                     color: Colors.indigo[colorNum],
@@ -629,7 +629,7 @@ class _ReleaseOrderState
                       '发布送货单',
                       style: TextStyle(
                           fontSize: ScreenUtil()
-                              .setSp(47, allowFontScalingSelf: true),
+                              .setSp(37, allowFontScalingSelf: true),
                           fontWeight: FontWeight.bold),
                     ),
                   )
