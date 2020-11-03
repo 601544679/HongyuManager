@@ -79,7 +79,7 @@ class _searchSuggestionState extends State<searchSuggestion> {
                 style: TextStyle(
                     color: Colors.black,
                     fontSize:
-                        ScreenUtil().setSp(20, allowFontScalingSelf: true)),
+                        ScreenUtil().setSp(35, allowFontScalingSelf: true)),
               ),
             ),
           ),
@@ -128,6 +128,9 @@ class _searchSuggestionState extends State<searchSuggestion> {
                       Wrap(
                         children: showHistory(context, widget.history),
                       ),
+                      SizedBox(
+                        height: setHeight(50),
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -136,7 +139,12 @@ class _searchSuggestionState extends State<searchSuggestion> {
                               clearHistory();
                               widget.popSuggestion(context);
                             },
-                            child: Text('清除历史记录'),
+                            child: Text(
+                              '清除历史记录',
+                              style: TextStyle(
+                                  fontSize: ScreenUtil()
+                                      .setSp(40, allowFontScalingSelf: true)),
+                            ),
                           )
                         ],
                       )
