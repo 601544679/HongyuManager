@@ -109,12 +109,12 @@ class _HomeState extends State<Home> {
       return Text('');
     } else if (currentTab == 1) {
       return Padding(
-        padding: EdgeInsets.only(right: ScreenUtil().setWidth(38)),
+        padding: EdgeInsets.only(right: setWidth(38)),
         child: IconButton(
             icon: Icon(
               Icons.search,
               color: Colors.white,
-              size: ScreenUtil().setHeight(36),
+              size: setHeight(36),
             ),
             onPressed: () async {
               /* var response = await Server().searchSuggestion();
@@ -132,13 +132,13 @@ class _HomeState extends State<Home> {
     } else if (currentTab == 2) {
       return UnconstrainedBox(
           child: Padding(
-              padding: EdgeInsets.only(right: ScreenUtil().setWidth(38)),
+              padding: EdgeInsets.only(right: setWidth(38)),
               child: InkWell(
                   child: Row(
                     children: [
                       Icon(
                         Icons.exit_to_app,
-                        size: ScreenUtil().setHeight(30),
+                        size: setHeight(30),
                       ),
                       Text(
                         '退出',
@@ -178,7 +178,7 @@ class _HomeState extends State<Home> {
     return tokenIsUseful == false
         ? Scaffold(
             body: AlertDialog(
-              title: Text('该账号已在新设备登录，点击重新登录'),
+              title: Text(retryLogin),
               elevation: 3,
               actions: [
                 FlatButton(

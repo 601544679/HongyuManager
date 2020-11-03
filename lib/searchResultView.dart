@@ -89,12 +89,12 @@ class _resultViewState extends State<resultView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(height: ScreenUtil().setHeight(10)),
+                    SizedBox(height: setHeight(10)),
                     CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
                           Colors.indigo[colorNum]),
                     ),
-                    SizedBox(height: ScreenUtil().setHeight(30)),
+                    SizedBox(height: setHeight(30)),
                     Text('正在加载..')
                   ],
                 ),
@@ -122,8 +122,8 @@ class ResultBuilder extends StatefulWidget {
 }
 
 class _ResultBuilderState extends State<ResultBuilder> {
-  var fontSize = ScreenUtil().setSp(35, allowFontScalingSelf: true);
-  var sizedBoxHeight = ScreenUtil().setHeight(15);
+  var fontSize = ScreenUtil().setSp(33, allowFontScalingSelf: true);
+  var sizedBoxHeight = setHeight(15);
   List titleList = ['序号', '色号', '规格', '数量', '发货数量', '开单单位', '明细备注'];
 
   @override
@@ -158,10 +158,10 @@ class _ResultBuilderState extends State<ResultBuilder> {
           child: Card(
             child: Padding(
               padding: EdgeInsets.only(
-                left: ScreenUtil().setWidth(20),
-                right: ScreenUtil().setWidth(20),
-                top: ScreenUtil().setHeight(20),
-                bottom: ScreenUtil().setHeight(20),
+                left: setWidth(20),
+                right: setWidth(20),
+                top: setHeight(20),
+                bottom: setHeight(20),
               ),
               child: Column(
                 children: [
@@ -205,7 +205,7 @@ class _ResultBuilderState extends State<ResultBuilder> {
                       Expanded(
                         child: textStyle(
                             '${result.result[index].startLocationName ?? '出发地'}',
-                            fontSize * 2,
+                            fontSize * 1.5,
                             fontWeight: FontWeight.bold,
                             textAlign: TextAlign.center),
                         flex: 2,
@@ -221,7 +221,7 @@ class _ResultBuilderState extends State<ResultBuilder> {
                       Expanded(
                         child: textStyle(
                             '${result.result[index].destinationName ?? '目的地'}',
-                            fontSize * 2,
+                            fontSize * 1.5,
                             fontWeight: FontWeight.bold,
                             textAlign: TextAlign.center),
                         flex: 2,
@@ -270,7 +270,7 @@ class _ResultBuilderState extends State<ResultBuilder> {
                     ],
                   ),
                   Divider(
-                    height: ScreenUtil().setHeight(13),
+                    height: setHeight(13),
                     color: Colors.black,
                   ),
                   Row(
@@ -284,7 +284,7 @@ class _ResultBuilderState extends State<ResultBuilder> {
                       Container(
                         color: Colors.grey,
                         width: 1,
-                        height: ScreenUtil().setHeight(45),
+                        height: setHeight(45),
                       ),
                       textStyle(
                           '${date(result.result[index].arrivalTime ?? '无到货日期')}',
@@ -327,8 +327,8 @@ class _ResultBuilderState extends State<ResultBuilder> {
       children: [
         textStyle(text, fontSize, color: color),
         Image.asset('images/arrow.png',
-            width: ScreenUtil().setWidth(108),
-            height: ScreenUtil().setHeight(90),
+            width: setWidth(108),
+            height: setHeight(90),
             fit: BoxFit.cover,
             color: color),
       ],
@@ -421,8 +421,8 @@ class _GoodsDetailState extends State<GoodsDetail> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
-          dataRowHeight: ScreenUtil().setHeight(45),
-          headingRowHeight: ScreenUtil().setHeight(60),
+          dataRowHeight: setHeight(45),
+          headingRowHeight: setHeight(60),
           columns: dataColumn(widget.titleList),
           rows: dataRow(allList)),
     );

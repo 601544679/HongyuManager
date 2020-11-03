@@ -113,7 +113,7 @@ class _OrderTabState extends State<OrderTab>
                 icon: Icon(
                   Icons.arrow_drop_down,
                   color: Colors.indigo[colorNum],
-                  size: ScreenUtil().setHeight(54),
+                  size: setHeight(54),
                 ),
               ),
             ),

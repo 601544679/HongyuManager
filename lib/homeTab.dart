@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mydemo/server.dart';
-import 'sizeConfig.dart';
 import 'constant.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -60,15 +58,15 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(15),
                 border: Border.all(width: 1, color: Colors.grey)),
-            height: ScreenUtil().setWidth(390),
-            width: ScreenUtil().setWidth(390),
+            height: setWidth(390),
+            width: setWidth(390),
             child: Icon(
               Icons.add,
-              size: ScreenUtil().setWidth(75),
+              size: setWidth(75),
             ),
           ),
           SizedBox(
-            height: ScreenUtil().setHeight(40),
+            height: setHeight(40),
           ),
           Text(
             '发布送货单',

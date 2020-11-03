@@ -63,7 +63,7 @@ class searchbar extends SearchDelegate<String> {
       IconButton(
           icon: Icon(
             Icons.clear,
-            size: ScreenUtil().setHeight(40),
+            size: setHeight(40),
           ),
           onPressed: () async {
             history = await getHistory().then((value) {

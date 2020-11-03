@@ -326,7 +326,7 @@ class _ReleaseOrderState
     return tokenIsUseful == false
         ? Scaffold(
             body: AlertDialog(
-              title: Text('该账号已在新设备登录，点击重新登录'),
+              title: Text(retryLogin),
               elevation: 3,
               actions: [
                 FlatButton(
@@ -364,10 +364,7 @@ class _ReleaseOrderState
             ),
             body: Padding(
               padding: EdgeInsets.fromLTRB(
-                  ScreenUtil().setWidth(15),
-                  ScreenUtil().setHeight(14),
-                  ScreenUtil().setWidth(15),
-                  ScreenUtil().setHeight(14)),
+                  setWidth(15), setHeight(14), setWidth(15), setHeight(14)),
               child: SingleChildScrollView(
                 //todo bug监听滚动不能填充，解决TextFromFiled的controller变量放在build外面
                 controller: scrollController,
@@ -384,7 +381,7 @@ class _ReleaseOrderState
                       ],
                     ),
                     SizedBox(
-                      height: ScreenUtil().setHeight(14),
+                      height: setHeight(14),
                     ),
                     TextField(
                       maxLines: null,
@@ -425,12 +422,11 @@ class _ReleaseOrderState
                       decoration: InputDecoration(
                           hintText: '请粘贴复制的订单内容',
                           border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(width: ScreenUtil().setWidth(13)),
+                              borderSide: BorderSide(width: setWidth(13)),
                               borderRadius: BorderRadius.circular(15))),
                     ),
                     SizedBox(
-                      height: ScreenUtil().setHeight(6),
+                      height: setHeight(6),
                     ),
                     Form(
                       key: _releaseFormKey,
@@ -453,7 +449,7 @@ class _ReleaseOrderState
                                 ],
                               ),
                               SizedBox(
-                                height: ScreenUtil().setHeight(6),
+                                height: setHeight(6),
                               ),
                               TextFormField(
                                 // ignore: missing_return
@@ -538,7 +534,7 @@ class _ReleaseOrderState
                                     hintText: '请输入${list[index]}',
                                     border: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                            width: ScreenUtil().setWidth(13),
+                                            width: setWidth(13),
                                             color: Colors.grey),
                                         borderRadius:
                                             BorderRadius.circular(15)),
@@ -548,7 +544,7 @@ class _ReleaseOrderState
                                 maxLines: null,
                               ),
                               SizedBox(
-                                height: ScreenUtil().setHeight(14),
+                                height: setHeight(14),
                               )
                             ],
                           );
@@ -562,15 +558,15 @@ class _ReleaseOrderState
             ),
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
             floatingActionButton: Container(
-              height: ScreenUtil().setHeight(208),
+              height: setHeight(208),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Visibility(
                       visible: showToTopBtn,
                       child: Container(
-                        height: ScreenUtil().setHeight(72),
-                        width: ScreenUtil().setHeight(72),
+                        height: setHeight(72),
+                        width: setHeight(72),
                         child: FloatingActionButton(
                           elevation: 0,
                           onPressed: () {
@@ -578,12 +574,11 @@ class _ReleaseOrderState
                                 duration: Duration(seconds: 1),
                                 curve: Curves.ease);
                           },
-                          child: Icon(Icons.arrow_upward,
-                              size: ScreenUtil().setHeight(60)),
+                          child: Icon(Icons.arrow_upward, size: setHeight(60)),
                         ),
                       )),
                   SizedBox(
-                    height: ScreenUtil().setHeight(30),
+                    height: setHeight(30),
                   ),
                   FlatButton(
                     color: Colors.indigo[colorNum],

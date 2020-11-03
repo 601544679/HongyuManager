@@ -109,10 +109,10 @@ class _searchSuggestionState extends State<searchSuggestion> {
     return widget.query.isEmpty
         ? Padding(
             padding: EdgeInsets.fromLTRB(
-              ScreenUtil().setWidth(20),
-              ScreenUtil().setWidth(10),
-              ScreenUtil().setWidth(20),
-              ScreenUtil().setWidth(0),
+              setWidth(20),
+              setWidth(10),
+              setWidth(20),
+              setWidth(0),
             ),
             child: widget.history == null
                 ? Center(
@@ -167,11 +167,11 @@ class _searchSuggestionState extends State<searchSuggestion> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(
-                            height: ScreenUtil().setHeight(10),
+                            height: setHeight(10),
                           ),
                           CircularProgressIndicator(),
                           SizedBox(
-                            height: ScreenUtil().setHeight(30),
+                            height: setHeight(30),
                           ),
                           Text('正在加载...')
                         ],

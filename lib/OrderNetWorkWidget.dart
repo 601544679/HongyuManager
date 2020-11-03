@@ -21,8 +21,8 @@ class OrderNetWorkWidget extends StatefulWidget {
 }
 
 class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
-  var fontSize = ScreenUtil().setSp(35, allowFontScalingSelf: true);
-  var sizedBoxHeight = ScreenUtil().setHeight(17);
+  double fontSize = ScreenUtil().setSp(33, allowFontScalingSelf: true);
+  double sizedBoxHeight = setHeight(5);
   List titleList = ['序号', '色号', '规格', '数量', '发货数量', '开单单位', '明细备注'];
   ScrollController controller = ScrollController();
   bool showToTopBtn = false;
@@ -121,7 +121,8 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
   @override
   Widget build(BuildContext context) {
     getToken();
-    print('具体值:tokenIsUseful--${tokenIsUseful},类型--${widget.waybill.runtimeType}');
+    print(
+        '具体值:tokenIsUseful--${tokenIsUseful},类型--${widget.waybill.runtimeType}');
     if (tokenIsUseful == true && widget.waybill.runtimeType != int) {
       print('OrderNetWorkWidget--build');
       MyNotification(showToTopBtn).dispatch(context);
@@ -153,10 +154,10 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
             child: Card(
               child: Padding(
                 padding: EdgeInsets.only(
-                    left: ScreenUtil().setWidth(15),
-                    right: ScreenUtil().setWidth(15),
-                    top: ScreenUtil().setHeight(14),
-                    bottom: ScreenUtil().setHeight(14)),
+                    left: setWidth(15),
+                    right: setWidth(15),
+                    top: setHeight(14),
+                    bottom: setHeight(14)),
                 child: Column(
                   children: [
                     Row(
@@ -170,7 +171,6 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                         )
                       ],
                     ),
-                    SizedBox(height: sizedBoxHeight),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -192,14 +192,16 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                                 fontSize))
                       ],
                     ),
-                    SizedBox(height: sizedBoxHeight),
+                    SizedBox(
+                      height: sizedBoxHeight * 5,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Expanded(
                           child: textStyle(
                               '${wbill.result[index].startLocationName == ' ' ? '' : wbill.result[index].startLocationName}',
-                              fontSize * 2,
+                              fontSize * 1.5,
                               fontWeight: FontWeight.bold,
                               textAlign: TextAlign.center),
                           flex: 2,
@@ -215,7 +217,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                         Expanded(
                           child: textStyle(
                               '${wbill.result[index].destinationName ?? '目的地'}',
-                              fontSize * 2,
+                              fontSize * 1.5,
                               fontWeight: FontWeight.bold,
                               textAlign: TextAlign.center),
                           flex: 2,
@@ -229,17 +231,17 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                             child: Text(
                           '司机：${wbill.result[index].driver == null ? '无司机' : wbill.result[index].driver.username}',
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: ScreenUtil().setWidth(31)),
+                          style: TextStyle(fontSize: setWidth(31)),
                         )),
                         Expanded(
                             child: Text(
                           '业务员：${wbill.result[index].supplierContactPerson ?? '无业务员'}',
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: ScreenUtil().setWidth(31)),
+                          style: TextStyle(fontSize: setWidth(31)),
                         )),
                       ],
                     ),
-                    SizedBox(height: sizedBoxHeight),
+                    SizedBox(height: sizedBoxHeight * 5),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -251,7 +253,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                       titleList: titleList,
                       totalList: wbill.result[index],
                     ),
-                    SizedBox(height: sizedBoxHeight),
+                    SizedBox(height: sizedBoxHeight * 5),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -260,7 +262,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                       ],
                     ),
                     Divider(
-                      height: ScreenUtil().setHeight(17),
+                      height: setHeight(17),
                       color: Colors.black,
                     ),
                     Row(
@@ -274,7 +276,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                         Container(
                           color: Colors.grey,
                           width: 1,
-                          height: ScreenUtil().setHeight(54),
+                          height: setHeight(54),
                         ),
                         textStyle(
                             '${wbill.result[index].estimatedArrivalTime == -1 ? '无到货日期' : date(wbill.result[index].estimatedArrivalTime)}',
@@ -293,7 +295,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
       );
     } else if (tokenIsUseful == false) {
       return AlertDialog(
-        title: Text('该账号已在新设备登录，点击重新登录'),
+        title: Text(retryLogin),
         elevation: 3,
         actions: [
           FlatButton(
@@ -332,8 +334,8 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
       children: [
         textStyle(text, fontSize, color: color),
         Image.asset('images/arrow.png',
-            width: ScreenUtil().setWidth(75),
-            height: ScreenUtil().setHeight(54),
+            width: setWidth(75),
+            height: setHeight(54),
             fit: BoxFit.cover,
             color: color),
       ],
@@ -432,8 +434,8 @@ class _GoodsDetailState extends State<GoodsDetail> {
       scrollDirection: Axis.horizontal,
       child: DataTable(
           //columnSpacing: ScreenUtil().setWidth(60),
-          dataRowHeight: ScreenUtil().setHeight(41),
-          headingRowHeight: ScreenUtil().setHeight(54),
+          dataRowHeight: setHeight(41),
+          headingRowHeight: setHeight(54),
           columns: dataColumn(widget.titleList),
           rows: dataRow(allList)),
     );

@@ -20,6 +20,18 @@ final routes = {
 };
 int currentTab = 0;
 String dropDownButtonValue = '0';
+final String retryLogin = '该账号已在新设备登录，点击重新登录';
+
+//设置高度
+double setHeight(double num) {
+  return ScreenUtil().setHeight(num);
+}
+
+//设置宽度
+double setWidth(double num) {
+  return ScreenUtil().setWidth(num);
+}
+
 
 //releaseOrder
 //发布订单没有车牌号码，司机接单后才添加车牌号码

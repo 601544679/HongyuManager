@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:leancloud_storage/leancloud.dart';
+import 'constant.dart';
 import 'login.dart';
 import 'sizeconfig.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,14 +17,16 @@ class _ResetPasswordState extends State<ResetPassword> {
   final TextEditingController _passwordControl = new TextEditingController();
   bool checkBoxValue = false;
   final int colorNum = 600;
-  final double leftIndent = ScreenUtil().setWidth(27);
-  final double rightIndent = ScreenUtil().setWidth(184);
-  final double topIndent = ScreenUtil().setHeight(34);
-  final double containerHeight = ScreenUtil().setHeight(135);
-  final double containerWidth = ScreenUtil().setWidth(627);
+  final double leftIndent = setWidth(27);
+  final double rightIndent = setWidth(184);
+  final double topIndent = setHeight(34);
+  final double containerHeight = setHeight(135);
+  final double containerWidth = setWidth(627);
   final double fontSize = ScreenUtil().setSp(40, allowFontScalingSelf: true);
-  final double sizeBoxWidth = ScreenUtil().setWidth(81);
-  final double sizeBoxW = ScreenUtil().setWidth(27);
+  final double fontSize1 = ScreenUtil().setSp(35, allowFontScalingSelf: true);
+  String fontFamily = 'Monsterrat';
+  final double sizeBoxWidth = setWidth(81);
+  final double sizeBoxW = setWidth(27);
   final _resetFormKey = GlobalKey<FormState>();
   Timer timer;
   int countdown = 60;
@@ -61,7 +64,7 @@ class _ResetPasswordState extends State<ResetPassword> {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(40, allowFontScalingSelf: true),
                 fontWeight: FontWeight.bold,
-                fontFamily: 'Monsterrat',
+                fontFamily: fontFamily,
               ),
             )),
         body: Form(
@@ -71,32 +74,31 @@ class _ResetPasswordState extends State<ResetPassword> {
               //mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
-                  height: ScreenUtil().setHeight(102),
+                  height: setHeight(102),
                 ),
 
                 //手机号码--------------------
                 Row(
                   children: <Widget>[
                     SizedBox(
-                      width: ScreenUtil().setWidth(56),
+                      width: setWidth(56),
                     ),
                     Text(
                       '手机号码:',
                       style: TextStyle(
-                        fontSize:
-                            ScreenUtil().setSp(35, allowFontScalingSelf: true),
+                        fontSize: fontSize1,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
-                        fontFamily: 'Monsterrat',
+                        fontFamily: fontFamily,
                       ),
                     ),
                     SizedBox(
-                      width: ScreenUtil().setWidth(19),
+                      width: setWidth(19),
                     ),
                     Container(
                       //padding: EdgeInsets.only(top: topIndent, left: leftIndent,right: rightIndent),
-                      height: ScreenUtil().setHeight(80),
-                      width: ScreenUtil().setWidth(435),
+                      height: setHeight(80),
+                      width: setWidth(435),
                       child: Row(
                         children: <Widget>[
                           Flexible(
@@ -134,8 +136,8 @@ class _ResetPasswordState extends State<ResetPassword> {
                           ),
                           //获取手机验证码按键----------------------
                           Container(
-                            width: ScreenUtil().setWidth(174),
-                            height: ScreenUtil().setHeight(61),
+                            width: setWidth(174),
+                            height: setHeight(61),
                             //padding: EdgeInsets.only(right: 5),
                             child: RaisedButton(
                               onPressed: buttonDisable == false
@@ -207,31 +209,30 @@ class _ResetPasswordState extends State<ResetPassword> {
                 ),
 
                 SizedBox(
-                  height: ScreenUtil().setHeight(40),
+                  height: setHeight(40),
                 ),
                 //验证码---------------------------
                 Row(
                   children: <Widget>[
                     SizedBox(
-                      width: ScreenUtil().setWidth(56),
+                      width: setWidth(56),
                     ),
                     Text(
                       '验证号码:',
                       style: TextStyle(
-                        fontSize:
-                            ScreenUtil().setSp(35, allowFontScalingSelf: true),
+                        fontSize: fontSize1,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
-                        fontFamily: 'Monsterrat',
+                        fontFamily: fontFamily,
                       ),
                     ),
                     SizedBox(
-                      width: ScreenUtil().setWidth(19),
+                      width: setWidth(19),
                     ),
                     Container(
                       //padding: EdgeInsets.only(top: topIndent, left: leftIndent,right: rightIndent),
-                      height: ScreenUtil().setHeight(80),
-                      width: ScreenUtil().setWidth(435),
+                      height: setHeight(80),
+                      width: setWidth(435),
                       child: TextFormField(
                         decoration: InputDecoration(
                             hintText: ' 请输入收到的验证码',
@@ -258,31 +259,30 @@ class _ResetPasswordState extends State<ResetPassword> {
                 ),
 
                 SizedBox(
-                  height: ScreenUtil().setHeight(158),
+                  height: setHeight(158),
                 ),
                 //登录密码---------------------------------
                 Row(
                   children: <Widget>[
                     SizedBox(
-                      width: ScreenUtil().setWidth(56),
+                      width: setWidth(56),
                     ),
                     Text(
                       '登录密码:',
                       style: TextStyle(
-                        fontSize:
-                            ScreenUtil().setSp(35, allowFontScalingSelf: true),
+                        fontSize: fontSize1,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
-                        fontFamily: 'Monsterrat',
+                        fontFamily: fontFamily,
                       ),
                     ),
                     SizedBox(
-                      width: ScreenUtil().setWidth(19),
+                      width: setWidth(19),
                     ),
                     Container(
                       //padding: EdgeInsets.only(top: topIndent, left: leftIndent,right: rightIndent),
-                      height: ScreenUtil().setHeight(80),
-                      width: ScreenUtil().setWidth(435),
+                      height: setHeight(80),
+                      width: setWidth(435),
                       child: TextFormField(
                         decoration: InputDecoration(
                             hintText: ' 6～18位数字或字母组合',
@@ -314,31 +314,30 @@ class _ResetPasswordState extends State<ResetPassword> {
                 ),
 
                 SizedBox(
-                  height: ScreenUtil().setHeight(40),
+                  height: setHeight(40),
                 ),
                 //确认密码---------------------------------------
                 Row(
                   children: <Widget>[
                     SizedBox(
-                      width: ScreenUtil().setWidth(56),
+                      width: setWidth(56),
                     ),
                     Text(
                       '确认密码:',
                       style: TextStyle(
-                        fontSize:
-                            ScreenUtil().setSp(35, allowFontScalingSelf: true),
+                        fontSize: fontSize1,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
-                        fontFamily: 'Monsterrat',
+                        fontFamily: fontFamily,
                       ),
                     ),
                     SizedBox(
-                      width: ScreenUtil().setWidth(19),
+                      width: setWidth(19),
                     ),
                     Container(
                       //padding: EdgeInsets.only(top: topIndent, left: leftIndent,right: rightIndent),
-                      height: ScreenUtil().setHeight(80),
-                      width: ScreenUtil().setWidth(435),
+                      height: setHeight(80),
+                      width: setWidth(435),
                       child: TextFormField(
                         decoration: InputDecoration(
                             hintText: ' 6～18位数字或字母组合',
@@ -370,13 +369,13 @@ class _ResetPasswordState extends State<ResetPassword> {
                 ),
 
                 SizedBox(
-                  height: ScreenUtil().setHeight(158),
+                  height: setHeight(158),
                 ),
                 //提交按键-----------------------------------------
                 Container(
                   //padding: EdgeInsets.only(top: topIndent, left: ,right: rightIndent),
-                  height: ScreenUtil().setHeight(80),
-                  width: ScreenUtil().setWidth(435),
+                  height: setHeight(80),
+                  width: setWidth(435),
                   child: Material(
                     borderRadius: BorderRadius.circular(20.0),
                     shadowColor: Colors.indigo[colorNum],

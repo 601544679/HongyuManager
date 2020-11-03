@@ -5,15 +5,10 @@ import 'package:flutter/rendering.dart';
 import 'package:leancloud_storage/leancloud.dart';
 import 'package:mydemo/finish_data_entity.dart';
 import 'LogUtils.dart';
-import 'sizeConfig.dart';
 import 'server.dart';
 import 'constant.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_drag_scale/flutter_drag_scale.dart';
-import 'package:flutter/services.dart';
-import 'package:date_format/date_format.dart';
-import 'package:r_logger/r_logger.dart';
-import 'constant.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 //查看已完成订单的详细信息
@@ -93,14 +88,14 @@ class _FinishPageState extends State<FinishPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: ScreenUtil().setHeight(14),
+                      height: setHeight(14),
                     ),
                     CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
                           Colors.indigo[colorNum]),
                     ),
                     SizedBox(
-                      height: ScreenUtil().setHeight(14),
+                      height: setHeight(30),
                     ),
                     Text('正在加载...')
                   ],
@@ -139,6 +134,7 @@ class _tabBuilderState extends State<tabBuilder>
   List cutList = List();
   List indexList = List();
   bool tokenIsUseful = true;
+  double fontSize = ScreenUtil().setSp(35, allowFontScalingSelf: true);
 
   getToken() async {
     //getCurrent要配合LCUser.loginByMobilePhoneNumber不然本地缓存没有记录
@@ -174,7 +170,7 @@ class _tabBuilderState extends State<tabBuilder>
     if (tokenIsUseful == false) {
       return Scaffold(
         body: AlertDialog(
-          title: Text('该账号已在新设备登录，点击重新登录'),
+          title: Text(retryLogin),
           elevation: 3,
           actions: [
             FlatButton(
@@ -239,32 +235,28 @@ class _tabBuilderState extends State<tabBuilder>
               title: Text('订单完成情况'),
               bottom: TabBar(
                   indicatorWeight: 4.0,
-                  labelPadding:
-                      EdgeInsets.only(bottom: ScreenUtil().setHeight(14)),
+                  labelPadding: EdgeInsets.only(bottom: setHeight(14)),
                   indicatorColor: Colors.white,
                   controller: controller,
                   tabs: [
                     Text(
                       '送货单信息',
                       style: TextStyle(
-                          fontSize: ScreenUtil()
-                              .setSp(35, allowFontScalingSelf: true)),
+                          fontSize: fontSize),
                     ),
                     Text(
                       '签收照片',
                       style: TextStyle(
-                          fontSize: ScreenUtil()
-                              .setSp(35, allowFontScalingSelf: true)),
+                          fontSize: fontSize),
                     ),
                     Text(
                       '途径点',
                       style: TextStyle(
-                          fontSize: ScreenUtil()
-                              .setSp(35, allowFontScalingSelf: true)),
+                          fontSize: fontSize),
                     ),
                   ]),
             ),
-            preferredSize: Size.fromHeight(ScreenUtil().setHeight(148))),
+            preferredSize: Size.fromHeight(setHeight(148))),
         body: TabBarView(controller: controller, children: [
           waybillDetailTab(titleList, contentList, arrayTitleList, cutList),
           signForPicture(allData),
@@ -407,16 +399,16 @@ class _waybillDetailTabState extends State<waybillDetailTab>
   var flex1 = 1;
   var flex2 = 2;
   var textAlign = TextAlign.right;
-  var containerWidth = ScreenUtil().setWidth(705);
+  var containerWidth = setWidth(705);
 
   Widget build(BuildContext context) {
     print('waybillDetailTab--build');
     return Padding(
         padding: EdgeInsets.only(
-            left: ScreenUtil().setWidth(23),
-            top: ScreenUtil().setHeight(14),
-            right: ScreenUtil().setWidth(23),
-            bottom: ScreenUtil().setHeight(14)),
+            left: setWidth(23),
+            top: setHeight(14),
+            right: setWidth(23),
+            bottom: setHeight(14)),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -437,7 +429,7 @@ class _waybillDetailTabState extends State<waybillDetailTab>
                           child: textStyle(widget.contentList[index], fontSize1,
                               fontWeight: FontWeight.bold)),
                       SizedBox(
-                        height: ScreenUtil().setHeight(14),
+                        height: setHeight(14),
                       ),
                     ],
                   );
@@ -445,12 +437,12 @@ class _waybillDetailTabState extends State<waybillDetailTab>
                 itemCount: widget.titleList.length,
               ),
               SizedBox(
-                height: ScreenUtil().setHeight(14),
+                height: setHeight(14),
               ),
               textStyle('货物明细', fontSize),
               Divider(
                 color: Colors.black,
-                height: ScreenUtil().setHeight(14),
+                height: setHeight(14),
               ),
               contentHorizontal(widget.arrayTitleList, widget.cutList),
               Divider(color: Colors.black),
@@ -491,10 +483,10 @@ class _signForPictureState extends State<signForPicture>
               children: [
                 Text(
                   s[index],
-                  style: TextStyle(fontSize: ScreenUtil().setHeight(40)),
+                  style: TextStyle(fontSize: setHeight(40)),
                 ),
                 SizedBox(
-                  height: ScreenUtil().setHeight(14),
+                  height: setHeight(14),
                 ),
                 InkWell(
                   child: AspectRatio(
@@ -517,7 +509,7 @@ class _signForPictureState extends State<signForPicture>
                   },
                 ),
                 SizedBox(
-                  height: ScreenUtil().setHeight(14),
+                  height: setHeight(14),
                 )
               ],
             ),
@@ -656,7 +648,7 @@ class _finishMapPageState extends State<finishMapPage>
                       Colors.indigo[colorNum]),
                 ),
                 SizedBox(
-                  height: ScreenUtil().setHeight(27),
+                  height: setHeight(27),
                 ),
                 Text(
                   '正在加载中...',
@@ -769,8 +761,8 @@ class _MapScreenState extends State<MapScreen>
                 113.13402564),
         title: widget.waybill['projectAddress'] ?? '',
         widget: Container(
-          height: ScreenUtil().setHeight(107),
-          width: ScreenUtil().setWidth(201),
+          height: setHeight(107),
+          width: setWidth(201),
           child: Material(
             borderRadius: BorderRadius.circular(15),
             shadowColor: Colors.transparent,
@@ -808,14 +800,14 @@ class _MapScreenState extends State<MapScreen>
     double height;
     double width;
     if (i == widget.latLngList.length - 1) {
-      height = ScreenUtil().setWidth(45);
-      width = ScreenUtil().setWidth(135);
+      height = setWidth(45);
+      width = setWidth(135);
     } else if (i == 0) {
-      height = ScreenUtil().setWidth(125);
-      width = ScreenUtil().setWidth(201);
+      height = setWidth(125);
+      width = setWidth(201);
     } else {
-      height = ScreenUtil().setWidth(23);
-      width = ScreenUtil().setWidth(23);
+      height = setWidth(23);
+      width = setWidth(23);
     }
     return Container(
       height: height,

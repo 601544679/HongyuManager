@@ -137,7 +137,7 @@ class _MapPageState extends State<MapPage> {
                           Colors.indigo[colorNum]),
                     ),
                     SizedBox(
-                      height: ScreenUtil().setHeight(27),
+                      height: setHeight(27),
                     ),
                     Text(
                       '正在加载中...',
@@ -174,6 +174,7 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   bool tokenIsUseful = true;
+  String fontFamily = 'Montserrat';
 
   @override
   void initState() {
@@ -227,7 +228,7 @@ class _MapScreenState extends State<MapScreen> {
     List titleList = ['送货单号：', '送货地址：', '收货人：', '收货人电话：'];
     if (tokenIsUseful == false) {
       return AlertDialog(
-        title: Text('该账号已在新设备登录，点击重新登录'),
+        title: Text(retryLogin),
         elevation: 3,
         actions: [
           FlatButton(
@@ -278,7 +279,7 @@ class _MapScreenState extends State<MapScreen> {
           child: Column(
             children: [
               SizedBox(
-                height: ScreenUtil().setHeight(667),
+                height: setHeight(667),
                 child: AmapView(
                   mapType: MapType.Standard,
                   zoomLevel: 15,
@@ -312,28 +313,28 @@ class _MapScreenState extends State<MapScreen> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(top: ScreenUtil().setHeight(21)),
-                height: ScreenUtil().setHeight(88),
+                padding: EdgeInsets.only(top: setHeight(21)),
+                height: setHeight(88),
                 child: Text(
                   '送货信息',
                   style: TextStyle(
                       fontSize:
                           ScreenUtil().setSp(40, allowFontScalingSelf: true),
-                      fontFamily: 'Montserrat',
+                      fontFamily: fontFamily,
                       fontWeight: FontWeight.bold,
                       color: Colors.black),
                 ),
               ),
               Container(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(15)),
-                width: ScreenUtil().setWidth(730),
+                padding: EdgeInsets.all(setWidth(15)),
+                width: setWidth(730),
                 child: Material(
                   borderRadius: BorderRadius.circular(20.0),
                   shadowColor: Colors.grey,
                   color: Colors.grey[300],
                   elevation: 2,
                   child: Padding(
-                      padding: EdgeInsets.all(ScreenUtil().setWidth(38)),
+                      padding: EdgeInsets.all(setWidth(38)),
                       child: ListView.separated(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
@@ -344,8 +345,9 @@ class _MapScreenState extends State<MapScreen> {
                               Text(
                                 titleList[index],
                                 style: TextStyle(
-                                    fontSize: ScreenUtil().setSp(35,allowFontScalingSelf: true),
-                                    fontFamily: 'Montserrat',
+                                    fontSize: ScreenUtil()
+                                        .setSp(35, allowFontScalingSelf: true),
+                                    fontFamily: fontFamily,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black),
                               ),
@@ -355,8 +357,9 @@ class _MapScreenState extends State<MapScreen> {
                                       ? '    ' + contentList[index]
                                       : contentList[index],
                                   style: TextStyle(
-                                      fontSize: ScreenUtil().setSp(35,allowFontScalingSelf: true),
-                                      fontFamily: 'Montserrat',
+                                      fontSize: ScreenUtil().setSp(35,
+                                          allowFontScalingSelf: true),
+                                      fontFamily: fontFamily,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black),
                                 ),
@@ -367,7 +370,7 @@ class _MapScreenState extends State<MapScreen> {
                         itemCount: titleList.length,
                         separatorBuilder: (context, index) {
                           return SizedBox(
-                            height: ScreenUtil().setHeight(14),
+                            height: setHeight(14),
                           );
                         },
                       )),
@@ -400,8 +403,8 @@ class _MapScreenState extends State<MapScreen> {
                 113.13402564),
         title: widget.waybill['result']['projectAddress'] ?? '',
         widget: Container(
-          height: ScreenUtil().setHeight(60),
-          width: ScreenUtil().setWidth(113),
+          height: setHeight(60),
+          width: setWidth(113),
           child: Material(
             borderRadius: BorderRadius.circular(30),
             shadowColor: Colors.transparent,
@@ -416,7 +419,7 @@ class _MapScreenState extends State<MapScreen> {
                       fontWeight: FontWeight.bold,
                       fontSize:
                           ScreenUtil().setSp(30, allowFontScalingSelf: true),
-                      fontFamily: 'Montserrat'),
+                      fontFamily: fontFamily),
                 ),
               ),
             ),
@@ -429,14 +432,14 @@ class _MapScreenState extends State<MapScreen> {
     double height;
     double width;
     if (i == widget.latLngList.length - 1) {
-      height = ScreenUtil().setWidth(45);
-      width = ScreenUtil().setWidth(135);
+      height = setWidth(45);
+      width = setWidth(135);
     } else if (i == 0) {
-      height = ScreenUtil().setWidth(131);
-      width = ScreenUtil().setWidth(202);
+      height = setWidth(131);
+      width = setWidth(202);
     } else {
-      height = ScreenUtil().setWidth(23);
-      width = ScreenUtil().setWidth(23);
+      height = setWidth(23);
+      width = setWidth(23);
     }
     return Container(
       height: height,
@@ -471,6 +474,6 @@ class _MapScreenState extends State<MapScreen> {
             color: Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: ScreenUtil().setSp(30, allowFontScalingSelf: true),
-            fontFamily: 'Montserrat'));
+            fontFamily: fontFamily));
   }
 }

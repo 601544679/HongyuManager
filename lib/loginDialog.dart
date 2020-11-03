@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:leancloud_storage/leancloud.dart';
+
+
+import 'constant.dart';
 
 class loginDialog extends StatefulWidget {
   String loadingText;
@@ -51,8 +52,8 @@ class _loginDialogState extends State<loginDialog> {
         type: MaterialType.transparency,
         child: new Center(
           child: new SizedBox(
-            width: ScreenUtil().setWidth(524),
-            height: ScreenUtil().setWidth(324),
+            width: setWidth(524),
+            height: setWidth(324),
             child: new Container(
               decoration: ShapeDecoration(
                 color: Color(0xffffffff),

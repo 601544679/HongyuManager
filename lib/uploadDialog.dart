@@ -129,18 +129,18 @@ class _uploadDialogState extends State<uploadDialog> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        height: ScreenUtil().setHeight(562),
-        width: ScreenUtil().setWidth(810),
+        height: setHeight(562),
+        width: setWidth(810),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0), color: Colors.white),
         child: Material(
           type: MaterialType.transparency,
           child: Padding(
             padding: EdgeInsets.only(
-              left: ScreenUtil().setWidth(33),
-              top: ScreenUtil().setHeight(23),
-              right: ScreenUtil().setWidth(33),
-              bottom: ScreenUtil().setHeight(23),
+              left: setWidth(33),
+              top: setHeight(23),
+              right: setWidth(33),
+              bottom: setHeight(23),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -158,14 +158,14 @@ class _uploadDialogState extends State<uploadDialog> {
                   children: [],
                 ),
                 SizedBox(
-                  height: ScreenUtil().setHeight(45),
+                  height: setHeight(45),
                 ),
                 LinearProgressIndicator(
                   value: number / widget.map.length,
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.lightBlue),
                 ),
                 SizedBox(
-                  height: ScreenUtil().setHeight(23),
+                  height: setHeight(23),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -184,24 +184,24 @@ class _uploadDialogState extends State<uploadDialog> {
                   ],
                 ),
                 SizedBox(
-                  height: ScreenUtil().setHeight(23),
+                  height: setHeight(23),
                 ),
                 Divider(
                   color: Colors.lightBlue,
                   height: 1,
                 ),
                 SizedBox(
-                  height: ScreenUtil().setHeight(23),
+                  height: setHeight(23),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [Text('成功：$success    失败：$failed')],
                 ),
                 SizedBox(
-                  height: ScreenUtil().setHeight(23),
+                  height: setHeight(23),
                 ),
                 Container(
-                  height: ScreenUtil().setHeight(90),
+                  height: setHeight(90),
                   child: MaterialButton(
                     textColor: Colors.lightBlue,
                     disabledTextColor: Colors.grey,
