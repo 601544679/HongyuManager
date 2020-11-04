@@ -1,11 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:leancloud_storage/leancloud.dart';
 import 'package:mydemo/userClass.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'mySearch.dart';
-import 'sizeConfig.dart';
 import 'homeTab.dart';
 import 'orderTab.dart';
 import 'userTab.dart';
@@ -33,7 +34,6 @@ class _HomeState extends State<Home> {
     } on LCException catch (e) {
       print('error--${e.code}--${e.code}');
     }
-
     print('是否有效${isAuthenticated}');
     return isAuthenticated;
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'constant.dart';
 
@@ -29,7 +29,6 @@ class _loginDialogState extends State<loginDialog> {
     Navigator.pop(context);
   }
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -37,10 +36,10 @@ class _loginDialogState extends State<loginDialog> {
     //getResult();
     widget.requestCallBack.then((value) {
       print('啥玩意${value.runtimeType}');
-      Navigator.pop(context,value);
+      Navigator.pop(context, value);
     }).catchError((onError) {
       print('啥玩意1--${onError}');
-      Navigator.pop(context,onError);
+      Navigator.pop(context, onError);
     });
   }
 
@@ -52,8 +51,8 @@ class _loginDialogState extends State<loginDialog> {
         type: MaterialType.transparency,
         child: new Center(
           child: new SizedBox(
-            width: setWidth(524),
-            height: setWidth(324),
+            width: setWidth(350),
+            height: setWidth(250),
             child: new Container(
               decoration: ShapeDecoration(
                 color: Color(0xffffffff),
@@ -69,12 +68,14 @@ class _loginDialogState extends State<loginDialog> {
                 children: <Widget>[
                   new CircularProgressIndicator(),
                   new Padding(
-                    padding: const EdgeInsets.only(
-                      top: 20.0,
+                    padding: EdgeInsets.only(
+                      top: setHeight(30),
                     ),
                     child: new Text(
                       widget.loadingText,
-                      style: new TextStyle(fontSize: 14.0),
+                      style: new TextStyle(
+                          fontSize: ScreenUtil()
+                              .setSp(30, allowFontScalingSelf: true)),
                     ),
                   ),
                 ],

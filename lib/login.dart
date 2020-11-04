@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:leancloud_storage/leancloud.dart';
 import 'constant.dart';
@@ -91,12 +92,32 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+//更改状态栏
+  changeStatusBar() {
+    print('login改变状态栏');
+    //绘制完成后回调
+    if (Platform.isAndroid) {
+      //沉浸式状态栏
+      //写在组件渲染之后，是为了在渲染后进行设置赋值，覆盖状态栏，写在渲染之前对MaterialApp组件会覆盖这个值。
+      SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark);
+      SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+      print('我是安卓状态栏');
+    } else if (Platform.isIOS) {
+      SystemUiOverlayStyle systemUiOverlayStyle =
+          SystemUiOverlayStyle(statusBarIconBrightness: Brightness.dark);
+      SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+      print('我是ios状态栏');
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    //绘制完成后回调
     WidgetsBinding.instance.addPostFrameCallback((_) => autoLogin(context));
+    WidgetsBinding.instance.addPostFrameCallback((_) => changeStatusBar());
     getDevice();
     print('LoginPage--initState');
   }
