@@ -103,12 +103,8 @@ class _LoginPageState extends State<LoginPage> {
           statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.dark);
       SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
-      print('我是安卓状态栏');
     } else if (Platform.isIOS) {
-      SystemUiOverlayStyle systemUiOverlayStyle =
-          SystemUiOverlayStyle(statusBarIconBrightness: Brightness.dark);
-      SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
-      print('我是ios状态栏');
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     }
   }
 
