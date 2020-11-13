@@ -129,18 +129,18 @@ class _uploadDialogState extends State<uploadDialog> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        height: setHeight(562),
-        width: setWidth(810),
+        height: setHeight(333.5),
+        width: setWidth(562.5),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0), color: Colors.white),
         child: Material(
           type: MaterialType.transparency,
           child: Padding(
             padding: EdgeInsets.only(
-              left: setWidth(33),
-              top: setHeight(23),
-              right: setWidth(33),
-              bottom: setHeight(23),
+              left: setWidth(23),
+              top: setHeight(14),
+              right: setWidth(23),
+              bottom: setHeight(14),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -148,7 +148,7 @@ class _uploadDialogState extends State<uploadDialog> {
                 Text(
                   _changeText(),
                   style: TextStyle(
-                      fontSize: ScreenUtil().setSp(50), color: Colors.black54),
+                      fontSize: ScreenUtil().setSp(40), color: Colors.black54),
                 ),
                 SizedBox(
                   height: SizeConfig.heightMultiplier,
@@ -158,14 +158,14 @@ class _uploadDialogState extends State<uploadDialog> {
                   children: [],
                 ),
                 SizedBox(
-                  height: setHeight(45),
+                  height: setHeight(27),
                 ),
                 LinearProgressIndicator(
                   value: number / widget.map.length,
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.lightBlue),
                 ),
                 SizedBox(
-                  height: setHeight(23),
+                  height: setHeight(14),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -184,32 +184,32 @@ class _uploadDialogState extends State<uploadDialog> {
                   ],
                 ),
                 SizedBox(
-                  height: setHeight(23),
+                  height: setHeight(14),
                 ),
                 Divider(
                   color: Colors.lightBlue,
                   height: 1,
                 ),
                 SizedBox(
-                  height: setHeight(23),
+                  height: setHeight(14),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [Text('成功：$success    失败：$failed')],
                 ),
                 SizedBox(
-                  height: setHeight(23),
+                  height: setHeight(14),
                 ),
                 Container(
-                  height: setHeight(90),
+                  height: setHeight(54),
                   child: MaterialButton(
                     textColor: Colors.lightBlue,
                     disabledTextColor: Colors.grey,
                     disabledColor: Colors.white,
                     onPressed: _finish(number) == true
                         ? () {
-                            Navigator.pop(context);
-                          }
+                      Navigator.pop(context);
+                    }
                         : null,
                     //null就是disable不能点击
                     child: Text(

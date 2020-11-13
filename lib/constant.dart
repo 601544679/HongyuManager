@@ -19,7 +19,6 @@ final routes = {
   "/resetPassword": (context) => ResetPassword(),
 };
 int currentTab = 0;
-String dropDownButtonValue = '0';
 final String retryLogin = '该账号已在新设备登录，点击重新登录';
 
 //设置高度
@@ -31,7 +30,6 @@ double setHeight(double num) {
 double setWidth(double num) {
   return ScreenUtil().setWidth(num);
 }
-
 
 //releaseOrder
 //发布订单没有车牌号码，司机接单后才添加车牌号码
@@ -134,7 +132,10 @@ List<String> driverMessage = [
   'mobilePhoneNumber',
   'username',
   'identityNo',
-  'estimatedArrivalTime'
+  'estimatedArrivalTime',
+  'roadTransportPermit',
+  'qualificationCertificate',
+  'deadweight'
 ];
 
 //finishPage
@@ -213,7 +214,7 @@ String date(int millTime) {
 //地址转经纬度
 changeLat(String address) async {
   final geocodeList =
-      await AmapSearch.instance.searchGeocode(address, city: place(address));
+  await AmapSearch.instance.searchGeocode(address, city: place(address));
   //final geocodeList = await AmapSearch.instance.searchGeocode(address, city: place(address));
   return geocodeList[0].latLng;
 }
@@ -288,7 +289,7 @@ SnackBar showSnackBar(String text) {
                 style: TextStyle(
                     color: Colors.black87,
                     fontSize:
-                        ScreenUtil().setSp(30, allowFontScalingSelf: true)),
+                    ScreenUtil().setSp(30, allowFontScalingSelf: true)),
               ),
             ),
           ),

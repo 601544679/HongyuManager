@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:leancloud_storage/leancloud.dart';
@@ -93,6 +94,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 //更改状态栏
+  //AnnotatedRegion效果更好,但是安卓要配合这个方法，ios不用
   changeStatusBar() {
     print('login改变状态栏');
     //绘制完成后回调
@@ -167,327 +169,333 @@ class _LoginPageState extends State<LoginPage> {
       //checkBoxValue = true;
       _passwordControl.text = _user.password;
     }
-    return Scaffold(
-      key: scaffoldKey,
-      resizeToAvoidBottomPadding: false,
-      body: Container(
-        height: setHeight(1334),
-        color: Colors.white,
-        child: Column(
-          children: [
-            Container(
-              height: setHeight(1067.2),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: setHeight(150),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'images/hongyu.png',
-                        width: setWidth(525),
-                        fit: BoxFit.cover,
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: setHeight(30),
-                  ),
-                  Container(
-                    //只能存在一个key
-                    height: setHeight(467),
-                    //color: Colors.green,
-                    child: Column(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.dark,
+      child: Scaffold(
+        key: scaffoldKey,
+        resizeToAvoidBottomPadding: false,
+        body: Container(
+          height: setHeight(1334),
+          color: Colors.white,
+          child: Column(
+            children: [
+              Container(
+                height: setHeight(1067.2),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: setHeight(150),
+                    ),
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Form(
-                            key: _loginformKey,
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                  left: setWidth(113), right: setWidth(113)),
-                              child: Column(
-                                children: [
-                                  TextFormField(
-                                    focusNode: focusNodeNum,
-                                    initialValue: _user.name,
-                                    validator: (value) {
-                                      if (value.trim().isEmpty) {
-                                        return '用户名不能为空';
-                                      }
-                                      /*if (isChinaPhoneLegal(value) == false) {
+                        Image.asset(
+                          'images/hongyu.png',
+                          width: setWidth(525),
+                          fit: BoxFit.cover,
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: setHeight(30),
+                    ),
+                    Container(
+                      //只能存在一个key
+                      height: setHeight(467),
+                      //color: Colors.green,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Form(
+                              key: _loginformKey,
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                    left: setWidth(113), right: setWidth(113)),
+                                child: Column(
+                                  children: [
+                                    TextFormField(
+                                      focusNode: focusNodeNum,
+                                      initialValue: _user.name,
+                                      validator: (value) {
+                                        if (value.trim().isEmpty) {
+                                          return '用户名不能为空';
+                                        }
+                                        /*if (isChinaPhoneLegal(value) == false) {
                                   //print('手机号码格式错误');
                                   return '手机号码格式错误';
                                 }*/
-                                      return null;
-                                    },
-                                    //保存输入手机到 userclass
-                                    onSaved: (input) =>
-                                        _user.name = input.trim(),
-                                    /* inputFormatters: [
+                                        return null;
+                                      },
+                                      //保存输入手机到 userclass
+                                      onSaved: (input) =>
+                                          _user.name = input.trim(),
+                                      /* inputFormatters: [
                                 FilteringTextInputFormatter.allow(
                                     RegExp("[0-9]"))
                               ]*/
-                                    style: TextStyle(fontSize: fontSize),
-                                    decoration: InputDecoration(
-                                        hintText: '输入用户名',
-                                        icon: Icon(
-                                          Icons.person_pin,
-                                          size: ScreenUtil().setSp(60,
-                                              allowFontScalingSelf: true),
-                                        ),
-                                        labelText: '输入用户名'),
-                                  ),
-                                  SizedBox(
-                                    height: setHeight(30),
-                                  ),
-                                  TextFormField(
-                                    //controller: _passwordControl,
-                                    initialValue: _user.password,
-                                    focusNode: focusNodePas,
-                                    obscureText: true,
-                                    // ignore: missing_return
-                                    style: TextStyle(fontSize: fontSize),
-                                    validator: (input) {
-                                      //print('输出：${input}');
-                                      if (input.trim().isEmpty) {
-                                        return '密码不能为空';
-                                      }
-                                      return null;
+                                      style: TextStyle(fontSize: fontSize),
+                                      decoration: InputDecoration(
+                                          hintText: '输入用户名',
+                                          icon: Icon(
+                                            Icons.person_pin,
+                                            size: ScreenUtil().setSp(60,
+                                                allowFontScalingSelf: true),
+                                          ),
+                                          labelText: '输入用户名'),
+                                    ),
+                                    SizedBox(
+                                      height: setHeight(30),
+                                    ),
+                                    TextFormField(
+                                      //controller: _passwordControl,
+                                      initialValue: _user.password,
+                                      focusNode: focusNodePas,
+                                      obscureText: true,
+                                      // ignore: missing_return
+                                      style: TextStyle(fontSize: fontSize),
+                                      validator: (input) {
+                                        //print('输出：${input}');
+                                        if (input.trim().isEmpty) {
+                                          return '密码不能为空';
+                                        }
+                                        return null;
+                                      },
+                                      onSaved: (input) =>
+                                          _user.password = input.trim(),
+                                      decoration: InputDecoration(
+                                          hintText: '输入密码',
+                                          icon: Icon(
+                                            Icons.lock,
+                                            size: ScreenUtil().setSp(60,
+                                                allowFontScalingSelf: true),
+                                          ),
+                                          labelText: '输入密码'),
+                                    )
+                                  ],
+                                ),
+                              )),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      //color: Colors.blue,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Row(
+                                children: [
+                                  Checkbox(
+                                      value: checkBoxValue,
+                                      activeColor: Colors.indigo[colorNum],
+                                      onChanged: (value) {
+                                        setState(() {
+                                          print(value);
+                                          checkBoxValue = value;
+                                        });
+                                      }),
+                                  InkWell(
+                                    child: Text(
+                                      '自动登录',
+                                      style: TextStyle(fontSize: fontSize),
+                                    ),
+                                    onTap: () {
+                                      setState(() {
+                                        checkBoxValue = !checkBoxValue;
+                                      });
                                     },
-                                    onSaved: (input) =>
-                                        _user.password = input.trim(),
-                                    decoration: InputDecoration(
-                                        hintText: '输入密码',
-                                        icon: Icon(
-                                          Icons.lock,
-                                          size: ScreenUtil().setSp(60,
-                                              allowFontScalingSelf: true),
-                                        ),
-                                        labelText: '输入密码'),
-                                  )
+                                  ),
                                 ],
                               ),
-                            )),
-                      ],
+                              InkWell(
+                                onTap: () {
+                                  // TODO :跳转到找回密码
+                                  Navigator.pushNamed(
+                                      context, '/resetPassword');
+                                },
+                                child: Text(
+                                  '忘记密码?',
+                                  style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      color: Colors.indigo[colorNum],
+                                      fontSize: fontSize),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: setHeight(90),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                  child: Padding(
+                                padding: EdgeInsets.only(
+                                    left: setWidth(113), right: setWidth(113)),
+                                child: FlatButton(
+                                  onPressed: () async {
+                                    // todo 登录事件，跳转路由，
+                                    if (_loginformKey.currentState.validate()) {
+                                      _loginformKey.currentState.save();
+                                      //"13802621111", "123456"
+                                      focusNodeNum.unfocus();
+                                      focusNodePas.unfocus();
+                                      var response = await showDialog(
+                                          context: context,
+                                          builder: (_) {
+                                            return loginDialog(
+                                                outsideDismiss: false,
+                                                requestCallBack: LCUser.login(
+                                                    _user.name,
+                                                    _user.password));
+                                          });
+                                      print('输出=${response.runtimeType}');
+                                      if (response.runtimeType ==
+                                          LCUser /*response != null*/) {
+                                        _user.sessionToken =
+                                            response.sessionToken;
+                                        _user.idNumber = response['identityNo'];
+                                        _user.name = response.username;
+                                        _user.company = response['company'];
+                                        _user.phoneNumber =
+                                            response['mobilePhoneNumber'];
+                                        //_user.objectId = response['objectId'];
+                                        //用sdk
+                                        _user.objectId = response.objectId;
+                                        _user.isSave = checkBoxValue;
+                                        _user.saveUser(_user);
+                                        //进行身份验证，管理者才能登录管理者端
+                                        if (response['role'] == 'Manager') {
+                                          scaffoldKey.currentState.showSnackBar(
+                                              showSnackBar('登录成功'));
+                                          var refreshToken = await Server()
+                                              .refreshToken(_user.sessionToken,
+                                                  _user.objectId);
+                                          print(
+                                              'refreshToken--${refreshToken}');
+                                          //更新缓存的token
+                                          LCUser.login(
+                                              _user.name, _user.password);
+                                          _user.sessionToken =
+                                              refreshToken['sessionToken'];
+                                          print('更新--${_user.sessionToken}');
+                                          _user.saveUser(_user);
+                                          Navigator.pushNamedAndRemoveUntil(
+                                              context,
+                                              "/homePage",
+                                              (route) => route == null);
+                                        } else {
+                                          scaffoldKey.currentState.showSnackBar(
+                                              showSnackBar('非管理者用户'));
+                                        }
+                                      } else if (response.runtimeType ==
+                                          LCException) {
+                                        if (response.code == 210) {
+                                          scaffoldKey.currentState.showSnackBar(
+                                              showSnackBar('账号或密码错误'));
+                                        } else if (response.code == 219) {
+                                          scaffoldKey.currentState.showSnackBar(
+                                              showSnackBar(response.message));
+                                        } else if (response.code == 211) {
+                                          scaffoldKey.currentState.showSnackBar(
+                                              showSnackBar('不存在此用户'));
+                                        }
+                                      } else if (response.runtimeType ==
+                                          DioError) {
+                                        //print('网络错误${response.data}');
+                                        print('网络错误error--${response.error}');
+                                        scaffoldKey.currentState
+                                            .showSnackBar(showSnackBar('断网了'));
+                                      }
+                                    }
+                                  },
+                                  child: Text(
+                                    '登录',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: ScreenUtil().setSp(40,
+                                            allowFontScalingSelf: true)),
+                                  ),
+                                  color: Colors.indigo[colorNum],
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15)),
+                                ),
+                              ))
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    //color: Colors.blue,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                  ],
+                ),
+              ),
+              Container(
+                height: setHeight(266.8),
+                //color: Colors.red,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Divider(
+                      indent: setWidth(113),
+                      endIndent: setWidth(113),
+                      height: 1,
+                      color: Colors.grey,
+                    ),
+                    SizedBox(
+                      height: setHeight(12),
+                    ),
+                    Column(
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Row(
-                              children: [
-                                Checkbox(
-                                    value: checkBoxValue,
-                                    activeColor: Colors.indigo[colorNum],
-                                    onChanged: (value) {
-                                      setState(() {
-                                        print(value);
-                                        checkBoxValue = value;
-                                      });
-                                    }),
-                                InkWell(
-                                  child: Text(
-                                    '自动登录',
-                                    style: TextStyle(fontSize: fontSize),
-                                  ),
-                                  onTap: () {
-                                    setState(() {
-                                      checkBoxValue = !checkBoxValue;
-                                    });
-                                  },
-                                ),
-                              ],
+                            Icon(
+                              Icons.build,
+                              color: Colors.indigo[colorNum],
                             ),
-                            InkWell(
-                              onTap: () {
-                                // TODO :跳转到找回密码
-                                Navigator.pushNamed(context, '/resetPassword');
-                              },
-                              child: Text(
-                                '忘记密码?',
-                                style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    color: Colors.indigo[colorNum],
-                                    fontSize: fontSize),
-                              ),
+                            SizedBox(
+                              width: setWidth(23),
                             ),
+                            Text(
+                              '技术支持：',
+                              style: TextStyle(
+                                  color: Colors.indigo[colorNum],
+                                  fontSize: fontSize),
+                            )
                           ],
                         ),
                         SizedBox(
-                          height: setHeight(90),
+                          height: setHeight(30),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Expanded(
-                                child: Padding(
-                              padding: EdgeInsets.only(
-                                  left: setWidth(113), right: setWidth(113)),
-                              child: FlatButton(
-                                onPressed: () async {
-                                  // todo 登录事件，跳转路由，
-                                  if (_loginformKey.currentState.validate()) {
-                                    _loginformKey.currentState.save();
-                                    //"13802621111", "123456"
-                                    focusNodeNum.unfocus();
-                                    focusNodePas.unfocus();
-                                    var response = await showDialog(
-                                        context: context,
-                                        builder: (_) {
-                                          return loginDialog(
-                                              outsideDismiss: false,
-                                              requestCallBack: LCUser.login(
-                                                  _user.name, _user.password));
-                                        });
-                                    print('输出=${response.runtimeType}');
-                                    if (response.runtimeType ==
-                                        LCUser /*response != null*/) {
-                                      _user.sessionToken =
-                                          response.sessionToken;
-                                      _user.idNumber = response['identityNo'];
-                                      _user.name = response.username;
-                                      _user.company = response['company'];
-                                      _user.phoneNumber =
-                                          response['mobilePhoneNumber'];
-                                      //_user.objectId = response['objectId'];
-                                      //用sdk
-                                      _user.objectId = response.objectId;
-                                      _user.isSave = checkBoxValue;
-                                      _user.saveUser(_user);
-                                      //进行身份验证，管理者才能登录管理者端
-                                      if (response['role'] == 'Manager') {
-                                        scaffoldKey.currentState
-                                            .showSnackBar(showSnackBar('登录成功'));
-                                        var refreshToken = await Server()
-                                            .refreshToken(_user.sessionToken,
-                                                _user.objectId);
-                                        print('refreshToken--${refreshToken}');
-                                        //更新缓存的token
-                                        LCUser.login(
-                                            _user.name, _user.password);
-                                        _user.sessionToken =
-                                            refreshToken['sessionToken'];
-                                        print('更新--${_user.sessionToken}');
-                                        _user.saveUser(_user);
-                                        Navigator.pushNamedAndRemoveUntil(
-                                            context,
-                                            "/homePage",
-                                            (route) => route == null);
-                                      } else {
-                                        scaffoldKey.currentState.showSnackBar(
-                                            showSnackBar('非管理者用户'));
-                                      }
-                                    } else if (response.runtimeType ==
-                                        LCException) {
-                                      if (response.code == 210) {
-                                        scaffoldKey.currentState.showSnackBar(
-                                            showSnackBar('账号或密码错误'));
-                                      } else if (response.code == 219) {
-                                        scaffoldKey.currentState.showSnackBar(
-                                            showSnackBar(response.message));
-                                      } else if (response.code == 211) {
-                                        scaffoldKey.currentState.showSnackBar(
-                                            showSnackBar('不存在此用户'));
-                                      }
-                                    } else if (response.runtimeType ==
-                                        DioError) {
-                                      //print('网络错误${response.data}');
-                                      print('网络错误error--${response.error}');
-                                      scaffoldKey.currentState
-                                          .showSnackBar(showSnackBar('断网了'));
-                                    }
-                                  }
-                                },
-                                child: Text(
-                                  '登录',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: ScreenUtil().setSp(40,
-                                          allowFontScalingSelf: true)),
-                                ),
-                                color: Colors.indigo[colorNum],
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)),
-                              ),
-                            ))
+                            Icon(
+                              Icons.call,
+                              color: Colors.indigo[colorNum],
+                            ),
+                            SizedBox(
+                              width: setWidth(23),
+                            ),
+                            Text(
+                              '联系电话：',
+                              style: TextStyle(
+                                  color: Colors.indigo[colorNum],
+                                  fontSize: fontSize),
+                            )
                           ],
                         ),
                       ],
-                    ),
-                  ),
-                ],
+                    )
+                  ],
+                ),
               ),
-            ),
-            Container(
-              height: setHeight(266.8),
-              //color: Colors.red,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Divider(
-                    indent: setWidth(113),
-                    endIndent: setWidth(113),
-                    height: 1,
-                    color: Colors.grey,
-                  ),
-                  SizedBox(
-                    height: setHeight(12),
-                  ),
-                  Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.build,
-                            color: Colors.indigo[colorNum],
-                          ),
-                          SizedBox(
-                            width: setWidth(23),
-                          ),
-                          Text(
-                            '技术支持：',
-                            style: TextStyle(
-                                color: Colors.indigo[colorNum],
-                                fontSize: fontSize),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: setHeight(30),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.call,
-                            color: Colors.indigo[colorNum],
-                          ),
-                          SizedBox(
-                            width: setWidth(23),
-                          ),
-                          Text(
-                            '联系电话：',
-                            style: TextStyle(
-                                color: Colors.indigo[colorNum],
-                                fontSize: fontSize),
-                          )
-                        ],
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

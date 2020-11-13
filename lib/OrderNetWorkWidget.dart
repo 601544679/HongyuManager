@@ -151,141 +151,148 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                   break;
               }
             },
-            child: Card(
-              child: Padding(
-                padding: EdgeInsets.only(
-                    left: setWidth(15),
-                    right: setWidth(15),
-                    top: setHeight(14),
-                    bottom: setHeight(14)),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        textStyle('运输单号：', fontSize),
-                        Expanded(
-                          child: textStyle(
-                              '${wbill.result[index].waybillId ?? '无运输单号'}',
-                              fontSize),
-                        )
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        textStyle('项目名称：', fontSize),
-                        Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: setWidth(15),
+                right: setWidth(15),
+                top: setHeight(14),
+              ),
+              child: Card(elevation: 3,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      left: setWidth(15),
+                      right: setWidth(15),
+                      top: setHeight(14),
+                      bottom: setHeight(14)),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          textStyle('运输单号：', fontSize),
+                          Expanded(
                             child: textStyle(
-                                '${wbill.result[index].projectName ?? '无项目名'}',
-                                fontSize))
-                      ],
-                    ),
-                    SizedBox(height: sizedBoxHeight),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        textStyle('施工单位：', fontSize),
-                        Expanded(
+                                '${wbill.result[index].waybillId ?? '无运输单号'}',
+                                fontSize),
+                          )
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          textStyle('项目名称：', fontSize),
+                          Expanded(
+                              child: textStyle(
+                                  '${wbill.result[index].projectName ?? '无项目名'}',
+                                  fontSize))
+                        ],
+                      ),
+                      SizedBox(height: sizedBoxHeight),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          textStyle('施工单位：', fontSize),
+                          Expanded(
+                              child: textStyle(
+                                  '${wbill.result[index].constructionCompanyName ?? '无施工单位'}',
+                                  fontSize))
+                        ],
+                      ),
+                      SizedBox(
+                        height: sizedBoxHeight * 5,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
                             child: textStyle(
-                                '${wbill.result[index].constructionCompanyName ?? '无施工单位'}',
-                                fontSize))
-                      ],
-                    ),
-                    SizedBox(
-                      height: sizedBoxHeight * 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: textStyle(
-                              '${wbill.result[index].startLocationName == ' ' ? '' : wbill.result[index].startLocationName}',
-                              fontSize * 1.5,
-                              fontWeight: FontWeight.bold,
-                              textAlign: TextAlign.center),
-                          flex: 2,
-                        ),
-                        Expanded(
-                          child: goodStatus(
-                              wbill.result[index].status,
-                              wbill.result[index].driver == null
-                                  ? ''
-                                  : wbill.result[index].driver.username),
-                          flex: 1,
-                        ),
-                        Expanded(
-                          child: textStyle(
-                              '${wbill.result[index].destinationName ?? '目的地'}',
-                              fontSize * 1.5,
-                              fontWeight: FontWeight.bold,
-                              textAlign: TextAlign.center),
-                          flex: 2,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: sizedBoxHeight),
-                    Row(
-                      children: [
-                        Expanded(
-                            child: Text(
-                          '司机：${wbill.result[index].driver == null ? '无司机' : wbill.result[index].driver.username}',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: setWidth(31)),
-                        )),
-                        Expanded(
-                            child: Text(
-                          '业务员：${wbill.result[index].supplierContactPerson ?? '无业务员'}',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: setWidth(31)),
-                        )),
-                      ],
-                    ),
-                    SizedBox(height: sizedBoxHeight * 5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        textStyle('货物明细：', fontSize),
-                      ],
-                    ),
-                    GoodsDetail(
-                      index: index,
-                      titleList: titleList,
-                      totalList: wbill.result[index],
-                    ),
-                    SizedBox(height: sizedBoxHeight * 5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        textStyle('发货日期', fontSize),
-                        textStyle('预计到达', fontSize),
-                      ],
-                    ),
-                    Divider(
-                      height: setHeight(17),
-                      color: Colors.black,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        textStyle(
-                          '${date(wbill.result[index].departureDate ?? '无出发日期')}',
-                          fontSize,
-                          color: Colors.red,
-                        ),
-                        Container(
-                          color: Colors.grey,
-                          width: 1,
-                          height: setHeight(54),
-                        ),
-                        textStyle(
-                            '${wbill.result[index].estimatedArrivalTime == -1 ? '无到货日期' : date(wbill.result[index].estimatedArrivalTime)}',
+                                '${wbill.result[index].startLocationName == ' ' ? '' : wbill.result[index].startLocationName}',
+                                fontSize * 1.5,
+                                fontWeight: FontWeight.bold,
+                                textAlign: TextAlign.center),
+                            flex: 2,
+                          ),
+                          Expanded(
+                            child: goodStatus(
+                                wbill.result[index].status,
+                                wbill.result[index].driver == null
+                                    ? ''
+                                    : wbill.result[index].driver.username),
+                            flex: 1,
+                          ),
+                          Expanded(
+                            child: textStyle(
+                                '${wbill.result[index].destinationName ?? '目的地'}',
+                                fontSize * 1.5,
+                                fontWeight: FontWeight.bold,
+                                textAlign: TextAlign.center),
+                            flex: 2,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: sizedBoxHeight),
+                      Row(
+                        children: [
+                          Expanded(
+                              child: Text(
+                            '司机：${wbill.result[index].driver == null ? '无司机' : wbill.result[index].driver.username}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: setWidth(31)),
+                          )),
+                          Expanded(
+                              child: Text(
+                            '业务员：${wbill.result[index].supplierContactPerson ?? '无业务员'}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: setWidth(31)),
+                          )),
+                        ],
+                      ),
+                      SizedBox(height: sizedBoxHeight * 5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          textStyle('货物明细：', fontSize),
+                        ],
+                      ),
+                      GoodsDetail(
+                        index: index,
+                        titleList: titleList,
+                        totalList: wbill.result[index],
+                      ),
+                      SizedBox(height: sizedBoxHeight * 5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          textStyle('发货日期', fontSize),
+                          textStyle('预计到达', fontSize),
+                        ],
+                      ),
+                      Divider(
+                        height: setHeight(17),
+                        color: Colors.black,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          textStyle(
+                            '${date(wbill.result[index].departureDate ?? '无出发日期')}',
                             fontSize,
-                            color: Colors.green,
-                            textAlign: TextAlign.center),
-                      ],
-                    ),
-                  ],
+                            color: Colors.red,
+                          ),
+                          Container(
+                            color: Colors.grey,
+                            width: 1,
+                            height: setHeight(54),
+                          ),
+                          textStyle(
+                              '${wbill.result[index].estimatedArrivalTime == -1 ? '无到货日期' : date(wbill.result[index].estimatedArrivalTime)}',
+                              fontSize,
+                              color: Colors.green,
+                              textAlign: TextAlign.center),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

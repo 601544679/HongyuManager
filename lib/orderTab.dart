@@ -21,6 +21,7 @@ class _OrderTabState extends State<OrderTab>
     with AutomaticKeepAliveClientMixin {
   List result;
   bool showToTopBtn = false;
+  String dropDownButtonValue = '0';
 
   @override
   void initState() {
@@ -67,11 +68,6 @@ class _OrderTabState extends State<OrderTab>
       '运输中',
       '已完成',
     ];
-    List value = [
-      '0',
-      '1',
-      '2',
-    ];
     List<DropdownMenuItem> dropdownMenuItem() {
       for (int i = 0; i < title.length; i++) {
         dropdownMenuItemList.add(DropdownMenuItem(
@@ -83,52 +79,52 @@ class _OrderTabState extends State<OrderTab>
                   fontSize: ScreenUtil().setSp(40, allowFontScalingSelf: true)),
             ),
           ),
-          value: value[i],
+          value: i.toString(),
         ));
       }
       return dropdownMenuItemList;
     }
 
-    return Column(
-      children: [
-        SizedBox(
-          height: SizeConfig.heightMultiplier,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            DropdownButtonHideUnderline(
-              child: DropdownButton(
-                style: TextStyle(
-                    fontSize:
-                        ScreenUtil().setSp(30, allowFontScalingSelf: true)),
-                value: dropDownButtonValue,
-                items: dropdownMenuItem(),
-                onChanged: (value) {
-                  print(value);
-                  setState(() {
-                    dropDownButtonValue = value;
-                  });
-                },
-                icon: Icon(
-                  Icons.arrow_drop_down,
-                  color: Colors.indigo[colorNum],
-                  size: setHeight(54),
+    return Container(
+      color: Colors.white12,
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  style: TextStyle(
+                      fontSize:
+                          ScreenUtil().setSp(30, allowFontScalingSelf: true)),
+                  value: dropDownButtonValue,
+                  items: dropdownMenuItem(),
+                  onChanged: (value) {
+                    print(value);
+                    setState(() {
+                      dropDownButtonValue = value;
+                    });
+                  },
+                  icon: Icon(
+                    Icons.arrow_drop_down,
+                    color: Colors.indigo[colorNum],
+                    size: setHeight(54),
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        Expanded(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            getOrderData(
-              dropDownButtonValue,
-            )
-          ],
-        ))
-      ],
+            ],
+          ),
+          Expanded(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              getOrderData(
+                dropDownButtonValue,
+              )
+            ],
+          ))
+        ],
+      ),
     );
   }
 

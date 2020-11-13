@@ -45,37 +45,37 @@ post_install do |installer|
           # e.g. when you don't need camera permission, just add 'PERMISSION_CAMERA=0'
           config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
             '$(inherited)',
-
+            #日历,'PERMISSION_EVENTS=0'前面加#表示需要这个权限
             ## dart: PermissionGroup.calendar
             'PERMISSION_EVENTS=0',
-
+            #提醒
             ## dart: PermissionGroup.reminders
             'PERMISSION_REMINDERS=0',
-
+            #联系人
             ## dart: PermissionGroup.contacts
             'PERMISSION_CONTACTS=0',
-
+            #相机
             ## dart: PermissionGroup.camera
             'PERMISSION_CAMERA=0',
-
+            #麦克风
             ## dart: PermissionGroup.microphone
             'PERMISSION_MICROPHONE=0',
-
+            #言语
             ## dart: PermissionGroup.speech
             'PERMISSION_SPEECH_RECOGNIZER=0',
-
+            #相册
             ## dart: PermissionGroup.photos
             'PERMISSION_PHOTOS=0',
-
+            #定位
             ## dart: [PermissionGroup.location, PermissionGroup.locationAlways, PermissionGroup.locationWhenInUse]
             'PERMISSION_LOCATION=0',
-
+            #通知
             ## dart: PermissionGroup.notification
-            'PERMISSION_NOTIFICATIONS=0',
-
+            #'PERMISSION_NOTIFICATIONS=0',
+            #媒体库
             ## dart: PermissionGroup.mediaLibrary
-            'PERMISSION_MEDIA_LIBRARY=0',
-
+            #'PERMISSION_MEDIA_LIBRARY=0',
+            #感应器
             ## dart: PermissionGroup.sensors
             'PERMISSION_SENSORS=0'
           ]

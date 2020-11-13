@@ -19,7 +19,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List tabName = ['主页', '订单详情', '公司'];
+  List tabName = ['主页', '订单详情', '物流公司'];
   List result;
   bool showToTopBtn;
   bool tokenIsUseful = true;

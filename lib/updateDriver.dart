@@ -8,22 +8,30 @@ class updateDriver {
   String username;
   String identityNo;
   int estimatedArrivalTime;
-
-  @override
-  String toString() {
-    return '$logisticsOrderNo,$waybill_ID,$carNo,$company_ID,$company,$mobilePhoneNumber,$username,$identityNo,$estimatedArrivalTime';
-  }
+  String roadTransportPermit;
+  String qualificationCertificate;
+  String deadWeight;
 
   updateDriver(
       {this.logisticsOrderNo,
-      this.waybill_ID,
-      this.carNo,
-      this.company_ID,
-      this.company,
-      this.mobilePhoneNumber,
-      this.username,
-      this.identityNo,
-      this.estimatedArrivalTime});
+        this.waybill_ID,
+        this.carNo,
+        this.company_ID,
+        this.company,
+        this.mobilePhoneNumber,
+        this.username,
+        this.identityNo,
+        this.estimatedArrivalTime,
+        this.roadTransportPermit,
+        this.qualificationCertificate,
+        this.deadWeight});
+
+  @override
+  String toString() {
+    return '{$logisticsOrderNo,  $waybill_ID,  $carNo, $company_ID,  $company,'
+        ' $mobilePhoneNumber, $username,  $identityNo,  $estimatedArrivalTime, $roadTransportPermit, '
+        ' $qualificationCertificate, $deadWeight}';
+  }
 
   set setLogisticsOrderNo(String logisticsOrderNo) {
     this.logisticsOrderNo = logisticsOrderNo;
@@ -78,4 +86,22 @@ class updateDriver {
   }
 
   int get getEstimatedArrivalTime => this.estimatedArrivalTime;
+
+  set setRoadTransportPermit(String roadTransportPermit) {
+    this.roadTransportPermit = roadTransportPermit;
+  }
+
+  String get getRoadTransportPermit => this.roadTransportPermit;
+
+  set setQualificationCertificate(String qualificationCertificate) {
+    this.qualificationCertificate = qualificationCertificate;
+  }
+
+  String get getQualificationCertificate => this.qualificationCertificate;
+
+  set setDeadWeight(String deadWeight) {
+    this.deadWeight = deadWeight;
+  }
+
+  String get getDeadWeight => this.deadWeight;
 }

@@ -340,6 +340,22 @@ class Server {
     return jsonDecode(responseBody.toString());
   }
 
+  //todo 物流公司名称
+  logisticsCompanyMessage() async {
+    var responseBody;
+    responseBody = await useDio(
+        '/1.1/functions/logisticsCompany', {}, 'logisticsCompanyMessage');
+    return responseBody;
+  }
+
+//todo 物流公司车辆信息
+  companyMessage(String companyName) async {
+    var responseBody;
+    responseBody = await useDio('/1.1/functions/companyMessage',
+        {'companyName': companyName}, 'companyMessage');
+    return responseBody;
+  }
+
   checkLogin(String sessionToken) {
     if (sessionToken != null) {
       return true;
@@ -353,35 +369,6 @@ class Server {
     responseBody =
         _post('/1.1/functions/finishWaybill', {'waybillid': waybillid});
     return responseBody;
-  }
-
-  int numHistoryOrders() {
-    return 3; //测试数据
-  }
-
-  String getHistoryWaybill(int index) {
-    return '';
-  }
-
-  String getHistoryDeparture(int index) {
-    return ' ';
-  }
-
-  String getHistoryArrival(int index) {
-    return ' ';
-  }
-
-  String getHistoryReciever(int index) {
-    return ' ';
-  }
-
-  DateTime getHistoryDate(int index) {
-    DateTime _datetime = DateTime.now();
-    return _datetime;
-  }
-
-  String getHistoryMaterialInfo(int index) {
-    return ' ';
   }
 
   Server();
