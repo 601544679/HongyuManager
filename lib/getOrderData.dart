@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:leancloud_storage/leancloud.dart';
 import 'package:mydemo/OrderNetWorkWidget.dart';
-import 'LogUtils.dart';
+import 'userClass.dart';
 import 'constant.dart';
-import 'sizeConfig.dart';
-import 'userclass.dart';
+import 'userClass.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'server.dart';
-import 'package:r_logger/r_logger.dart';
 
 //获取订单数据
 
@@ -25,6 +22,7 @@ class _getOrderDataState extends State<getOrderData> {
   var waybillRecord;
   var saveFutureBuilder;
   Future getData;
+  String role;
 
   //被父组件调用的方法
   chidFunction() {
@@ -32,10 +30,16 @@ class _getOrderDataState extends State<getOrderData> {
     // netWorkChildKey.currentState.backToTop();
   }
 
+  getRole() async {
+    User _user = await User().getUser();
+    role = _user.role;
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getRole();
     print('getOrderData--initState');
   }
 
@@ -88,6 +92,7 @@ class _getOrderDataState extends State<getOrderData> {
                 child: OrderNetWorkWidget(
                   waybill: waybillRecord,
                   key: netWorkChildKey,
+                  role: role,
                 ),
               );
             }
@@ -124,7 +129,9 @@ class _getOrderDataState extends State<getOrderData> {
 
   //todo 根据选择下拉菜单的值请求订单数据
   Future _getData(String state) async {
-    waybillRecord = await Server().getWaybillByValue(state);
+    User _user = await User().getUser();
+    print('名字=${_user.realName}');
+    waybillRecord = await Server().getWaybillByValue(state, _user.realName);
     print('返回的类型---${waybillRecord}');
     return waybillRecord;
   }

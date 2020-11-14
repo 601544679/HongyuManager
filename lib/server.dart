@@ -222,10 +222,10 @@ class Server {
   //value=0 返回所有订单
   //value=1 返回运输中订单
   //value=2 返回已完成订单
-  getWaybillByValue(String value) async {
+  getWaybillByValue(String value, String userName) async {
     var responseBody;
     responseBody = await useDio('/1.1/functions/getWaybillByValue',
-        {'value': value}, 'getWaybillByValue');
+        {'value': value, 'userName': userName}, 'getWaybillByValue');
     print('getWaybillByValue--${responseBody}');
     return responseBody;
     /* User user = await User().getUser();
@@ -302,10 +302,10 @@ class Server {
   }
 
   //todo搜索单张订单
-  searchWaybill(String waybillId) async {
+  searchWaybill(String waybillId, String username) async {
     var responseBody;
     responseBody = await useDio('/1.1/functions/searchWaybill',
-        {'waybillid': waybillId}, 'searchWaybill');
+        {'waybillid': waybillId, 'userName': username}, 'searchWaybill');
     return responseBody;
     /*var responseBody;
     responseBody =
@@ -314,10 +314,10 @@ class Server {
   }
 
   //todo 搜索
-  searchSuggestion(String text) async {
+  searchSuggestion(String text, String userName) async {
     var responseBody;
-    responseBody = await useDio(
-        '/1.1/functions/suggestion', {'waybillid': text}, 'searchSuggestion');
+    responseBody = await useDio('/1.1/functions/suggestion',
+        {'waybillid': text, 'userName': userName}, 'searchSuggestion');
     return responseBody;
     /* var responseBody;
     responseBody = _post('/1.1/functions/suggestion/', {'waybillid': text});

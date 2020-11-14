@@ -6,15 +6,17 @@ import 'package:mydemo/waybill_entity.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'constant.dart';
 import 'finishPage.dart';
+import 'userClass.dart';
 
 //根据下拉菜单使用网络请求
 GlobalKey<_OrderNetWorkWidgetState> netWorkChildKey = GlobalKey(); //一定要指定<>
 
 class OrderNetWorkWidget extends StatefulWidget {
   final waybill;
+  final role;
 
 //构造方法传入请求成功后的数据
-  OrderNetWorkWidget({this.waybill, Key key});
+  OrderNetWorkWidget({this.waybill, Key key, this.role});
 
   @override
   _OrderNetWorkWidgetState createState() => _OrderNetWorkWidgetState();
@@ -40,6 +42,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
     // TODO: implement initState
     super.initState();
     print('OrderNetWorkWidget--initState');
+    print('OrderNetWorkWidget身份--${widget.role}');
     getToken();
     controller.addListener(() {
       //print('滚动位置:${controller.offset}');
@@ -121,8 +124,7 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
   @override
   Widget build(BuildContext context) {
     getToken();
-    print(
-        '具体值:tokenIsUseful--${tokenIsUseful},类型--${widget.waybill.runtimeType}');
+    print('具体值:tokenIsUseful--${tokenIsUseful},类型--${widget.waybill}');
     if (tokenIsUseful == true && widget.waybill.runtimeType != int) {
       print('OrderNetWorkWidget--build');
       MyNotification(showToTopBtn).dispatch(context);
@@ -131,7 +133,8 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
         controller: controller,
         itemBuilder: (context, index) {
           return InkWell(
-            onTap: () {
+            onTap: () async {
+              User _user = await User().getUser();
               print(index);
               //根据运输状态进行跳转
               switch (wbill.result[index].status) {
@@ -147,7 +150,9 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => FinishPage(
-                              orderNumber: wbill.result[index].waybillId)));
+                                orderNumber: wbill.result[index].waybillId,
+                                role: _user.role,
+                              )));
                   break;
               }
             },
@@ -157,7 +162,8 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                 right: setWidth(15),
                 top: setHeight(14),
               ),
-              child: Card(elevation: 3,
+              child: Card(
+                elevation: 3,
                 child: Padding(
                   padding: EdgeInsets.only(
                       left: setWidth(15),
@@ -166,16 +172,19 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                       bottom: setHeight(14)),
                   child: Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          textStyle('运输单号：', fontSize),
-                          Expanded(
-                            child: textStyle(
-                                '${wbill.result[index].waybillId ?? '无运输单号'}',
-                                fontSize),
-                          )
-                        ],
+                      Visibility(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            textStyle('运输单号：', fontSize),
+                            Expanded(
+                              child: textStyle(
+                                  '${wbill.result[index].waybillId ?? '运输单号'}',
+                                  fontSize),
+                            )
+                          ],
+                        ),
+                        visible: widget.role == 'logisticsClerk' ? false : true,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -188,15 +197,18 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                         ],
                       ),
                       SizedBox(height: sizedBoxHeight),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          textStyle('施工单位：', fontSize),
-                          Expanded(
-                              child: textStyle(
-                                  '${wbill.result[index].constructionCompanyName ?? '无施工单位'}',
-                                  fontSize))
-                        ],
+                      Visibility(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            textStyle('施工单位：', fontSize),
+                            Expanded(
+                                child: textStyle(
+                                    '${wbill.result[index].constructionCompanyName ?? '无施工单位'}',
+                                    fontSize))
+                          ],
+                        ),
+                        visible: widget.role == 'logisticsClerk' ? false : true,
                       ),
                       SizedBox(
                         height: sizedBoxHeight * 5,
@@ -240,11 +252,16 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
                             style: TextStyle(fontSize: setWidth(31)),
                           )),
                           Expanded(
+                            child: Visibility(
                               child: Text(
-                            '业务员：${wbill.result[index].supplierContactPerson ?? '无业务员'}',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: setWidth(31)),
-                          )),
+                                '业务员：${wbill.result[index].supplierContactPerson ?? '无业务员'}',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: setWidth(31)),
+                              ),
+                              visible:
+                                  widget.role == 'salesClerk' ? false : true,
+                            ),
+                          ),
                         ],
                       ),
                       SizedBox(height: sizedBoxHeight * 5),

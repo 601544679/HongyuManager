@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mydemo/server.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'constant.dart';
+import 'userClass.dart';
 
 class searchSuggestion extends StatefulWidget {
   String query;
@@ -22,10 +23,13 @@ class searchSuggestion extends StatefulWidget {
 class _searchSuggestionState extends State<searchSuggestion> {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   var response;
+  var saveHistory;
 
   getDataFuture() async {
     print('传入单号:${widget.query}');
-    response = await Server().searchSuggestion(widget.query);
+    User _user = await User().getUser();
+
+    response = await Server().searchSuggestion(widget.query, _user.realName);
     return response;
   }
 
@@ -33,6 +37,7 @@ class _searchSuggestionState extends State<searchSuggestion> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    saveHistory = widget.history;
     print('searchSuggestion--initState');
   }
 
@@ -114,7 +119,7 @@ class _searchSuggestionState extends State<searchSuggestion> {
               setWidth(20),
               setWidth(0),
             ),
-            child: widget.history == null
+            child: saveHistory == null
                 ? Center(
                     child: Text(
                       '无历史记录',
@@ -136,6 +141,9 @@ class _searchSuggestionState extends State<searchSuggestion> {
                         children: [
                           MaterialButton(
                             onPressed: () {
+                              setState(() {
+                                saveHistory = null;
+                              });
                               clearHistory();
                               widget.popSuggestion(context);
                             },

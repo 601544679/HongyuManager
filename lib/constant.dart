@@ -11,7 +11,8 @@ import 'releaseOrder.dart';
 final int colorNum = 600;
 final String home = '主页';
 final String order = '订单';
-final String user = '公司';
+final String logisticsCompanyName = '公司';
+final String user = '我的';
 final routes = {
   "/homePage": (context) => Home(),
   "/loginPage": (context) => LoginPage(),
@@ -96,7 +97,6 @@ List<String> jsonTitle = [
   'departureDate',
   'logisticsOrderNo',
   'waybill_ID',
-  'XK_NO',
   'company_ID',
   'projectName',
   'constructionCompanyName',
@@ -171,8 +171,6 @@ List titleList = [
 ];
 List arrayTitleList = [
   '序号',
-  '销售单号',
-  //XK_NO                                                                                                                               a.result.allMessage.xkNo ?? "无销售单号",
   '物料号',
   //materialsNumber                                FT200-318-0
   '客户编码',

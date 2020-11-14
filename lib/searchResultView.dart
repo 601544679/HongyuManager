@@ -4,6 +4,7 @@ import 'package:mydemo/search_result_entity.dart';
 import 'finishPage.dart';
 import 'mapPage.dart';
 import 'server.dart';
+import 'userClass.dart';
 import 'sizeConfig.dart';
 import 'constant.dart';
 import 'package:r_logger/r_logger.dart';
@@ -19,12 +20,20 @@ class resultView extends StatefulWidget {
 
 class _resultViewState extends State<resultView> {
   var response;
+  String role;
+  String username;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getRole();
     print('resultView--initState');
+  }
+
+  getRole() async {
+    User _user = await User().getUser();
+    role = _user.role;
   }
 
   @override
@@ -57,7 +66,9 @@ class _resultViewState extends State<resultView> {
 
   getDataFuture() async {
     print('传入单号:${widget.query}');
-    response = await Server().searchWaybill(widget.query);
+    User _user = await User().getUser();
+    username = _user.realName;
+    response = await Server().searchWaybill(widget.query, username);
     print('单号结果:${response}');
     return response;
   }
@@ -76,7 +87,7 @@ class _resultViewState extends State<resultView> {
             } else if (snapshot.hasData) {
               print('hasData');
               // 请求成功，显示数据
-              return ResultBuilder(snapshot.data, widget.query);
+              return ResultBuilder(snapshot.data, widget.query, role);
             }
             break;
           case ConnectionState.none:
@@ -114,8 +125,9 @@ class _resultViewState extends State<resultView> {
 class ResultBuilder extends StatefulWidget {
   final data;
   String query;
+  String role;
 
-  ResultBuilder(this.data, this.query);
+  ResultBuilder(this.data, this.query, this.role);
 
   @override
   _ResultBuilderState createState() => _ResultBuilderState();
@@ -129,6 +141,7 @@ class _ResultBuilderState extends State<ResultBuilder> {
   @override
   Widget build(BuildContext context) {
     print('数据${widget.data}');
+    print('搜索身份${widget.role}');
     //RLogger.instance.d(widget.data.toString());
     var result = SearchResultEntity().fromJson(widget.data);
     return ListView.builder(
@@ -151,7 +164,9 @@ class _ResultBuilderState extends State<ResultBuilder> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => FinishPage(
-                            orderNumber: result.result[index].waybillID)));
+                              orderNumber: result.result[index].waybillID,
+                              role: widget.role,
+                            )));
                 break;
             }
           },
@@ -165,16 +180,19 @@ class _ResultBuilderState extends State<ResultBuilder> {
               ),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      textStyle('运输单号：', fontSize),
-                      Expanded(
-                        child: textStyle(
-                            '${result.result[index].waybillID ?? '无运输单号'}',
-                            fontSize),
-                      )
-                    ],
+                  Visibility(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        textStyle('运输单号：', fontSize),
+                        Expanded(
+                          child: textStyle(
+                              '${result.result[index].waybillID ?? '运输单号'}',
+                              fontSize),
+                        )
+                      ],
+                    ),
+                    visible: widget.role == 'logisticsClerk' ? false : true,
                   ),
                   SizedBox(height: sizedBoxHeight),
                   Row(
@@ -188,15 +206,18 @@ class _ResultBuilderState extends State<ResultBuilder> {
                     ],
                   ),
                   SizedBox(height: sizedBoxHeight),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      textStyle('施工单位：', fontSize),
-                      Expanded(
-                          child: textStyle(
-                              '${result.result[index].constructionCompanyName ?? '无施工单位'}',
-                              fontSize))
-                    ],
+                  Visibility(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        textStyle('施工单位：', fontSize),
+                        Expanded(
+                            child: textStyle(
+                                '${result.result[index].constructionCompanyName ?? '无施工单位'}',
+                                fontSize))
+                      ],
+                    ),
+                    visible: widget.role == 'logisticsClerk' ? false : true,
                   ),
                   SizedBox(height: sizedBoxHeight),
                   Row(
@@ -240,13 +261,15 @@ class _ResultBuilderState extends State<ResultBuilder> {
                                 .setSp(35, allowFontScalingSelf: true)),
                       )),
                       Expanded(
+                        child: Visibility(
                           child: Text(
-                        '业务员：${result.result[index].supplierContactPerson ?? '无业务员'}',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: ScreenUtil()
-                                .setSp(35, allowFontScalingSelf: true)),
-                      )),
+                            '业务员：${result.result[index].supplierContactPerson ?? '无业务员'}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: setWidth(31)),
+                          ),
+                          visible: widget.role == 'salesClerk' ? false : true,
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(height: sizedBoxHeight),

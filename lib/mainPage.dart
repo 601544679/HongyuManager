@@ -5,11 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:leancloud_storage/leancloud.dart';
 import 'package:mydemo/userClass.dart';
+import 'package:mydemo/userTab.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'mySearch.dart';
 import 'homeTab.dart';
 import 'orderTab.dart';
-import 'userTab.dart';
+import 'logisticsCompanyTab.dart';
 import 'constant.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -19,11 +20,16 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List tabName = ['主页', '订单详情', '物流公司'];
+  List tabName = ['主页', '订单详情', '物流公司', '个人信息'];
   List result;
   bool showToTopBtn;
   bool tokenIsUseful = true;
-  List<Widget> currentScreen = [HomeTab(), OrderTab(), UserTab()];
+  List<Widget> currentScreen = [
+    HomeTab(),
+    OrderTab(),
+    logisticsCompanyTab(),
+    userTab()
+  ];
   var _pageController = PageController();
 
   checkToken() async {
@@ -45,6 +51,8 @@ class _HomeState extends State<Home> {
     currentTab = 0;
     print('Home--initState');
   }
+
+
 
   @override
   void didChangeDependencies() {
@@ -157,6 +165,8 @@ class _HomeState extends State<Home> {
                     Navigator.pushNamedAndRemoveUntil(
                         context, "/loginPage", (route) => route == null);
                   })));
+    } else {
+      return Text('');
     }
   }
 
@@ -165,7 +175,8 @@ class _HomeState extends State<Home> {
       BottomNavigationBarItem(icon: Icon(Icons.home), title: Text(home)),
       BottomNavigationBarItem(icon: Icon(Icons.reorder), title: Text(order)),
       BottomNavigationBarItem(
-          icon: Icon(Icons.directions_car), title: Text(user)),
+          icon: Icon(Icons.directions_car), title: Text(logisticsCompanyName)),
+      BottomNavigationBarItem(icon: Icon(Icons.person), title: Text(user)),
     ];
   }
 

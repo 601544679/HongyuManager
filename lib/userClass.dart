@@ -12,6 +12,8 @@ class User {
   String sessionToken;
   String name;
   String company;
+  String realName;
+  String role;
   String currentWaybill;
   String objectId;
   bool isSave;
@@ -23,6 +25,8 @@ class User {
     sessionToken = null;
     name = null;
     company = null;
+    realName = null;
+    role = null;
     currentWaybill = null;
     objectId = null;
     isSave = null;
@@ -93,6 +97,8 @@ class User {
         idNumber = json['idNumber'],
         sessionToken = json['sessionToken'],
         company = json['company'],
+        realName = json['realName'],
+        role = json['role'],
         currentWaybill = json['currentWaybill'],
         objectId = json['objectId'],
         password = json['password'];
@@ -104,6 +110,8 @@ class User {
         'idNumber': idNumber,
         'sessionToken': sessionToken,
         'company': company,
+        'realName': realName,
+        'role': role,
         'currentWaybill': currentWaybill,
         'objectId': objectId,
         'password': password,

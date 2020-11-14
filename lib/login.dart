@@ -360,6 +360,10 @@ class _LoginPageState extends State<LoginPage> {
                                         _user.idNumber = response['identityNo'];
                                         _user.name = response.username;
                                         _user.company = response['company'];
+                                        _user.role = response['role'];
+                                        print(
+                                            'realName = ${response['realName']}');
+                                        _user.realName = response['realName'];
                                         _user.phoneNumber =
                                             response['mobilePhoneNumber'];
                                         //_user.objectId = response['objectId'];
@@ -368,7 +372,7 @@ class _LoginPageState extends State<LoginPage> {
                                         _user.isSave = checkBoxValue;
                                         _user.saveUser(_user);
                                         //进行身份验证，管理者才能登录管理者端
-                                        if (response['role'] == 'Manager') {
+                                        if (response['role'] != 'Driver') {
                                           scaffoldKey.currentState.showSnackBar(
                                               showSnackBar('登录成功'));
                                           var refreshToken = await Server()

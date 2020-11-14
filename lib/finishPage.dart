@@ -6,6 +6,7 @@ import 'package:leancloud_storage/leancloud.dart';
 import 'package:mydemo/finish_data_entity.dart';
 import 'LogUtils.dart';
 import 'server.dart';
+import 'userClass.dart';
 import 'constant.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_drag_scale/flutter_drag_scale.dart';
@@ -16,8 +17,9 @@ class FinishPage extends StatefulWidget {
   @override
   _FinishPageState createState() => _FinishPageState();
   String orderNumber;
+  String role;
 
-  FinishPage({this.orderNumber});
+  FinishPage({this.orderNumber, this.role});
 }
 
 class _FinishPageState extends State<FinishPage> {
@@ -73,6 +75,7 @@ class _FinishPageState extends State<FinishPage> {
               return tabBuilder(
                 snapshot.data,
                 number: widget.orderNumber,
+                role: widget.role,
               );
             }
             break;
@@ -122,8 +125,9 @@ class _FinishPageState extends State<FinishPage> {
 class tabBuilder extends StatefulWidget {
   final data;
   final number;
+  final role;
 
-  tabBuilder(this.data, {this.number});
+  tabBuilder(this.data, {this.number, this.role});
 
   @override
   _tabBuilderState createState() => _tabBuilderState();
@@ -205,7 +209,7 @@ class _tabBuilderState extends State<tabBuilder>
       for (int i = 0; i < allData.result.allMessage.xkNo.length; i++) {
         List detailList = List();
         detailList.add(i + 1);
-        detailList.add(allData.result.allMessage.xkNo[i]);
+        //detailList.add(allData.result.allMessage.xkNo[i]);
         detailList.add(allData.result.allMessage.materialsNumber[i]);
         detailList.add(allData.result.allMessage.clientId[i]);
         detailList.add(allData.result.allMessage.size[i]);
@@ -241,24 +245,22 @@ class _tabBuilderState extends State<tabBuilder>
                   tabs: [
                     Text(
                       '送货单信息',
-                      style: TextStyle(
-                          fontSize: fontSize),
+                      style: TextStyle(fontSize: fontSize),
                     ),
                     Text(
                       '签收照片',
-                      style: TextStyle(
-                          fontSize: fontSize),
+                      style: TextStyle(fontSize: fontSize),
                     ),
                     Text(
                       '途径点',
-                      style: TextStyle(
-                          fontSize: fontSize),
+                      style: TextStyle(fontSize: fontSize),
                     ),
                   ]),
             ),
             preferredSize: Size.fromHeight(setHeight(148))),
         body: TabBarView(controller: controller, children: [
-          waybillDetailTab(titleList, contentList, arrayTitleList, cutList),
+          waybillDetailTab(
+              titleList, contentList, arrayTitleList, cutList, widget.role),
           signForPicture(allData),
           finishMapPage(widget.number)
         ]),
@@ -274,6 +276,22 @@ Text textStyle(String data, double fontSize, {FontWeight fontWeight}) {
     style: TextStyle(
         fontWeight: fontWeight ?? FontWeight.normal, fontSize: fontSize),
   );
+}
+
+//是否展示
+bool showMessage(String role, int index) {
+  print('传入身份=$role');
+  if (role == 'logisticsClerk' && index == 2) {
+    return false;
+  } else if (role == 'logisticsClerk' && index == 5) {
+    return false;
+  } else if (role == 'merchandiser' && index == 7) {
+    return false;
+  } else if (role == 'merchandiser' && index == 8) {
+    return false;
+  } else {
+    return true;
+  }
 }
 
 //点击查看大图
@@ -383,9 +401,10 @@ class waybillDetailTab extends StatefulWidget {
   final contentList;
   final arrayTitleList;
   final cutList;
+  final role;
 
-  waybillDetailTab(
-      this.titleList, this.contentList, this.arrayTitleList, this.cutList);
+  waybillDetailTab(this.titleList, this.contentList, this.arrayTitleList,
+      this.cutList, this.role);
 
   @override
   _waybillDetailTabState createState() => _waybillDetailTabState();
@@ -400,6 +419,20 @@ class _waybillDetailTabState extends State<waybillDetailTab>
   var flex2 = 2;
   var textAlign = TextAlign.right;
   var containerWidth = setWidth(705);
+  User _user;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getRole();
+    print('waybillDetailTab--initState');
+  }
+
+  getRole() async {
+    _user = await User().getUser();
+    print('身份=${_user.role}');
+  }
 
   Widget build(BuildContext context) {
     print('waybillDetailTab--build');
@@ -416,23 +449,27 @@ class _waybillDetailTabState extends State<waybillDetailTab>
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                  return Visibility(
+                      visible: showMessage(widget.role, index),
+                      child: Column(
                         children: [
-                          textStyle(widget.titleList[index] + ':', fontSize),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              textStyle(
+                                  widget.titleList[index] + ':', fontSize),
+                            ],
+                          ),
+                          Container(
+                              width: containerWidth,
+                              child: textStyle(
+                                  widget.contentList[index], fontSize1,
+                                  fontWeight: FontWeight.bold)),
+                          SizedBox(
+                            height: setHeight(14),
+                          ),
                         ],
-                      ),
-                      Container(
-                          width: containerWidth,
-                          child: textStyle(widget.contentList[index], fontSize1,
-                              fontWeight: FontWeight.bold)),
-                      SizedBox(
-                        height: setHeight(14),
-                      ),
-                    ],
-                  );
+                      ));
                 },
                 itemCount: widget.titleList.length,
               ),
