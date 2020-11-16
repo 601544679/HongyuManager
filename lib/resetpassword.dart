@@ -53,11 +53,7 @@ class _ResetPasswordState extends State<ResetPassword> {
             centerTitle: true,
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => LoginPage(),
-                      fullscreenDialog: true)),
+              onPressed: () => Navigator.pop(context),
             ),
             title: Text(
               '修改密码',

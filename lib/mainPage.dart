@@ -52,8 +52,6 @@ class _HomeState extends State<Home> {
     print('Home--initState');
   }
 
-
-
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -138,33 +136,7 @@ class _HomeState extends State<Home> {
             }),
       );
     } else if (currentTab == 2) {
-      return UnconstrainedBox(
-          child: Padding(
-              padding: EdgeInsets.only(right: setWidth(38)),
-              child: InkWell(
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.exit_to_app,
-                        size: setHeight(30),
-                      ),
-                      Text(
-                        '退出',
-                        style: TextStyle(
-                            fontSize: ScreenUtil()
-                                .setSp(30, allowFontScalingSelf: true)),
-                      )
-                    ],
-                  ),
-                  onTap: () async {
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    prefs.clear();
-                    final storage = new FlutterSecureStorage();
-                    await storage.deleteAll();
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, "/loginPage", (route) => route == null);
-                  })));
+      return Text('');
     } else {
       return Text('');
     }

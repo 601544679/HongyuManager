@@ -15,7 +15,8 @@ class logisticsCompanyTab extends StatefulWidget {
   _logisticsCompanyTabState createState() => _logisticsCompanyTabState();
 }
 
-class _logisticsCompanyTabState extends State<logisticsCompanyTab> with AutomaticKeepAliveClientMixin {
+class _logisticsCompanyTabState extends State<logisticsCompanyTab>
+    with AutomaticKeepAliveClientMixin {
   List dropdownList = List();
   String dropDownButtonValue = '0';
 
@@ -196,62 +197,67 @@ class _logisticsCompanyState extends State<logisticsCompany> {
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: EdgeInsets.only(
-                        left: ScreenUtil().setWidth(15),
-                        right: ScreenUtil().setWidth(15),
-                      ),
+                          left: ScreenUtil().setWidth(15),
+                          right: ScreenUtil().setWidth(15),
+                          top: ScreenUtil().setHeight(13)),
                       child: Card(
+                          elevation: 4,
                           child: Padding(
-                        padding: EdgeInsets.only(
-                            left: ScreenUtil().setWidth(15),
-                            right: ScreenUtil().setWidth(15),
-                            top: ScreenUtil().setHeight(14),
-                            bottom: ScreenUtil().setHeight(14)),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
+                            padding: EdgeInsets.only(
+                                left: ScreenUtil().setWidth(15),
+                                right: ScreenUtil().setWidth(15),
+                                top: ScreenUtil().setHeight(14),
+                                bottom: ScreenUtil().setHeight(14)),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Image.asset(
-                                  'images/huoche.png',
-                                  width: ScreenUtil().setWidth(75),
-                                ),
-                                SizedBox(
-                                  width: ScreenUtil().setWidth(37.5),
-                                ),
-                                Column(
+                                Row(
                                   children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '车牌：${snapshot.data[index]['carNo'].toString().substring(0, 2)}'
-                                          '•${snapshot.data[index]['carNo'].toString().substring(2)}',
-                                          style: TextStyle(
-                                              fontSize: ScreenUtil().setSp(30,
-                                                  allowFontScalingSelf: true)),
-                                        )
-                                      ],
+                                    Image.asset(
+                                      'images/huoche.png',
+                                      width: ScreenUtil().setWidth(75),
                                     ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                    SizedBox(
+                                      width: ScreenUtil().setWidth(37.5),
+                                    ),
+                                    Column(
                                       children: [
-                                        Text(
-                                          '载重量：${snapshot.data[index]['deadWeight']}(吨)',
-                                          style: TextStyle(
-                                              fontSize: ScreenUtil().setSp(30,
-                                                  allowFontScalingSelf: true)),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              '车牌：${snapshot.data[index]['carNo'].toString().substring(0, 2)}'
+                                              '•${snapshot.data[index]['carNo'].toString().substring(2)}',
+                                              style: TextStyle(
+                                                  fontSize: ScreenUtil().setSp(
+                                                      30,
+                                                      allowFontScalingSelf:
+                                                          true)),
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              '载重量：${snapshot.data[index]['deadWeight']}(吨)',
+                                              style: TextStyle(
+                                                  fontSize: ScreenUtil().setSp(
+                                                      30,
+                                                      allowFontScalingSelf:
+                                                          true)),
+                                            )
+                                          ],
                                         )
                                       ],
                                     )
                                   ],
                                 )
                               ],
-                            )
-                          ],
-                        ),
-                      )),
+                            ),
+                          )),
                     );
                   },
                   itemCount: snapshot.data.length);

@@ -160,10 +160,10 @@ class _OrderNetWorkWidgetState extends State<OrderNetWorkWidget> {
               padding: EdgeInsets.only(
                 left: setWidth(15),
                 right: setWidth(15),
-                top: setHeight(14),
+                top: setHeight(15),
               ),
               child: Card(
-                elevation: 3,
+                elevation: 4,
                 child: Padding(
                   padding: EdgeInsets.only(
                       left: setWidth(15),

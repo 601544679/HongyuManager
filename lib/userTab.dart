@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mydemo/constant.dart';
 import 'package:mydemo/finishPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'userClass.dart';
 
 class userTab extends StatefulWidget {
@@ -98,18 +100,15 @@ class _userMessageState extends State<userMessage> {
         child: Column(
           children: [
             SizedBox(
-              height: ScreenUtil().setHeight(70),
+              height: ScreenUtil().setHeight(50),
             ),
             CircleAvatar(
-              radius: 70,
+              radius: 60,
               backgroundColor: Colors.white,
-              child: Icon(
-                Icons.person_pin,
-                size: ScreenUtil().setHeight(200),
-              ),
+              child: Image.asset('images/touxiang.png'),
             ),
             SizedBox(
-              height: ScreenUtil().setHeight(50),
+              height: ScreenUtil().setHeight(60),
             ),
             ListView.separated(
               shrinkWrap: true,
@@ -151,10 +150,17 @@ class _userMessageState extends State<userMessage> {
               },
             ),
             SizedBox(
-              height: ScreenUtil().setHeight(35),
+              height: ScreenUtil().setHeight(60),
             ),
             MaterialButton(
-              onPressed: () {},
+              onPressed: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.clear();
+                final storage = new FlutterSecureStorage();
+                await storage.deleteAll();
+                Navigator.pushNamedAndRemoveUntil(
+                    context, "/loginPage", (route) => route == null);
+              },
               child: Material(
                 color: Colors.indigo[colorNum],
                 child: Padding(
@@ -178,7 +184,9 @@ class _userMessageState extends State<userMessage> {
               height: ScreenUtil().setHeight(15),
             ),
             MaterialButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/resetPassword');
+              },
               child: Material(
                 color: Colors.indigo[colorNum],
                 child: Padding(
@@ -201,7 +209,6 @@ class _userMessageState extends State<userMessage> {
           ],
         ),
       ),
-     
     );
   }
 }
