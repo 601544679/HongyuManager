@@ -109,7 +109,7 @@ class _userMessageState extends State<userMessage> {
               ),
             ),
             SizedBox(
-              height: ScreenUtil().setHeight(70),
+              height: ScreenUtil().setHeight(50),
             ),
             ListView.separated(
               shrinkWrap: true,
@@ -159,10 +159,36 @@ class _userMessageState extends State<userMessage> {
                 color: Colors.indigo[colorNum],
                 child: Padding(
                   padding: EdgeInsets.only(
-                      left: ScreenUtil().setWidth(30),
-                      right: ScreenUtil().setWidth(30)),
+                      left: ScreenUtil().setWidth(50),
+                      right: ScreenUtil().setWidth(50),
+                      top: ScreenUtil().setHeight(10),
+                      bottom: ScreenUtil().setHeight(10)),
                   child: Text(
                     '退出登录',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: ScreenUtil().setSp(40),
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                borderRadius: BorderRadius.circular(15),
+              ),
+            ),
+            SizedBox(
+              height: ScreenUtil().setHeight(15),
+            ),
+            MaterialButton(
+              onPressed: () {},
+              child: Material(
+                color: Colors.indigo[colorNum],
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      left: ScreenUtil().setWidth(50),
+                      right: ScreenUtil().setWidth(50),
+                      top: ScreenUtil().setHeight(10),
+                      bottom: ScreenUtil().setHeight(10)),
+                  child: Text(
+                    '修改密码',
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: ScreenUtil().setSp(40),
@@ -175,7 +201,7 @@ class _userMessageState extends State<userMessage> {
           ],
         ),
       ),
-      color: Colors.white,
+     
     );
   }
 }
