@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mydemo/sizeConfig.dart';
+import 'package:mydemo/splashScreen.dart';
 import 'login.dart';
 import 'constant.dart';
 import 'userClass.dart';
@@ -28,7 +29,7 @@ void main() async {
   LeanCloud.initialize(
       '24PJDWahD7Pww2cDice6F6Er-gzGzoHsz', 'mrcuLNzhXH6uJ3gTtGi0Ttg7',
       server: 'https://gcapp.hy100.com.cn');
-  LCLogger.setLevel(3); //一定要放在main不然不显示具体错误信息
+  //LCLogger.setLevel(3); //一定要放在main不然不显示具体错误信息
   runApp(MyApp(user: user));
 }
 
@@ -50,9 +51,7 @@ class MyApp extends StatelessWidget {
               navigatorKey: navigatorState,
               routes: routes,
               theme: ThemeData(primaryColor: Colors.indigo[colorNum]),
-              home: LoginPage(
-                user: user,
-              ));
+              home: splashScreen(user));
         },
       );
     });
