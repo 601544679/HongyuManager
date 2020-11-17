@@ -22,7 +22,7 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
   bool checkBoxValue = false;
   final server = Server();
   TextEditingController _passwordControl = new TextEditingController();
@@ -30,6 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   FocusNode focusNodeNum = FocusNode(); //控制手机号码焦点
   FocusNode focusNodePas = FocusNode(); //控制密码焦点
   var scaffoldKey = GlobalKey<ScaffoldState>();
+  bool keyboardOpen = false;
 
   autoLogin(context) async {
     var refreshToken;
@@ -120,10 +121,32 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => autoLogin(context));
+    //监听键盘
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) => changeStatusBar());
+    WidgetsBinding.instance.addPostFrameCallback((_) => autoLogin(context));
     getDevice();
     print('LoginPage--initState');
+  }
+
+  @override
+  void didChangeMetrics() {
+    // TODO: implement didChangeMetrics
+    super.didChangeMetrics();
+    print('LoginPage--didChangeMetrics');
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {
+        if (focusNodePas.hasFocus) {
+          if (MediaQuery.of(context).viewInsets.bottom == 0) {
+            print('键盘关闭了');
+            keyboardOpen = false;
+          } else {
+            print('键盘打开了');
+            keyboardOpen = true;
+          }
+        }
+      });
+    });
   }
 
   @override
@@ -151,14 +174,14 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     print('LoginPage--dispose');
   }
 
   @override
   Widget build(BuildContext context) {
     print('LoginPage--build');
-    ScreenUtil.init(context,
-        designSize: Size(750, 1334), allowFontScaling: false);
+
     double fontSize = ScreenUtil().setSp(30, allowFontScalingSelf: true);
     /*print('像素密度--${ScreenUtil().pixelRatio}');
     print('像素宽度--${ScreenUtil().screenWidthPx}');
@@ -176,206 +199,229 @@ class _LoginPageState extends State<LoginPage> {
       _passwordControl.text = _user.password;
     }
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.dark,
+      value: SystemUiOverlayStyle.light,
       child: Scaffold(
         key: scaffoldKey,
         resizeToAvoidBottomPadding: false,
         body: Container(
           height: setHeight(1334),
           color: Colors.white,
-          child: Stack(
-            overflow: Overflow.visible,
-            children: [
-              ClipPath(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Stack(
+                  overflow: Overflow.visible,
+                  children: [
+                    /*ClipPath(
                   clipper: BottomClipper(),
                   child: Container(
-                    height: setHeight(667),
+                    height: setHeight(660),
                     color: Colors.indigo[colorNum],
                     child: Image.asset(
-                      'images/bg1.jpg',
+                      'images/gg.png',
                       fit: BoxFit.cover,
                     ),
-                  )),
-              Positioned(
-                left: setWidth(75),
-                top: setHeight(400),
-                width: setWidth(600),
-                height: setHeight(700),
-                child: Card(
-                  shadowColor: Colors.indigo[colorNum],
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: setWidth(15),
-                        right: setWidth(15),
-                        top: setHeight(26),
-                        bottom: setHeight(26)),
-                    child: Form(
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: setHeight(50),
-                          ),
-                          Container(
-                            width: setWidth(500),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.person_pin,
-                                  size: setWidth(60),
-                                ),
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: setHeight(20)),
-                                //输入框背景色
-                                fillColor: Color(0x30cccccc),
-                                //true fillColor生效
-                                filled: true,
-                                hintText: '请输入用户名',
-                                enabledBorder: OutlineInputBorder(
-                                    //失去焦点时边框颜色
-                                    borderSide:
-                                        BorderSide(color: Color(0x00FF0000)),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10))),
-                                focusedBorder: OutlineInputBorder(
-                                    //边框选中时的颜色
-                                    borderSide: BorderSide(
-                                        color: Colors.indigo[colorNum]),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10))),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: setHeight(50),
-                          ),
-                          Container(
-                            width: setWidth(500),
-                            child: TextField(
-                              obscureText: true,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: setHeight(20)),
-                                prefixIcon: Icon(
-                                  Icons.lock,
-                                  size: setWidth(60),
-                                ),
-                                //输入框背景色
-                                fillColor: Color(0x30cccccc),
-                                //true fillColor生效
-                                filled: true,
-                                hintText: '请输入密码',
-                                enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0x00FF0000)),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10))),
-                                focusedBorder: OutlineInputBorder(
-                                    //边框选中时的颜色
-                                    borderSide: BorderSide(
-                                        color: Colors.indigo[colorNum]),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10))),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: setHeight(50),
-                          ),
-                          Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                  ))*/
+                    Image.asset(
+                      'images/ss.png',
+                      height: ScreenUtil().setHeight(1334),
+                      fit: BoxFit.fill,
+                    ),
+                    Positioned(
+                      left: setWidth(75),
+                      top: setHeight(keyboardOpen == true ? 350 : 500),
+                      width: setWidth(600),
+                      height: setHeight(650),
+                      child: Card(
+                        color: Colors.white,
+                        shadowColor: Colors.indigo[colorNum],
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: setWidth(15),
+                              right: setWidth(15),
+                              top: setHeight(26),
+                              bottom: setHeight(26)),
+                          child: Form(
+                            child: Column(
                               children: [
-                                Checkbox(
-                                    activeColor: Colors.indigo[colorNum],
-                                    value: checkBoxValue,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        checkBoxValue = value;
-                                      });
-                                    }),
-                                InkWell(
-                                  child: Text(
-                                    '自动登录',
-                                    style: TextStyle(
-                                        fontSize: fontSize,
-                                        color: checkBoxValue == true
-                                            ? Colors.indigo[colorNum]
-                                            : Colors.black),
+                                SizedBox(
+                                  height: setHeight(50),
+                                ),
+                                Container(
+                                  width: setWidth(500),
+                                  child: TextFormField(
+                                    initialValue: _user.name,
+                                    focusNode: focusNodeNum,
+                                    decoration: InputDecoration(
+                                      prefixIcon: Icon(
+                                        Icons.person_pin,
+                                        size: setWidth(60),
+                                      ),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: setHeight(20)),
+                                      //输入框背景色
+                                      fillColor: Color(0x30cccccc),
+                                      //true fillColor生效
+                                      filled: true,
+                                      hintText: '请输入用户名',
+                                      enabledBorder: OutlineInputBorder(
+                                          //失去焦点时边框颜色
+                                          borderSide: BorderSide(
+                                              color: Color(0x00FF0000)),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10))),
+                                      focusedBorder: OutlineInputBorder(
+                                          //边框选中时的颜色
+                                          borderSide: BorderSide(
+                                              color: Colors.indigo[colorNum]),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10))),
+                                    ),
                                   ),
-                                  onTap: () {
-                                    setState(() {
-                                      checkBoxValue = !checkBoxValue;
-                                    });
-                                  },
+                                ),
+                                SizedBox(
+                                  height: setHeight(50),
+                                ),
+                                Container(
+                                  width: setWidth(500),
+                                  child: TextFormField(
+                                    focusNode: focusNodePas,
+                                    initialValue: _user.password,
+                                    obscureText: true,
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: setHeight(20)),
+                                      prefixIcon: Icon(
+                                        Icons.lock,
+                                        size: setWidth(60),
+                                      ),
+                                      //输入框背景色
+                                      fillColor: Color(0x30cccccc),
+                                      //true fillColor生效
+                                      filled: true,
+                                      hintText: '请输入密码',
+                                      enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color(0x00FF0000)),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10))),
+                                      focusedBorder: OutlineInputBorder(
+                                          //边框选中时的颜色
+                                          borderSide: BorderSide(
+                                              color: Colors.indigo[colorNum]),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10))),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: setHeight(50),
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Container(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Checkbox(
+                                              activeColor:
+                                                  Colors.indigo[colorNum],
+                                              value: checkBoxValue,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  checkBoxValue = value;
+                                                });
+                                              }),
+                                          InkWell(
+                                            child: Text(
+                                              '自动登录',
+                                              style: TextStyle(
+                                                  fontSize: fontSize,
+                                                  color: checkBoxValue == true
+                                                      ? Colors.indigo[colorNum]
+                                                      : Colors.black),
+                                            ),
+                                            onTap: () {
+                                              setState(() {
+                                                checkBoxValue = !checkBoxValue;
+                                              });
+                                            },
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                            context, '/resetPassword');
+                                      },
+                                      child: Text(
+                                        '忘记密码',
+                                        style: TextStyle(
+                                            decoration:
+                                                TextDecoration.underline,
+                                            color: Colors.indigo[colorNum],
+                                            fontSize: fontSize),
+                                      ),
+                                    )
+                                  ],
                                 )
                               ],
                             ),
-                          ),
-                          SizedBox(
-                            height: setHeight(50),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/resetPassword');
-                            },
-                            child: Text(
-                              '忘记密码',
-                              style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  color: Colors.indigo[colorNum],
-                                  fontSize: fontSize),
-                            ),
-                          )
-                        ],
-                      ),
-                      key: _loginformKey,
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                left: setWidth(75),
-                top: setHeight(1050),
-                child: Container(
-                  width: setWidth(600),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          print('点接了');
-                        },
-                        child: Material(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          color: Colors.indigo[colorNum],
-                          shadowColor: Colors.indigo[colorNum],
-                          elevation: 4,
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                left: setWidth(130),
-                                right: setWidth(130),
-                                top: setHeight(13),
-                                bottom: setHeight(13)),
-                            child: Text(
-                              '登录',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: ScreenUtil()
-                                      .setSp(40, allowFontScalingSelf: true)),
-                            ),
+                            key: _loginformKey,
                           ),
                         ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ],
+                      ),
+                    ),
+                    Positioned(
+                      left: setWidth(75),
+                      top: setHeight(1000),
+                      child: Container(
+                        width: setWidth(600),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                print('点接了');
+                              },
+                              child: Material(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                color: Color(0xff0079d4),
+                                shadowColor: Colors.indigo[colorNum],
+                                elevation: 4,
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      left: setWidth(130),
+                                      right: setWidth(130),
+                                      top: setHeight(13),
+                                      bottom: setHeight(13)),
+                                  child: Text(
+                                    '登录',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: ScreenUtil().setSp(40,
+                                            allowFontScalingSelf: true)),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
