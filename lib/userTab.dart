@@ -188,6 +188,7 @@ class _userMessageState extends State<userMessage> {
                 Navigator.pushNamed(context, '/resetPassword');
               },
               child: Material(
+                elevation: 4,
                 color: Colors.indigo[colorNum],
                 child: Padding(
                   padding: EdgeInsets.only(
