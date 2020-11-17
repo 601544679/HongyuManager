@@ -73,8 +73,8 @@ class _splashScreenState extends State<splashScreen>
   Widget build(BuildContext context) {
     return FadeTransition(
       opacity: _animation,
-      child: Image.network(
-        'https://i0.hdslb.com/bfs/live/b4d408cdd9b9d0f2a35a5bd8bd8da797a9b56765.jpg@320w_330h_1c_100q.webp',
+      child: Image.asset(
+        'images/guide.jpg',
         fit: BoxFit.cover,
       ),
     );

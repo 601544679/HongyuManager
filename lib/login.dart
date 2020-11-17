@@ -159,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
     print('LoginPage--build');
     ScreenUtil.init(context,
         designSize: Size(750, 1334), allowFontScaling: false);
-    double fontSize = ScreenUtil().setSp(35, allowFontScalingSelf: true);
+    double fontSize = ScreenUtil().setSp(30, allowFontScalingSelf: true);
     /*print('像素密度--${ScreenUtil().pixelRatio}');
     print('像素宽度--${ScreenUtil().screenWidthPx}');
     print('像素高度--${ScreenUtil().screenHeightPx}');
@@ -186,15 +186,14 @@ class _LoginPageState extends State<LoginPage> {
           child: Stack(
             overflow: Overflow.visible,
             children: [
-              Positioned(
-                  left: 0,
-                  top: 0,
-                  child: ClipPath(
-                    clipper: BottomClipper(),
-                    child: Container(
-                      width: setWidth(750),
-                      height: setHeight(667),
-                      color: Colors.indigo[colorNum],
+              ClipPath(
+                  clipper: BottomClipper(),
+                  child: Container(
+                    height: setHeight(667),
+                    color: Colors.indigo[colorNum],
+                    child: Image.asset(
+                      'images/bg1.jpg',
+                      fit: BoxFit.cover,
                     ),
                   )),
               Positioned(
@@ -220,7 +219,7 @@ class _LoginPageState extends State<LoginPage> {
                             height: setHeight(50),
                           ),
                           Container(
-                            width: setWidth(400),
+                            width: setWidth(500),
                             child: TextFormField(
                               decoration: InputDecoration(
                                 prefixIcon: Icon(
@@ -253,7 +252,7 @@ class _LoginPageState extends State<LoginPage> {
                             height: setHeight(50),
                           ),
                           Container(
-                            width: setWidth(400),
+                            width: setWidth(500),
                             child: TextField(
                               obscureText: true,
                               decoration: InputDecoration(
@@ -287,51 +286,49 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           Container(
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Row(
-                                  children: [
-                                    Checkbox(
-                                        activeColor: Colors.indigo[colorNum],
-                                        value: checkBoxValue,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            checkBoxValue = value;
-                                          });
-                                        }),
-                                    InkWell(
-                                      child: Text(
-                                        '自动登录',
-                                        style: TextStyle(
-                                            fontSize: fontSize,
-                                            color: checkBoxValue == true
-                                                ? Colors.indigo[colorNum]
-                                                : Colors.black),
-                                      ),
-                                      onTap: () {
-                                        setState(() {
-                                          checkBoxValue = !checkBoxValue;
-                                        });
-                                      },
-                                    )
-                                  ],
-                                ),
+                                Checkbox(
+                                    activeColor: Colors.indigo[colorNum],
+                                    value: checkBoxValue,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        checkBoxValue = value;
+                                      });
+                                    }),
                                 InkWell(
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                        context, '/resetPassword');
-                                  },
                                   child: Text(
-                                    '忘记密码',
+                                    '自动登录',
                                     style: TextStyle(
-                                        decoration: TextDecoration.underline,
-                                        color: Colors.indigo[colorNum],
-                                        fontSize: fontSize),
+                                        fontSize: fontSize,
+                                        color: checkBoxValue == true
+                                            ? Colors.indigo[colorNum]
+                                            : Colors.black),
                                   ),
+                                  onTap: () {
+                                    setState(() {
+                                      checkBoxValue = !checkBoxValue;
+                                    });
+                                  },
                                 )
                               ],
                             ),
                           ),
+                          SizedBox(
+                            height: setHeight(50),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/resetPassword');
+                            },
+                            child: Text(
+                              '忘记密码',
+                              style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  color: Colors.indigo[colorNum],
+                                  fontSize: fontSize),
+                            ),
+                          )
                         ],
                       ),
                       key: _loginformKey,
@@ -341,7 +338,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Positioned(
                 left: setWidth(75),
-                top: setHeight(1060),
+                top: setHeight(1050),
                 child: Container(
                   width: setWidth(600),
                   child: Row(
@@ -359,15 +356,17 @@ class _LoginPageState extends State<LoginPage> {
                           elevation: 4,
                           child: Padding(
                             padding: EdgeInsets.only(
-                                left: setWidth(50),
-                                right: setWidth(50),
+                                left: setWidth(130),
+                                right: setWidth(130),
                                 top: setHeight(13),
                                 bottom: setHeight(13)),
                             child: Text(
                               '登录',
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: ScreenUtil()
+                                      .setSp(40, allowFontScalingSelf: true)),
                             ),
                           ),
                         ),
@@ -408,7 +407,7 @@ class BottomClipper extends CustomClipper<Path> {
     //设置贝塞尔曲线
     path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
         firstEndPoint.dx, firstEndPoint.dy);
-    path.lineTo(size.width, size.height - setHeight(50));
+    path.lineTo(size.width, size.height);
     path.lineTo(size.width, 0);
     return path;
   }
