@@ -9,10 +9,6 @@ import 'mainPage.dart';
 import 'releaseOrder.dart';
 
 final int colorNum = 600;
-final String home = '主页';
-final String order = '订单';
-final String logisticsCompanyName = '公司';
-final String user = '我的';
 final routes = {
   "/homePage": (context) => Home(),
   "/loginPage": (context) => LoginPage(),

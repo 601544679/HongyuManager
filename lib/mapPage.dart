@@ -25,6 +25,7 @@ class _MapPageState extends State<MapPage> {
 
   //游标，记录上一次查询的位置
   String cursor;
+  var a = '';
 
   @override
   void initState() {
@@ -148,7 +149,44 @@ class _MapPageState extends State<MapPage> {
               );
             case ConnectionState.done:
               print('done');
-              if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+              if (snapshot.hasError)
+                return Scaffold(
+                  appBar: AppBar(
+                    centerTitle: true,
+                    title: Text('运货追踪'),
+                  ),
+                  body: InkWell(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.wifi_off_outlined,
+                            size: setWidth(200),
+                            color: Colors.indigo[colorNum],
+                          ),
+                          SizedBox(
+                            height: setHeight(20),
+                          ),
+                          Text(
+                            '网络错误,点击重试',
+                            style: TextStyle(
+                              fontSize: ScreenUtil()
+                                  .setSp(30, allowFontScalingSelf: true),
+                              fontWeight: FontWeight.bold,
+                              color: Colors.indigo[colorNum],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        a = '1';
+                      });
+                    },
+                  ),
+                );
               return MapScreen(
                 waybill: snapshot.data,
                 latLngList: resultList,
@@ -266,7 +304,11 @@ class _MapScreenState extends State<MapScreen> {
       return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: Text('运货追踪'),
+          title: Text(
+            '运货追踪',
+            style: TextStyle(
+                fontSize: ScreenUtil().setSp(40, allowFontScalingSelf: true)),
+          ),
           centerTitle: true,
           leading: InkWell(
             child: Icon(Icons.arrow_back),
@@ -275,63 +317,65 @@ class _MapScreenState extends State<MapScreen> {
             },
           ),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: setHeight(667),
-                child: AmapView(
-                  mapType: MapType.Standard,
-                  zoomLevel: 15,
-                  showCompass: true,
-                  showScaleControl: true,
-                  showZoomControl: true,
-                  rotateGestureEnabled: true,
-                  autoRelease: true,
-                  scrollGesturesEnabled: true,
-                  tiltGestureEnabled: true,
-                  zoomGesturesEnabled: true,
-                  maskDelay: Duration(milliseconds: 500),
-                  centerCoordinate: LatLng(
-                      widget.latLngList[widget.latLngList.length - 1]
-                          ['position']['latitude'],
-                      widget.latLngList[widget.latLngList.length - 1]
-                          ['position']['longitude']),
-                  markers: makeOptions(),
-                  onMapCreated: (controller) async {
-                    await controller?.showMyLocation(MyLocationOption(
-                        myLocationType: MyLocationType.Follow,
-                        interval: Duration(seconds: 10)));
-                    /*await controller
+        body: Stack(
+          children: [
+            Container(
+              height: setHeight(1334),
+              child: AmapView(
+                mapType: MapType.Standard,
+                zoomLevel: 15,
+                showCompass: true,
+                showScaleControl: true,
+                showZoomControl: true,
+                rotateGestureEnabled: true,
+                autoRelease: true,
+                scrollGesturesEnabled: true,
+                tiltGestureEnabled: true,
+                zoomGesturesEnabled: true,
+                maskDelay: Duration(milliseconds: 500),
+                centerCoordinate: LatLng(
+                    widget.latLngList[widget.latLngList.length - 1]['position']
+                        ['latitude'],
+                    widget.latLngList[widget.latLngList.length - 1]['position']
+                        ['longitude']),
+                markers: makeOptions(),
+                onMapCreated: (controller) async {
+                  await controller?.showMyLocation(MyLocationOption(
+                      myLocationType: MyLocationType.Follow,
+                      interval: Duration(seconds: 10)));
+                  /*await controller
                       .addPolyline(PolylineOption(latLngList: latLngList));*/
-                    await controller.showTraffic(true);
-                    await controller.showCompass(true);
-                    //await controller.showLocateControl(true);
-                    await controller.showScaleControl(true);
-                    await controller.showZoomControl(true);
-                  },
-                ),
+                  await controller.showTraffic(true);
+                  await controller.showCompass(true);
+                  //await controller.showLocateControl(true);
+                  await controller.showScaleControl(true);
+                  await controller.showZoomControl(true);
+                },
               ),
-              Container(
-                padding: EdgeInsets.only(top: setHeight(21)),
-                height: setHeight(88),
-                child: Text(
-                  '送货信息',
-                  style: TextStyle(
-                      fontSize:
-                          ScreenUtil().setSp(40, allowFontScalingSelf: true),
-                      fontFamily: fontFamily,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
+            ),
+            Positioned(
+              child: Container(
+                padding: EdgeInsets.all(setWidth(0)),
+                width: setWidth(750),
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    //阴影效果
+                    BoxShadow(
+                      offset: Offset(0, 0), //阴影在X轴和Y轴上的偏移
+                      color: Colors.grey, //阴影颜色
+                      blurRadius: 3.0, //阴影程度
+                      spreadRadius: 0, //阴影扩散的程度 取值可以正数,也可以是负数
+                    ),
+                  ],
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12.0),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.all(setWidth(15)),
-                width: setWidth(730),
                 child: Material(
-                  borderRadius: BorderRadius.circular(20.0),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15)),
                   shadowColor: Colors.grey,
-                  color: Colors.grey[300],
+                  color: Color(0xffffffff),
                   elevation: 2,
                   child: Padding(
                       padding: EdgeInsets.all(setWidth(38)),
@@ -349,7 +393,7 @@ class _MapScreenState extends State<MapScreen> {
                                         .setSp(35, allowFontScalingSelf: true),
                                     fontFamily: fontFamily,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black),
+                                    color: Color(0xff485158)),
                               ),
                               Expanded(
                                 child: Text(
@@ -361,7 +405,7 @@ class _MapScreenState extends State<MapScreen> {
                                           allowFontScalingSelf: true),
                                       fontFamily: fontFamily,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.black),
+                                      color: Color(0xff485158)),
                                 ),
                               )
                             ],
@@ -376,8 +420,9 @@ class _MapScreenState extends State<MapScreen> {
                       )),
                 ),
               ),
-            ],
-          ),
+              bottom: setHeight(0),
+            )
+          ],
         ),
       );
     }

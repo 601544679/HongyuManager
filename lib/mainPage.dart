@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:leancloud_storage/leancloud.dart';
+import 'package:mydemo/customeRoute.dart';
+import 'package:mydemo/releaseOrder.dart';
 import 'package:mydemo/userClass.dart';
 import 'package:mydemo/userTab.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -112,7 +114,24 @@ class _HomeState extends State<Home> {
   Widget action(int currentTab) {
     //getToken();
     if (currentTab == 0) {
-      return Text('');
+      return InkWell(
+          onTap: () {
+            Navigator.push(context, customRoute(ReleaseOrder()));
+          },
+          child: Padding(
+            padding: EdgeInsets.only(right: setWidth(20)),
+            child: Column(
+              children: [
+                Text(
+                  '发布送货单',
+                  style: TextStyle(
+                      fontSize:
+                          ScreenUtil().setSp(30, allowFontScalingSelf: true)),
+                )
+              ],
+              mainAxisAlignment: MainAxisAlignment.center,
+            ),
+          ));
     } else if (currentTab == 1) {
       return Padding(
         padding: EdgeInsets.only(right: setWidth(38)),
@@ -142,16 +161,6 @@ class _HomeState extends State<Home> {
     }
   }
 
-  List<BottomNavigationBarItem> getItems() {
-    return [
-      BottomNavigationBarItem(icon: Icon(Icons.home), title: Text(home)),
-      BottomNavigationBarItem(icon: Icon(Icons.reorder), title: Text(order)),
-      BottomNavigationBarItem(
-          icon: Icon(Icons.directions_car), title: Text(logisticsCompanyName)),
-      BottomNavigationBarItem(icon: Icon(Icons.person), title: Text(user)),
-    ];
-  }
-
   @override
   Widget build(BuildContext context) {
     getToken();
@@ -176,6 +185,7 @@ class _HomeState extends State<Home> {
           )
         : Scaffold(
             appBar: AppBar(
+              elevation: 0,
               centerTitle: true,
               title: Text(tabName[currentTab],
                   style: TextStyle(
@@ -191,7 +201,24 @@ class _HomeState extends State<Home> {
               type: BottomNavigationBarType.fixed,
               currentIndex: currentTab,
               onTap: onTabTapped,
-              items: getItems(),
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  label: '主页',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.reorder),
+                  label: '送货单',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.directions_car),
+                  label: '物流公司',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: '我的',
+                ),
+              ],
             ),
           );
   }

@@ -23,6 +23,8 @@ class FinishPage extends StatefulWidget {
 }
 
 class _FinishPageState extends State<FinishPage> {
+  var a = '';
+
   @override
   void initState() {
     // TODO: implement initState
@@ -68,7 +70,43 @@ class _FinishPageState extends State<FinishPage> {
           case ConnectionState.done:
             print('done');
             if (snapshot.hasError) {
-              return Text("Error: ${snapshot.error}");
+              return Scaffold(
+                appBar: AppBar(
+                  centerTitle: true,
+                  title: Text('订单完成情况'),
+                ),
+                body: InkWell(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.wifi_off_outlined,
+                          size: setWidth(200),
+                          color: Colors.indigo[colorNum],
+                        ),
+                        SizedBox(
+                          height: setHeight(20),
+                        ),
+                        Text(
+                          '网络错误,点击重试',
+                          style: TextStyle(
+                            fontSize: ScreenUtil()
+                                .setSp(30, allowFontScalingSelf: true),
+                            fontWeight: FontWeight.bold,
+                            color: Colors.indigo[colorNum],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  onTap: () {
+                    setState(() {
+                      a = '1';
+                    });
+                  },
+                ),
+              );
             } else if (snapshot.hasData) {
               print('hasData');
               // 请求成功，显示数据
@@ -236,6 +274,7 @@ class _tabBuilderState extends State<tabBuilder>
       return Scaffold(
         appBar: PreferredSize(
             child: AppBar(
+              centerTitle: true,
               title: Text('订单完成情况'),
               bottom: TabBar(
                   indicatorWeight: 4.0,
@@ -390,6 +429,8 @@ class _contentHorizontalState extends State<contentHorizontal> {
     return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: DataTable(
+            dividerThickness: 1,
+            showBottomBorder: true,
             columns: dataColumn(widget.arrayTitleList),
             rows: dataRow(widget.cutList)));
   }
@@ -443,49 +484,105 @@ class _waybillDetailTabState extends State<waybillDetailTab>
             right: setWidth(23),
             bottom: setHeight(14)),
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return Visibility(
-                      visible: showMessage(widget.role, index),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              textStyle(
-                                  widget.titleList[index] + ':', fontSize),
-                            ],
-                          ),
-                          Container(
-                              width: containerWidth,
-                              child: textStyle(
-                                  widget.contentList[index], fontSize1,
-                                  fontWeight: FontWeight.bold)),
-                          SizedBox(
-                            height: setHeight(14),
-                          ),
-                        ],
-                      ));
-                },
-                itemCount: widget.titleList.length,
+            child: Column(
+          children: [
+            Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30)),
+              color: Colors.white,
+              shadowColor: Colors.indigo[colorNum],
+              child: Padding(
+                padding: EdgeInsets.only(
+                    left: setWidth(23),
+                    top: setHeight(14),
+                    right: setWidth(23),
+                    bottom: setHeight(14)),
+                child: Column(
+                  children: [
+                    ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return Visibility(
+                            visible: showMessage(widget.role, index),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundColor:
+                                            Colors.indigo[colorNum],
+                                        radius: 12,
+                                        child: CircleAvatar(
+                                          backgroundColor: Colors.white,
+                                          radius: 8,
+                                        ),
+                                      ),
+                                      Container(
+                                        color: Colors.grey,
+                                        width: setWidth(10),
+                                        height: setHeight(130),
+                                      )
+                                    ],
+                                  ),
+                                  flex: 1,
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          textStyle(
+                                              widget.titleList[index] + ':',
+                                              fontSize,
+                                              fontWeight: FontWeight.bold),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: setHeight(7),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                            child: textStyle(
+                                              widget.contentList[index],
+                                              fontSize1,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  flex: 8,
+                                )
+                              ],
+                            ));
+                      },
+                      itemCount: widget.titleList.length,
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(
-                height: setHeight(14),
-              ),
-              textStyle('货物明细', fontSize),
-              Divider(
-                color: Colors.black,
-                height: setHeight(14),
-              ),
-              contentHorizontal(widget.arrayTitleList, widget.cutList),
-              Divider(color: Colors.black),
-            ],
-          ),
-        ));
+            ),
+            SizedBox(
+              height: setHeight(30),
+            ),
+            textStyle('货物明细', fontSize),
+            Divider(
+              color: Colors.black,
+              height: setHeight(14),
+            ),
+            contentHorizontal(widget.arrayTitleList, widget.cutList),
+          ],
+        )));
   }
 
   @override
@@ -506,54 +603,170 @@ class signForPicture extends StatefulWidget {
 class _signForPictureState extends State<signForPicture>
     with AutomaticKeepAliveClientMixin {
   List s = ['工地现场图', '运货单号', '顺丰单号'];
+  bool loadingSuccess = true;
+  String picUrl = '';
+  PageController _pageController;
+  int indexPage = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _pageController = PageController(viewportFraction: 0.7, initialPage: 0);
+    _pageController.addListener(() {});
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _pageController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     print('signForPicture--build');
-    return Container(
-      child: ListView.builder(
-        itemBuilder: (context, index) {
-          return Container(
-            //color: Colors.red,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  s[index],
-                  style: TextStyle(fontSize: setHeight(40)),
-                ),
-                SizedBox(
-                  height: setHeight(14),
-                ),
-                InkWell(
-                  child: AspectRatio(
-                    aspectRatio: 16 / 10,
-                    child: Image.network(
+    return Stack(
+      children: [
+        PageView.builder(
+          onPageChanged: (index) {
+            setState(() {
+              indexPage = index;
+            });
+          },
+          controller: _pageController,
+          allowImplicitScrolling: true,
+          itemBuilder: (context, index) {
+            return Container(
+              //color: Colors.red,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InkWell(
+                    child: Card(
+                        child: Image.network(
                       widget.allData.result.imageUrl[index],
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  onTap: () {
-                    Fluttertoast.showToast(
-                        msg: '${s[index]}', toastLength: Toast.LENGTH_SHORT);
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) {
-                          return dialogImageBuilder(
-                              widget.allData.result.imageUrl, index);
+                      errorBuilder: (BuildContext context, Object exception,
+                          StackTrace stackTrace) {
+                        print('exception=${exception}');
+                        print('StackTrace=${stackTrace}');
+                        loadingSuccess = false;
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.wifi_off_outlined,
+                              size: setWidth(200),
+                              color: Colors.indigo[colorNum],
+                            ),
+                            SizedBox(
+                              height: setHeight(20),
+                            ),
+                            Text(
+                              '网络错误',
+                              style: TextStyle(
+                                fontSize: ScreenUtil()
+                                    .setSp(30, allowFontScalingSelf: true),
+                                fontWeight: FontWeight.bold,
+                                color: Colors.indigo[colorNum],
+                              ),
+                            )
+                          ],
+                        );
+                      },
+                      loadingBuilder: (context, child, loadingProgress) {
+                        print('进度$loadingProgress');
+                        //loadingProgress.expectedTotalBytes图片总大小
+                        //loadingProgress.cumulativeBytesLoaded目前加载进度
+                        if (loadingProgress == null) {
+                          //加载图片
+                          return child;
+                        }
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.indigo[colorNum]),
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes
+                                  : null,
+                            ),
+                            SizedBox(
+                              height: setHeight(20),
+                            ),
+                            Text(
+                              '正在加载中 ${((loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes) * 100).toStringAsFixed(2)}%',
+                              style: TextStyle(
+                                  color: Colors.indigo[colorNum],
+                                  fontSize: ScreenUtil()
+                                      .setSp(30, allowFontScalingSelf: true),
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        );
+                      },
+                      fit: BoxFit.fill,
+                    )),
+                    onTap: () {
+                      if (loadingSuccess == true) {
+                        print('加载成功=$loadingSuccess');
+                        Fluttertoast.showToast(
+                            msg: '${s[index]}',
+                            toastLength: Toast.LENGTH_SHORT);
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (context) {
+                              return dialogImageBuilder(
+                                  widget.allData.result.imageUrl, index);
+                            });
+                      } else if (loadingSuccess == false) {
+                        setState(() {
+                          picUrl = '5';
                         });
-                  },
-                ),
-                SizedBox(
-                  height: setHeight(14),
-                )
-              ],
-            ),
-          );
-        },
-        itemCount: widget.allData.result.imageUrl.length,
-      ),
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: setHeight(14),
+                  ),
+                  Text(
+                    s[index],
+                    style: TextStyle(fontSize: setHeight(40)),
+                  ),
+                ],
+              ),
+            );
+          },
+          itemCount: widget.allData.result.imageUrl.length,
+        ),
+        Positioned(
+            left: setWidth(322),
+            top: setHeight(850),
+            child: CircleAvatar(
+              backgroundColor:
+                  indexPage == 0 ? Colors.indigo[colorNum] : Colors.white,
+              radius: 8,
+            )),
+        Positioned(
+            left: setWidth(371),
+            top: setHeight(850),
+            child: CircleAvatar(
+              backgroundColor:
+                  indexPage == 1 ? Colors.indigo[colorNum] : Colors.white,
+              radius: 8,
+            )),
+        Positioned(
+            left: setWidth(422),
+            top: setHeight(850),
+            child: CircleAvatar(
+              backgroundColor:
+                  indexPage == 2 ? Colors.indigo[colorNum] : Colors.white,
+              radius: 8,
+            ))
+      ],
     );
   }
 
@@ -766,7 +979,7 @@ class _MapScreenState extends State<MapScreen>
                 await controller?.showMyLocation(MyLocationOption(
                     myLocationType: MyLocationType.Follow,
                     interval: Duration(seconds: 10)));
-                await controller.showTraffic(true);
+                //await controller.showTraffic(true);
                 await controller.showCompass(true);
                 //await controller.showLocateControl(true);
                 await controller.showScaleControl(true);

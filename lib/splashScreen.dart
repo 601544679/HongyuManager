@@ -21,8 +21,8 @@ class splashScreen extends StatefulWidget {
 class _splashScreenState extends State<splashScreen>
     with SingleTickerProviderStateMixin {
   Timer timer;
-  int countdown = 5;
-  String num = '5';
+  int countdown = 3;
+  String num = '3';
 
   //动画控制器
   AnimationController _controller;
@@ -34,17 +34,8 @@ class _splashScreenState extends State<splashScreen>
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (Platform.isAndroid) {
-      //沉浸式状态栏
-      //写在组件渲染之后，是为了在渲染后进行设置赋值，覆盖状态栏，写在渲染之前对MaterialApp组件会覆盖这个值。
-      SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          statusBarIconBrightness: Brightness.light);
-      SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
-    } else if (Platform.isIOS) {
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-    }
-    /* timer = Timer.periodic(Duration(milliseconds: 1000), (timer) {
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+    timer = Timer.periodic(Duration(milliseconds: 1000), (timer) {
       setState(() {
         num = countdown.toString();
         if (countdown == 0) {
@@ -58,42 +49,42 @@ class _splashScreenState extends State<splashScreen>
         }
         countdown--;
       });
-    });*/
+    });
     //初始化
-    _controller = AnimationController(
+    /*_controller = AnimationController(
         vsync: this, duration: Duration(milliseconds: 3000));
     _animation = Tween(begin: 0.0, end: 1.0).animate(_controller);
     _animation.addStatusListener((status) {
       print('动画进程=$status');
       //动画结束
       if (status == AnimationStatus.completed) {
-        Navigator.pushAndRemoveUntil(
+        */ /*Navigator.pushAndRemoveUntil(
             context,
             customRoute(LoginPage(
               user: widget.user,
             )),
-            (route) => route == null);
-        /*
+            (route) => route == null);*/ /*
+
         Navigator.pushAndRemoveUntil(context,
             MaterialPageRoute(builder: (context) {
           return LoginPage(
             user: widget.user,
           );
         }), (route) => route == null);
-        */ /*   Navigator.pushNamedAndRemoveUntil(
+         */ /*   Navigator.pushNamedAndRemoveUntil(
             context, '/loginPage', (route) => route == null,
-            arguments: widget.user);*/
+            arguments: widget.user);*/ /*
       }
-    });
+    });*/
     //播放动画
-    _controller.forward();
+    //_controller.forward();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    _controller.dispose();
-    //timer.cancel();
+    //_controller.dispose();
+    timer.cancel();
     super.dispose();
   }
 
@@ -101,19 +92,19 @@ class _splashScreenState extends State<splashScreen>
   Widget build(BuildContext context) {
     ScreenUtil.init(context,
         designSize: Size(750, 1334), allowFontScaling: false);
-    /*return Stack(
+    return Stack(
       children: [
         Container(
           height: setHeight(1334),
           width: setWidth(750),
           child: Image.asset(
-            'images/guide.jpg',
+            'images/guidewhite.png',
             fit: BoxFit.fill,
           ),
         ),
         Positioned(
             left: setWidth(600),
-            top: setHeight(100),
+            bottom: setHeight(200),
             child: CircleAvatar(
               backgroundColor: Colors.grey,
               radius: 20,
@@ -123,8 +114,8 @@ class _splashScreenState extends State<splashScreen>
               ),
             ))
       ],
-    );*/
-    return FadeTransition(
+    );
+    /*return FadeTransition(
       opacity: Tween(begin: 0.0, end: 1.0).animate(_animation),
       child: Container(
         height: setHeight(1334),
@@ -134,6 +125,6 @@ class _splashScreenState extends State<splashScreen>
           fit: BoxFit.fill,
         ),
       ),
-    );
+    );*/
   }
 }

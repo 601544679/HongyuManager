@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
+//路由跳转动画
 class customRoute extends PageRouteBuilder {
   final Widget widget;
 
   customRoute(this.widget)
       : super(
-            transitionDuration: Duration(milliseconds: 2500),
+            transitionDuration: Duration(milliseconds: 1000),
             pageBuilder: (context, animation1, animation2) {
               return widget;
             },

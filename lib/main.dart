@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mydemo/sizeConfig.dart';
 import 'package:mydemo/splashScreen.dart';
@@ -30,6 +32,16 @@ void main() async {
       '24PJDWahD7Pww2cDice6F6Er-gzGzoHsz', 'mrcuLNzhXH6uJ3gTtGi0Ttg7',
       server: 'https://gcapp.hy100.com.cn');
   //LCLogger.setLevel(3); //一定要放在main不然不显示具体错误信息
+  if (Platform.isAndroid) {
+    //沉浸式状态栏
+    //写在组件渲染之后，是为了在渲染后进行设置赋值，覆盖状态栏，写在渲染之前对MaterialApp组件会覆盖这个值。
+    SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light);
+    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+  } else if (Platform.isIOS) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  }
   runApp(MyApp(user: user));
 }
 
@@ -50,8 +62,11 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
               navigatorKey: navigatorState,
               routes: routes,
+              initialRoute: '/',
               theme: ThemeData(primaryColor: Colors.indigo[colorNum]),
-              home: splashScreen(user));
+              home: splashScreen(
+                user,
+              ));
         },
       );
     });

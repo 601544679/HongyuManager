@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:mydemo/resetpassword.dart';
 
+import 'customeRoute.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:leancloud_storage/leancloud.dart';
 import 'constant.dart';
+import 'mainPage.dart';
 import 'userClass.dart';
 import 'server.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -77,8 +80,8 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
         } on DioError catch (e) {
           print('error=${e.response.data}');
         }
-        Navigator.pushNamedAndRemoveUntil(
-            context, "/homePage", (route) => route == null);
+        Navigator.pushAndRemoveUntil(
+            context, customRoute(Home()), (route) => route == null);
       } else if (response.runtimeType == LCException) {
         print('autoLogin--error${response.code}');
         if (response.code == 211) {
@@ -121,6 +124,7 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
   void initState() {
     // TODO: implement initState
     super.initState();
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
     //监听键盘
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) => changeStatusBar());
@@ -137,6 +141,14 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setState(() {
         if (focusNodePas.hasFocus) {
+          if (MediaQuery.of(context).viewInsets.bottom == 0) {
+            print('键盘关闭了');
+            keyboardOpen = false;
+          } else {
+            print('键盘打开了');
+            keyboardOpen = true;
+          }
+        } else if (focusNodeNum.hasFocus) {
           if (MediaQuery.of(context).viewInsets.bottom == 0) {
             print('键盘关闭了');
             keyboardOpen = false;
@@ -174,6 +186,8 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    focusNodeNum.dispose();
+    focusNodePas.dispose();
     WidgetsBinding.instance.removeObserver(this);
     print('LoginPage--dispose');
   }
@@ -181,7 +195,8 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     print('LoginPage--build');
-
+    ScreenUtil.init(context,
+        designSize: Size(750, 1334), allowFontScaling: false);
     double fontSize = ScreenUtil().setSp(30, allowFontScalingSelf: true);
     /*print('像素密度--${ScreenUtil().pixelRatio}');
     print('像素宽度--${ScreenUtil().screenWidthPx}');
@@ -253,6 +268,15 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
                                 Container(
                                   width: setWidth(500),
                                   child: TextFormField(
+                                    validator: (value) {
+                                      if (value.trim().isEmpty) {
+                                        return '用户名不能为空';
+                                      }
+                                      return null;
+                                    },
+                                    //保存输入手机到 userclass
+                                    onSaved: (input) =>
+                                        _user.name = input.trim(),
                                     initialValue: _user.name,
                                     focusNode: focusNodeNum,
                                     decoration: InputDecoration(
@@ -261,7 +285,8 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
                                         size: setWidth(60),
                                       ),
                                       contentPadding: EdgeInsets.symmetric(
-                                          vertical: setHeight(20)),
+                                          vertical: setHeight(20),
+                                          horizontal: setWidth(20)),
                                       //输入框背景色
                                       fillColor: Color(0x30cccccc),
                                       //true fillColor生效
@@ -288,12 +313,28 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
                                 Container(
                                   width: setWidth(500),
                                   child: TextFormField(
+                                    validator: (input) {
+                                      //print('输出：${input}');
+                                      if (input.trim().isEmpty) {
+                                        return '密码不能为空';
+                                      }
+                                      return null;
+                                    },
+                                    maxLines: 1,
+                                    inputFormatters: [
+                                      //只能输入0-9
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp('[0-9,a-z,A-Z]')),
+                                    ],
+                                    onSaved: (input) =>
+                                        _user.password = input.trim(),
                                     focusNode: focusNodePas,
                                     initialValue: _user.password,
                                     obscureText: true,
                                     decoration: InputDecoration(
                                       contentPadding: EdgeInsets.symmetric(
-                                          vertical: setHeight(20)),
+                                          vertical: setHeight(20),
+                                          horizontal: setWidth(20)),
                                       prefixIcon: Icon(
                                         Icons.lock,
                                         size: setWidth(60),
@@ -358,8 +399,8 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
                                     ),
                                     InkWell(
                                       onTap: () {
-                                        Navigator.pushNamed(
-                                            context, '/resetPassword');
+                                        Navigator.push(context,
+                                            customRoute(ResetPassword()));
                                       },
                                       child: Text(
                                         '忘记密码',
@@ -388,8 +429,79 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             InkWell(
-                              onTap: () {
-                                print('点接了');
+                              onTap: () async {
+                                // todo 登录事件，跳转路由，
+                                if (_loginformKey.currentState.validate()) {
+                                  _loginformKey.currentState.save();
+                                  //"13802621111", "123456"
+                                  focusNodeNum.unfocus();
+                                  focusNodePas.unfocus();
+                                  var response = await showDialog(
+                                      context: context,
+                                      builder: (_) {
+                                        return loginDialog(
+                                            outsideDismiss: false,
+                                            requestCallBack: LCUser.login(
+                                                _user.name, _user.password));
+                                      });
+                                  print('输出=${response.runtimeType}');
+                                  if (response.runtimeType ==
+                                      LCUser /*response != null*/) {
+                                    _user.sessionToken = response.sessionToken;
+                                    _user.idNumber = response['identityNo'];
+                                    _user.name = response.username;
+                                    _user.company = response['company'];
+                                    _user.role = response['role'];
+                                    print('realName = ${response['realName']}');
+                                    _user.realName = response['realName'];
+                                    _user.phoneNumber =
+                                        response['mobilePhoneNumber'];
+                                    //_user.objectId = response['objectId'];
+                                    //用sdk
+                                    _user.objectId = response.objectId;
+                                    _user.isSave = checkBoxValue;
+                                    _user.saveUser(_user);
+                                    //进行身份验证，管理者才能登录管理者端
+                                    if (response['role'] != 'Driver') {
+                                      scaffoldKey.currentState
+                                          .showSnackBar(showSnackBar('登录成功'));
+                                      var refreshToken = await Server()
+                                          .refreshToken(_user.sessionToken,
+                                              _user.objectId);
+                                      print('refreshToken--$refreshToken');
+                                      //更新缓存的token
+                                      LCUser.login(_user.name, _user.password);
+                                      _user.sessionToken =
+                                          refreshToken['sessionToken'];
+                                      print('更新--${_user.sessionToken}');
+                                      _user.saveUser(_user);
+                                      Navigator.pushAndRemoveUntil(
+                                          context,
+                                          customRoute(Home()),
+                                          (route) => route == null);
+                                    } else {
+                                      scaffoldKey.currentState
+                                          .showSnackBar(showSnackBar('非管理者用户'));
+                                    }
+                                  } else if (response.runtimeType ==
+                                      LCException) {
+                                    if (response.code == 210) {
+                                      scaffoldKey.currentState.showSnackBar(
+                                          showSnackBar('账号或密码错误'));
+                                    } else if (response.code == 219) {
+                                      scaffoldKey.currentState.showSnackBar(
+                                          showSnackBar(response.message));
+                                    } else if (response.code == 211) {
+                                      scaffoldKey.currentState
+                                          .showSnackBar(showSnackBar('不存在此用户'));
+                                    }
+                                  } else if (response.runtimeType == DioError) {
+                                    //print('网络错误${response.data}');
+                                    print('网络错误error--${response.error}');
+                                    scaffoldKey.currentState
+                                        .showSnackBar(showSnackBar('断网了'));
+                                  }
+                                }
                               },
                               child: Material(
                                 shape: RoundedRectangleBorder(

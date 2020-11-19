@@ -79,6 +79,9 @@ flutter:
     - images/boy.png
     - images/ss.png
     - images/guide.jpg
+    - images/guidewhite.png
+    - images/resetpassword.png
+    - images/resetpasswprd.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
