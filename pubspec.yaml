@@ -82,6 +82,11 @@ flutter:
     - images/guidewhite.png
     - images/resetpassword.png
     - images/resetpasswprd.png
+    - images/fabu.png
+    - images/gongsi.png
+    - images/ziyuan.png
+    - images/lugongsi.png
+    - images/laba.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

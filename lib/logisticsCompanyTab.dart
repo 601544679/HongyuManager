@@ -13,6 +13,8 @@ import 'sizeConfig.dart';
 class logisticsCompanyTab extends StatefulWidget {
   @override
   _logisticsCompanyTabState createState() => _logisticsCompanyTabState();
+
+  logisticsCompanyTab({Key key});
 }
 
 class _logisticsCompanyTabState extends State<logisticsCompanyTab>
@@ -95,42 +97,52 @@ class _logisticsCompanyTabState extends State<logisticsCompanyTab>
     }
 
     print('logisticsCompanyTab--build');
-    return dropdownList.length == 0
-        ? Center(
-            child: CircularProgressIndicator(),
-          )
-        : SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 0, right: 0),
-                  child: Container(
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        style: TextStyle(
-                            fontSize: ScreenUtil()
-                                .setSp(30, allowFontScalingSelf: true)),
-                        value: dropDownButtonValue,
-                        items: dropdownMenuItem(),
-                        onChanged: (value) {
-                          print('啥$value');
-                          setState(() {
-                            dropDownButtonValue = value;
-                          });
-                        },
-                        icon: Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.indigo[colorNum],
-                          size: setHeight(54),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('物流公司',
+            style: TextStyle(
+                fontSize: ScreenUtil().setSp(40, allowFontScalingSelf: true),
+                fontWeight: FontWeight.bold)),
+        elevation: 0,
+        centerTitle: true,
+      ),
+      body: dropdownList.length == 0
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 0, right: 0),
+                    child: Container(
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          style: TextStyle(
+                              fontSize: ScreenUtil()
+                                  .setSp(30, allowFontScalingSelf: true)),
+                          value: dropDownButtonValue,
+                          items: dropdownMenuItem(),
+                          onChanged: (value) {
+                            print('啥$value');
+                            setState(() {
+                              dropDownButtonValue = value;
+                            });
+                          },
+                          icon: Icon(
+                            Icons.arrow_drop_down,
+                            color: Colors.indigo[colorNum],
+                            size: setHeight(54),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                logisticsCompany(dropdownList[int.parse(dropDownButtonValue)])
-              ],
+                  logisticsCompany(dropdownList[int.parse(dropDownButtonValue)])
+                ],
+              ),
             ),
-          );
+    );
   }
 
   @override
@@ -215,7 +227,7 @@ class _logisticsCompanyState extends State<logisticsCompany> {
                                   children: [
                                     Image.asset(
                                       'images/huoche.png',
-                                      width: ScreenUtil().setWidth(75),
+                                      width: ScreenUtil().setWidth(100),
                                     ),
                                     SizedBox(
                                       width: ScreenUtil().setWidth(37.5),

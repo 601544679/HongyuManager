@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:mydemo/constant.dart';
 
@@ -104,13 +105,18 @@ class _splashScreenState extends State<splashScreen>
         ),
         Positioned(
             left: setWidth(600),
-            bottom: setHeight(200),
+            bottom: setHeight(100),
             child: CircleAvatar(
               backgroundColor: Colors.grey,
-              radius: 20,
+              radius: 15,
               child: Text(
                 num,
-                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white,
+                    decoration: TextDecoration.none,
+                    fontSize:
+                        ScreenUtil().setSp(30, allowFontScalingSelf: true)),
               ),
             ))
       ],

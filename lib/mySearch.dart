@@ -11,12 +11,12 @@ import 'package:mydemo/myEventBus.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class searchbar extends SearchDelegate<String> {
-  List result;
+
   List history;
   var historyList;
   StreamSubscription _searchSubscription;
 
-  searchbar(this.result, this.history);
+  searchbar( this.history);
 
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 

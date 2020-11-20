@@ -19,7 +19,6 @@ class OrderTab extends StatefulWidget {
 
 class _OrderTabState extends State<OrderTab>
     with AutomaticKeepAliveClientMixin {
-  List result;
   bool showToTopBtn = false;
   String dropDownButtonValue = '0';
 
@@ -85,45 +84,77 @@ class _OrderTabState extends State<OrderTab>
       return dropdownMenuItemList;
     }
 
-    return Container(
-      color: Colors.white12,
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              DropdownButtonHideUnderline(
-                child: DropdownButton(
-                  style: TextStyle(
-                      fontSize:
-                          ScreenUtil().setSp(30, allowFontScalingSelf: true)),
-                  value: dropDownButtonValue,
-                  items: dropdownMenuItem(),
-                  onChanged: (value) {
-                    print(value);
-                    setState(() {
-                      dropDownButtonValue = value;
-                    });
-                  },
-                  icon: Icon(
-                    Icons.arrow_drop_down,
-                    color: Colors.indigo[colorNum],
-                    size: setHeight(54),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('订单详情',
+            style: TextStyle(
+                fontSize: ScreenUtil().setSp(40, allowFontScalingSelf: true),
+                fontWeight: FontWeight.bold)),
+        elevation: 0,
+        centerTitle: true,
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: setWidth(38)),
+            child: IconButton(
+                icon: Icon(
+                  Icons.search,
+                  color: Colors.white,
+                  size: setWidth(45),
+                ),
+                onPressed: () async {
+                  /* var response = await Server().searchSuggestion();
+                result = response['result'];*/
+                  Future<SharedPreferences> _prefs =
+                      SharedPreferences.getInstance();
+                  final SharedPreferences preferences = await _prefs;
+                  final history = preferences.getStringList('historyList');
+                  print('历史$history');
+                  showSearch(context: context, delegate: searchbar(history));
+                  //print('$result');
+                }),
+          )
+        ],
+      ),
+      body: Container(
+        color: Colors.white12,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                    style: TextStyle(
+                        fontSize:
+                            ScreenUtil().setSp(30, allowFontScalingSelf: true)),
+                    value: dropDownButtonValue,
+                    items: dropdownMenuItem(),
+                    onChanged: (value) {
+                      print(value);
+                      setState(() {
+                        dropDownButtonValue = value;
+                      });
+                    },
+                    icon: Icon(
+                      Icons.arrow_drop_down,
+                      color: Colors.indigo[colorNum],
+                      size: setHeight(54),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Expanded(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              getOrderData(
-                dropDownButtonValue,
-              )
-            ],
-          ))
-        ],
+              ],
+            ),
+            Expanded(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                getOrderData(
+                  dropDownButtonValue,
+                )
+              ],
+            ))
+          ],
+        ),
       ),
     );
   }

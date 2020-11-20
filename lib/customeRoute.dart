@@ -24,7 +24,7 @@ class customRoute extends PageRouteBuilder {
                     parent: animation1, curve: Curves.fastOutSlowIn)),
                 child: child,
               );*/
-              //平滑
+              //平滑，从下到上
               return SlideTransition(
                 position: Tween<Offset>(begin: Offset(0, 1), end: Offset(0, 0))
                     .animate(CurvedAnimation(

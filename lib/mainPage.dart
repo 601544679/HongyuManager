@@ -21,18 +21,27 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with WidgetsBindingObserver {
   List tabName = ['主页', '订单详情', '物流公司', '个人信息'];
-  List result;
+
   bool showToTopBtn;
   bool tokenIsUseful = true;
-  List<Widget> currentScreen = [
-    HomeTab(),
-    OrderTab(),
-    logisticsCompanyTab(),
-    userTab()
-  ];
+  List<Widget> currentScreen = List();
+  GlobalKey stopTimer = GlobalKey();
   var _pageController = PageController();
+
+  //点击跳转到物流公司
+  _changeCurrentTab(index) {
+    //print('调用了=$index');
+    setState(() {
+      currentTab = index;
+    });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print('MainPage生命周期=${state}');
+  }
 
   checkToken() async {
     User user = await User().getUser();
@@ -50,7 +59,17 @@ class _HomeState extends State<Home> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     currentTab = 0;
+    currentScreen = [
+      HomeTab(
+        changeCurrentTab: (index) => _changeCurrentTab(index),
+        key: stopTimer,
+      ),
+      OrderTab(),
+      logisticsCompanyTab(),
+      userTab()
+    ];
     print('Home--initState');
   }
 
@@ -79,6 +98,7 @@ class _HomeState extends State<Home> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    WidgetsBinding.instance.addObserver(this);
     print('Home--dispose');
   }
 
@@ -150,7 +170,7 @@ class _HomeState extends State<Home> {
               final history = preferences.getStringList('historyList');
               print('历史$history');
               showSearch(
-                  context: context, delegate: searchbar(result, history));
+                  context: context, delegate: searchbar(history));
               //print('$result');
             }),
       );
@@ -165,7 +185,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     getToken();
     print('currentTab: $currentTab');
-    print('Home--build');
+    print('MainPage--build');
     print('tokenIsUseful--${tokenIsUseful}');
     return tokenIsUseful == false
         ? Scaffold(
@@ -184,15 +204,6 @@ class _HomeState extends State<Home> {
             ),
           )
         : Scaffold(
-            appBar: AppBar(
-              elevation: 0,
-              centerTitle: true,
-              title: Text(tabName[currentTab],
-                  style: TextStyle(
-                      fontSize:
-                          ScreenUtil().setSp(40, allowFontScalingSelf: true))),
-              actions: [action(currentTab)],
-            ),
             body: IndexedStack(
               index: currentTab,
               children: currentScreen,

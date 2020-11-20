@@ -83,7 +83,15 @@ class _getOrderDataState extends State<getOrderData> {
             //print('done---${snapshot.hashCode}');
             //print('done---${snapshot.data}');
             if (snapshot.hasError) {
-              return Text("Error: ${snapshot.error}");
+              return Center(
+                child: Column(
+                  children: [
+                    Icon(Icons.wifi_off_outlined, size: setWidth(200)),
+                    SizedBox(height: setHeight(20)),
+                    Text('断网了')
+                  ],
+                ),
+              );
             } else if (snapshot.hasData) {
               print('hasData');
               // 请求成功，显示数据

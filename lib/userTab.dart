@@ -101,136 +101,147 @@ class _userMessageState extends State<userMessage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      overflow: Overflow.visible,
-      children: [
-        //stack超过第一个布局的范围会无法点击，因此第一个控件要布满
-        Container(
-          width: setWidth(750),
-          height: setHeight(1100),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        title: Text(
+          '个人信息',
+          style: TextStyle(
+              fontSize: ScreenUtil().setSp(40, allowFontScalingSelf: true),
+              fontWeight: FontWeight.bold),
         ),
-        ClipPath(
-            clipper: BottomClipper(),
-            child: Container(
-              height: setHeight(600),
-              color: Colors.indigo[colorNum],
-              width: setWidth(750),
-            )),
-        Positioned(
-          child: CircleAvatar(
-            radius: 50,
-            backgroundColor: Colors.white,
-            child: Image.asset(
-              'images/touxiang.png',
-              width: setWidth(170),
+      ),
+      body: Stack(
+        overflow: Overflow.visible,
+        children: [
+          //stack超过第一个布局的范围会无法点击，因此第一个控件要布满
+          Container(
+            width: setWidth(750),
+            height: setHeight(1100),
+          ),
+          ClipPath(
+              clipper: BottomClipper(),
+              child: Container(
+                height: setHeight(700),
+                color: Colors.indigo[colorNum],
+                width: setWidth(750),
+              )),
+          Positioned(
+            child: CircleAvatar(
+              radius: 50,
+              backgroundColor: Colors.white,
+              child: Image.asset(
+                'images/touxiang.png',
+                width: setWidth(170),
+              ),
             ),
+            left: setWidth(80),
+            top: setHeight(80),
           ),
-          left: setWidth(80),
-          top: setHeight(80),
-        ),
-        Positioned(
-          child: Text(
-            '姓名：${widget.contentList[0]}',
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: ScreenUtil().setSp(35, allowFontScalingSelf: true)),
+          Positioned(
+            child: Text(
+              '姓名：${widget.contentList[0]}',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: ScreenUtil().setSp(35, allowFontScalingSelf: true)),
+            ),
+            left: setWidth(320),
+            top: setHeight(70),
           ),
-          left: setWidth(320),
-          top: setHeight(70),
-        ),
-        Positioned(
-          child: Text(
-            '岗位：${widget.contentList[1]}',
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: ScreenUtil().setSp(35, allowFontScalingSelf: true)),
+          Positioned(
+            child: Text(
+              '岗位：${widget.contentList[1]}',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: ScreenUtil().setSp(35, allowFontScalingSelf: true)),
+            ),
+            left: setWidth(320),
+            top: setHeight(135),
           ),
-          left: setWidth(320),
-          top: setHeight(135),
-        ),
-        Positioned(
-          child: Text(
-            '联系电话：${widget.contentList[2]}',
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: ScreenUtil().setSp(35, allowFontScalingSelf: true)),
+          Positioned(
+            child: Text(
+              '联系电话：${widget.contentList[2]}',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: ScreenUtil().setSp(35, allowFontScalingSelf: true)),
+            ),
+            left: setWidth(320),
+            top: setHeight(200),
           ),
-          left: setWidth(320),
-          top: setHeight(200),
-        ),
-        Positioned(
-          child: Card(
-            color: Colors.white,
-            elevation: 4,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            child: ListView.builder(
-              itemBuilder: (context, i) {
-                return Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: setWidth(20),
-                          right: setWidth(20),
-                          top: setHeight(15),
-                          bottom: setHeight(15)),
-                      child: GestureDetector(
-                        onTap: () async {
-                          print('点击了=$i');
-                          switch (i) {
-                            case 5:
-                              Navigator.push(
-                                  context, customRoute(ResetPassword()));
-                              break;
-                            case 6:
-                              SharedPreferences prefs =
-                                  await SharedPreferences.getInstance();
-                              prefs.clear();
-                              final storage = new FlutterSecureStorage();
-                              await storage.deleteAll();
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  customRoute(LoginPage()),
-                                  (route) => route == null);
-                              break;
-                            default:
-                              Fluttertoast.showToast(
-                                  msg: '敬请期待!!!',
-                                  toastLength: Toast.LENGTH_SHORT);
-                              break;
-                          }
-                        },
-                        child: Container(
-                          width: setWidth(750),
-                          child: Row(
-                            children: [
-                              Text(
-                                titleList1[i],
-                                style: TextStyle(
-                                    fontSize: ScreenUtil()
-                                        .setSp(30, allowFontScalingSelf: true)),
-                              ),
-                            ],
+          Positioned(
+            child: Card(
+              color: Colors.white,
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              child: ListView.builder(
+                itemBuilder: (context, i) {
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: setWidth(20),
+                            right: setWidth(20),
+                            top: setHeight(15),
+                            bottom: setHeight(15)),
+                        child: InkWell(
+                          onTap: () async {
+                            print('点击了=$i');
+                            switch (i) {
+                              case 5:
+                                Navigator.push(
+                                    context, customRoute(ResetPassword()));
+                                break;
+                              case 6:
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                prefs.clear();
+                                final storage = new FlutterSecureStorage();
+                                await storage.deleteAll();
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    customRoute(LoginPage()),
+                                    (route) => route == null);
+                                break;
+                              default:
+                                Fluttertoast.showToast(
+                                    msg: '敬请期待!!!',
+                                    toastLength: Toast.LENGTH_SHORT);
+                                break;
+                            }
+                          },
+                          child: Container(
+                            width: setWidth(600),
+                            child: Row(
+                              children: [
+                                Text(
+                                  titleList1[i],
+                                  style: TextStyle(
+                                      fontSize: ScreenUtil().setSp(30,
+                                          allowFontScalingSelf: true)),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Divider(
-                      height: 1,
-                      color: Colors.grey,
-                    )
-                  ],
-                );
-              },
-              itemCount: titleList1.length,
+                      Divider(
+                        height: 1,
+                        color: Colors.grey,
+                      )
+                    ],
+                  );
+                },
+                itemCount: titleList1.length,
+              ),
             ),
+            width: setWidth(600),
+            height: setHeight(550),
+            top: setHeight(350),
+            left: setWidth(75),
           ),
-          width: setWidth(600),
-          height: setHeight(700),
-          top: setHeight(300),
-          left: setWidth(75),
-        ),
-        /*SingleChildScrollView(
+          /*SingleChildScrollView(
           child: Column(
             children: [
               SizedBox(
@@ -337,7 +348,8 @@ class _userMessageState extends State<userMessage> {
             ],
           ),
         )*/
-      ],
+        ],
+      ),
     );
   }
 }
