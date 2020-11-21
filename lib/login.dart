@@ -140,22 +140,12 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
     print('LoginPage--didChangeMetrics');
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setState(() {
-        if (focusNodePas.hasFocus) {
-          if (MediaQuery.of(context).viewInsets.bottom == 0) {
-            print('键盘关闭了');
-            keyboardOpen = false;
-          } else {
-            print('键盘打开了');
-            keyboardOpen = true;
-          }
-        } else if (focusNodeNum.hasFocus) {
-          if (MediaQuery.of(context).viewInsets.bottom == 0) {
-            print('键盘关闭了');
-            keyboardOpen = false;
-          } else {
-            print('键盘打开了');
-            keyboardOpen = true;
-          }
+        if (MediaQuery.of(context).viewInsets.bottom == 0) {
+          print('键盘关闭了');
+          keyboardOpen = false;
+        } else {
+          print('键盘打开了');
+          keyboardOpen = true;
         }
       });
     });
@@ -268,6 +258,7 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
                                 Container(
                                   width: setWidth(500),
                                   child: TextFormField(
+                                    textInputAction: TextInputAction.done,
                                     validator: (value) {
                                       if (value.trim().isEmpty) {
                                         return '用户名不能为空';
@@ -313,6 +304,7 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
                                 Container(
                                   width: setWidth(500),
                                   child: TextFormField(
+                                    textInputAction: TextInputAction.done,
                                     validator: (input) {
                                       //print('输出：${input}');
                                       if (input.trim().isEmpty) {
